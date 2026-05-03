@@ -1,0 +1,2713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A2A Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#252830;
+  --surface:#2e3240;
+  --card:#363b4e;
+  --card2:#3f4557;
+  --border:#4a5068;
+  --border2:#5a6080;
+
+  --text:#f1f3f9;
+  --text2:#c4c9db;
+  --muted:#828aaa;
+
+  /* Tile colours — darker/richer so white text pops */
+  --green:#0ea371;
+  --green-d:#0b8a5f;
+  --red:#e03535;
+  --red-d:#c42a2a;
+  --blue:#2d6edf;
+  --blue-d:#2459c0;
+  --amber:#c97d0a;
+  --amber-d:#a86509;
+  --teal:#0e9080;
+  --teal-d:#0b7568;
+  --orange:#d95f10;
+  --orange-d:#b84e0d;
+  --purple:#7c4ddb;
+
+  --dm:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+body{background:var(--bg);color:var(--text);font-family:var(--dm);font-size:14px;min-height:100vh;}
+
+/* ── HEADER ── */
+header{
+  background:linear-gradient(135deg,#2d6edf 0%,#1e54c0 100%);
+  padding:0 26px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+.logo{display:flex;align-items:center;gap:11px;}
+.logo-icon{font-size:21px;}
+.logo-text{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
+.hdr-r{display:flex;align-items:center;gap:10px;}
+.sw{position:relative;}
+.sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.55);pointer-events:none;}
+.si{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.22);color:#fff;
+  padding:7px 13px 7px 32px;border-radius:8px;font-family:var(--dm);font-size:13px;width:190px;transition:all .2s;}
+.si::placeholder{color:rgba(255,255,255,.5);}
+.si:focus{outline:none;background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.55);}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:215px 1fr;min-height:calc(100vh - 60px);}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 10px;}
+.nav-sec-lbl{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;padding:0 10px;margin:14px 0 4px;}
+.nav-sec-lbl:first-child{margin-top:0;}
+.nb{display:flex;align-items:center;gap:9px;width:100%;padding:10px 11px;border:none;background:none;border-radius:8px;
+  color:var(--text2);font-family:var(--dm);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;margin-bottom:2px;}
+.nb:hover{background:var(--card);color:var(--text);}
+.nb.active{background:rgba(45,110,223,.28);color:#7eb3ff;font-weight:600;}
+.nbadge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;
+  background:var(--red);color:#fff;min-width:20px;text-align:center;}
+.nbadge.blue{background:var(--blue);}
+.nbadge.grey{background:var(--border);color:var(--muted);}
+.nbadge.green{background:var(--green);}
+.nbadge.amber{background:var(--amber);}
+
+/* ── MAIN ── */
+.main{padding:24px 26px;overflow-y:auto;}
+.tc{display:none;}
+.tc.active{display:block;animation:fu .2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+.pg-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-.2px;}
+
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:26px;}
+.kpi{border-radius:11px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;color:#fff;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.kpi.green{background:var(--green);}
+.kpi.red{background:var(--red);}
+.kpi.blue{background:var(--blue);}
+.kpi.amber{background:var(--amber);}
+.kpi.teal{background:var(--teal);}
+.kpi-num{font-size:34px;font-weight:700;line-height:1;margin-bottom:5px;}
+.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;opacity:.92;}
+
+/* ── SECTION HDR ── */
+.sec{display:flex;align-items:center;gap:10px;margin-bottom:13px;padding-bottom:10px;
+  border-bottom:2px solid var(--border);margin-top:26px;}
+.sec.nt{margin-top:0;}
+.sec-t{font-size:11.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;}
+.sec-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
+  background:var(--card);color:var(--muted);border:1px solid var(--border);}
+
+/* ── TILE GRID ── */
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:9px;margin-bottom:4px;}
+
+.tile{border-radius:10px;padding:13px 12px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;gap:4px;min-height:116px;text-align:left;
+  color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);border:none;position:relative;}
+.tile:hover{transform:translateY(-3px);box-shadow:0 7px 22px rgba(0,0,0,.4);}
+
+/* Solid rich colours — darker so white text is legible */
+.t-green {background:var(--green);}
+.t-red   {background:var(--red);}
+.t-amber {background:var(--amber);}
+.t-teal  {background:var(--teal);}
+.t-orange{background:var(--orange);}
+.t-blue  {background:var(--blue);}
+.t-neu   {background:var(--card);color:var(--text);}
+.t-purple{background:var(--purple);}
+
+/* Source badge top-right */
+.tile-src{
+  position:absolute;top:9px;right:9px;
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;
+  background:rgba(0,0,0,.22);color:rgba(255,255,255,.9);letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.t-neu .tile-src{background:var(--border);color:var(--muted);}
+
+.tile-asin{font-family:var(--mono);font-size:13px;font-weight:500;word-break:break-all;
+  text-shadow:0 1px 3px rgba(0,0,0,.3);}
+.t-neu .tile-asin{color:var(--text2);text-shadow:none;}
+
+.tile-status{font-size:12px;font-weight:700;line-height:1.3;text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.t-neu .tile-status{color:var(--text);}
+
+.tile-meta{font-size:11px;opacity:.92;line-height:1.5;flex:1;text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.t-neu .tile-meta{color:var(--text2);opacity:1;text-shadow:none;}
+
+.tile-note{font-size:10px;opacity:.82;font-style:italic;margin-top:2px;
+  text-shadow:0 1px 1px rgba(0,0,0,.2);}
+.t-neu .tile-note{color:var(--muted);opacity:1;}
+
+.tile-comp{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;
+  background:rgba(0,0,0,.18);color:rgba(255,255,255,.95);display:inline-block;margin-top:2px;}
+.t-neu .tile-comp{background:var(--border);color:var(--text2);}
+
+.tbtns{display:flex;gap:3px;margin-top:7px;}
+.tbtn{flex:1;padding:5px 2px;font-size:9px;font-family:var(--dm);font-weight:700;
+  border:none;border-radius:5px;background:rgba(0,0,0,.2);color:#fff;
+  cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.3px;}
+.tbtn:hover{background:rgba(0,0,0,.38);}
+.tbtn.buy{background:rgba(255,255,255,.22);}
+.tbtn.buy:hover{background:rgba(255,255,255,.38);}
+.t-neu .tbtn{background:var(--card2);color:var(--text2);}
+.t-neu .tbtn:hover{background:var(--border);}
+
+/* ── INFO TOOLTIP ── */
+.iw{position:relative;display:inline-block;vertical-align:middle;margin-left:3px;}
+.idot{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;
+  background:rgba(0,0,0,.25);color:#fff;border-radius:50%;font-size:9px;font-weight:700;cursor:help;}
+.itip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#1a1f2e;color:#fff;padding:7px 11px;border-radius:7px;font-size:11px;
+  white-space:nowrap;z-index:400;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.5);
+  border:1px solid var(--border);}
+.iw:hover .itip{display:block;}
+
+/* ── COLLAPSIBLE FORM ── */
+.fc{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;margin-bottom:24px;overflow:hidden;}
+.fc-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;
+  cursor:pointer;user-select:none;transition:background .15s;}
+.fc-hd:hover{background:var(--card);}
+.fc-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.cico{font-size:16px;color:var(--muted);transition:transform .25s;width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;background:var(--card);
+  border-radius:6px;border:1px solid var(--border);}
+.fc.coll .cico{transform:rotate(-90deg);}
+.fb{padding:0 20px 20px;border-top:1px solid var(--border);}
+.fc.coll .fb{display:none;}
+
+/* ── FORM FIELDS ── */
+.fg{margin-bottom:13px;}
+.fg:last-child{margin-bottom:0;}
+.fl{display:block;margin-bottom:4px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.fi,.fs,.fta{width:100%;padding:9px 11px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
+.fi::placeholder,.fta::placeholder{color:var(--muted);}
+.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
+.fi.err{border-color:var(--red);}
+.ferr{font-size:10.5px;color:var(--red);margin-top:3px;display:none;}
+.fs option{background:var(--card);}
+.fta{resize:vertical;min-height:52px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:13px;}
+.badd{width:100%;margin-top:14px;padding:11px;background:var(--blue);color:#fff;border:none;
+  border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.badd:hover{background:var(--blue-d,#2459c0);box-shadow:0 4px 14px rgba(45,110,223,.4);transform:translateY(-1px);}
+
+/* ── QUICK CAPTURE ── */
+.qc-bar{display:flex;gap:10px;margin-bottom:20px;}
+.qc-input{flex:1;padding:10px 14px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:9px;color:var(--text);font-family:var(--mono);font-size:14px;transition:all .2s;}
+.qc-input::placeholder{color:var(--muted);font-family:var(--dm);}
+.qc-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
+.qc-sel{padding:10px 11px;background:var(--card);border:1.5px solid var(--border);border-radius:9px;
+  color:var(--text);font-family:var(--dm);font-size:13px;cursor:pointer;}
+.qc-sel:focus{outline:none;border-color:var(--blue);}
+.qc-sel option{background:var(--card);}
+.qc-btn{padding:10px 18px;background:var(--green);color:#fff;border:none;border-radius:9px;
+  font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.qc-btn:hover{background:var(--green-d);transform:translateY(-1px);}
+
+.inbox-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:border-color .2s;}
+.inbox-card:hover{border-color:var(--border2);}
+.inbox-asin{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);min-width:120px;}
+.inbox-market{font-size:11px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);}
+.inbox-note{flex:1;font-size:12px;color:var(--text2);font-style:italic;}
+.inbox-ts{font-size:10px;color:var(--muted);white-space:nowrap;}
+.inbox-actions{display:flex;gap:6px;}
+.ib{padding:6px 11px;border:none;border-radius:6px;font-family:var(--dm);font-size:11px;
+  font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
+.ib.promote{background:var(--green);}
+.ib.promote:hover{background:var(--green-d);}
+.ib.del{background:transparent;color:var(--red);border:1.5px solid rgba(224,53,53,.35);}
+.ib.del:hover{background:rgba(224,53,53,.15);}
+
+/* ── WATCHLIST CARDS ── */
+.wl-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;gap:14px;transition:border-color .2s;}
+.wl-card:hover{border-color:var(--border2);}
+.wl-asin{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);min-width:130px;}
+.wl-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  background:rgba(124,77,219,.2);color:#c4b5fd;white-space:nowrap;}
+.wl-market{font-size:11px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);}
+.wl-note{flex:1;font-size:12px;color:var(--text2);font-style:italic;}
+.wl-src{font-size:10px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);white-space:nowrap;}
+.wl-actions{display:flex;gap:6px;}
+.wb{padding:6px 11px;border:none;border-radius:6px;font-family:var(--dm);font-size:11px;
+  font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
+.wb.promote{background:var(--blue);}
+.wb.promote:hover{background:var(--blue-d,#2459c0);}
+.wb.edit{background:var(--card2);color:var(--text2);}
+.wb.edit:hover{background:var(--border);color:var(--text);}
+.wb.del{background:transparent;color:var(--red);border:1.5px solid rgba(224,53,53,.35);}
+.wb.del:hover{background:rgba(224,53,53,.15);}
+
+/* ── REBUY CARDS ── */
+.rc{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:15px 17px;margin-bottom:10px;transition:border-color .2s;}
+.rc:hover{border-color:var(--border2);}
+.rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.rc-asin{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);}
+.rc-amz{font-size:11px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:3px 9px;
+  border:1.5px solid rgba(45,110,223,.4);border-radius:6px;background:rgba(45,110,223,.12);transition:all .15s;}
+.rc-amz:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.acc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:10px;}
+.acc{padding:7px 3px;border-radius:7px;text-align:center;font-size:11px;font-weight:600;
+  background:var(--card);border:1.5px solid var(--border);color:var(--muted);}
+.acc.ready{background:var(--green);border-color:var(--green);color:#fff;cursor:pointer;transition:all .15s;}
+.acc.ready:hover{opacity:.85;transform:scale(1.06);}
+.acc.soon{background:rgba(201,125,10,.2);border-color:var(--amber);color:#f5c056;}
+.rc-note{font-size:12px;color:var(--text2);background:var(--card);border:1px solid var(--border);
+  border-radius:7px;padding:8px 11px;margin-bottom:10px;font-style:italic;}
+.rc-acts{display:flex;gap:5px;padding-top:11px;border-top:1.5px solid var(--border);}
+.rb{flex:1;padding:8px 5px;border:none;border-radius:7px;font-family:var(--dm);font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;transition:all .15s;color:#fff;}
+.rb.sas{background:var(--blue);}
+.rb.sas:hover{background:var(--blue-d,#2459c0);}
+.rb.bought{background:var(--green);}
+.rb.bought:hover{background:var(--green-d);}
+.rb.skip{background:var(--amber);}
+.rb.skip:hover{background:var(--amber-d);}
+.rb.del{background:transparent;color:var(--red);border:1.5px solid rgba(224,53,53,.35);}
+.rb.del:hover{background:rgba(224,53,53,.15);}
+
+/* ── BUY WINDOW BOX ── */
+.bwb{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:6px;font-size:11.5px;}
+.bwb.ok{border-color:var(--green);background:rgba(14,163,113,.1);}
+.bwb.warn{border-color:var(--amber);background:rgba(201,125,10,.1);}
+.bwb.bad{border-color:var(--red);background:rgba(224,53,53,.1);}
+.bwb-row{display:flex;justify-content:space-between;margin-bottom:3px;font-size:11px;}
+.bwb-lbl{color:var(--muted);}
+.bwb-val{font-weight:600;color:var(--text);}
+.bwb-val.ok{color:var(--green);}
+.bwb-val.warn{color:#f5c056;}
+.bwb-val.bad{color:var(--red);}
+
+/* ── NOTES ── */
+.notes-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.notes-new-title{flex:1;min-width:160px;padding:10px 13px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:9px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
+.notes-new-title::placeholder{color:var(--muted);}
+.notes-new-title:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
+.notes-add-btn{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:9px;
+  font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.notes-add-btn:hover{background:#2459c0;transform:translateY(-1px);}
+.notes-export-btn{padding:10px 16px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);
+  border-radius:9px;font-family:var(--dm);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.notes-export-btn:hover{background:var(--card2);border-color:var(--border2);}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.note-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s;min-height:200px;}
+.note-card:hover{border-color:var(--border2);}
+.note-card-hd{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--card);}
+.note-title-input{flex:1;background:none;border:none;color:var(--text);font-family:var(--dm);
+  font-size:13px;font-weight:700;outline:none;cursor:text;}
+.note-title-input::placeholder{color:var(--muted);font-weight:400;}
+.note-date{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.note-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s;flex-shrink:0;}
+.note-del-btn:hover{background:rgba(224,53,53,.2);color:var(--red);}
+.note-textarea{width:100%;min-height:160px;background:none;border:none;
+  color:var(--text2);font-family:var(--dm);font-size:13px;line-height:1.6;
+  padding:13px 14px;resize:none;outline:none;display:block;}
+.note-textarea::placeholder{color:var(--muted);}
+.note-footer{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;
+  justify-content:space-between;background:var(--card);}
+.note-char-count{font-size:10px;color:var(--muted);}
+.note-saved{font-size:10px;color:var(--green);opacity:0;transition:opacity .4s;}
+.note-saved.show{opacity:1;}
+.export-textarea{width:100%;min-height:320px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text2);font-family:var(--mono);font-size:12px;line-height:1.6;
+  padding:14px;resize:vertical;outline:none;}
+.export-copy-btn{width:100%;margin-top:12px;padding:11px;background:var(--green);color:#fff;border:none;
+  border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.export-copy-btn:hover{background:#0b8a5f;}
+
+/* ── MODAL ── */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;}
+.mbg.open{display:flex;animation:fu .15s;}
+.modal{background:var(--surface);border:1.5px solid var(--border2);border-radius:14px;padding:24px;
+  max-width:520px;width:92%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+.mhd{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.mt{font-size:16px;font-weight:700;color:var(--text);}
+.mx{background:var(--card);border:none;color:var(--muted);font-size:20px;width:30px;height:30px;
+  border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mx:hover{background:rgba(224,53,53,.2);color:var(--red);}
+.mbtns{display:flex;gap:9px;margin-top:18px;}
+.mbtn{flex:1;padding:10px;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;}
+.mbtn.ok{background:var(--green);color:#fff;}
+.mbtn.ok:hover{background:var(--green-d);}
+.mbtn.cancel{background:var(--card);color:var(--text2);border:1.5px solid var(--border);}
+.mbtn.cancel:hover{background:var(--card2);}
+.mbtn.danger{background:var(--red);color:#fff;}
+.mbtn.danger:hover{background:var(--red-d);}
+
+.cbg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px;}
+.cbr{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card);
+  border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+.cbr:hover{border-color:var(--blue);}
+.cbr input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue);cursor:pointer;}
+.cbr span{font-size:13px;font-weight:600;color:var(--text);font-family:var(--mono);}
+
+/* Lead detail modal */
+.ld-asin{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.ld-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:14px;}
+.ld-badge.A2A{background:rgba(45,110,223,.2);color:#7eb3ff;}
+.ld-badge.OA{background:rgba(124,77,219,.2);color:#c4b5fd;}
+.ld-status{border-radius:10px;padding:13px 15px;margin-bottom:13px;color:#fff;}
+.ld-st-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.ld-st-sub{font-size:12px;opacity:.85;}
+.ld-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px;}
+.ld-f{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 11px;}
+.ld-fl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ld-fv{font-size:13px;font-weight:600;color:var(--text);}
+.ld-notes{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px;
+  font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:13px;}
+.ld-links{display:flex;gap:7px;margin-bottom:13px;}
+.ld-link{flex:1;padding:9px;border-radius:7px;border:1.5px solid var(--border2);background:var(--card);
+  color:var(--text2);font-size:12px;font-weight:600;text-decoration:none;text-align:center;transition:all .15s;display:block;}
+.ld-link:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.ld-buy-btn{width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:9px;
+  font-family:var(--dm);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:8px;
+  box-shadow:0 4px 12px rgba(14,163,113,.3);}
+.ld-buy-btn:hover{background:var(--green-d);transform:translateY(-1px);box-shadow:0 6px 18px rgba(14,163,113,.4);}
+
+/* Expired row */
+.exp-row{background:var(--surface);border:1.5px dashed var(--border2);border-radius:9px;
+  padding:11px 13px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.exp-asin{font-family:var(--mono);font-weight:600;color:var(--text2);}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;
+  border:1.5px dashed var(--border);border-radius:10px;background:var(--surface);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;padding:11px 17px;border-radius:10px;font-size:13px;
+  font-weight:600;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);pointer-events:none;color:#fff;}
+.toast.show{opacity:1;transform:none;}
+.toast.ok{background:var(--green);}
+.toast.bad{background:var(--red);}
+.toast.info{background:var(--blue);}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr;}
+  .sidebar{display:flex;gap:3px;padding:9px 13px;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;}
+  .nav-sec-lbl{display:none;}
+  .nb{white-space:nowrap;padding:8px 13px;}
+  .kpi-row{grid-template-columns:repeat(3,1fr);}
+  .acc-grid{grid-template-columns:repeat(3,1fr);}
+  .g3,.g4{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .main{padding:16px 13px;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .g2,.g3,.g4{grid-template-columns:1fr;}
+  .ld-grid{grid-template-columns:1fr;}
+  .qc-bar{flex-wrap:wrap;}
+}
+
+/* ── NOTES ── */
+.notes-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.notes-new-title{flex:1;min-width:180px;padding:10px 13px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:9px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
+.notes-new-title::placeholder{color:var(--muted);}
+.notes-new-title:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
+.notes-add-btn{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:9px;
+  font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.notes-add-btn:hover{background:var(--blue-d);transform:translateY(-1px);}
+.notes-export-btn{padding:10px 16px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);
+  border-radius:9px;font-family:var(--dm);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.notes-export-btn:hover{background:var(--card2);color:var(--text);}
+
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+
+.note-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s;min-height:200px;}
+.note-card:hover{border-color:var(--border2);}
+
+.note-card-hd{display:flex;align-items:center;gap:8px;padding:12px 14px 10px;border-bottom:1px solid var(--border);}
+.note-title-input{flex:1;background:none;border:none;color:var(--text);font-family:var(--dm);
+  font-size:13px;font-weight:700;outline:none;min-width:0;}
+.note-title-input::placeholder{color:var(--muted);}
+.note-date{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.note-del-btn{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;
+  padding:0 2px;transition:color .15s;flex-shrink:0;line-height:1;}
+.note-del-btn:hover{color:var(--red);}
+
+.note-body{flex:1;padding:12px 14px;}
+.note-textarea{width:100%;height:100%;min-height:140px;background:none;border:none;
+  color:var(--text2);font-family:var(--dm);font-size:13px;line-height:1.6;
+  resize:none;outline:none;}
+.note-textarea::placeholder{color:var(--muted);}
+
+.note-card-ft{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;
+  justify-content:space-between;}
+.note-char-count{font-size:10px;color:var(--muted);}
+.note-saved{font-size:10px;color:var(--green);opacity:0;transition:opacity .3s;}
+.note-saved.show{opacity:1;}
+
+/* Export modal */
+.export-textarea{width:100%;min-height:320px;background:var(--card);border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text2);font-family:var(--mono);font-size:12px;line-height:1.6;
+  padding:14px;resize:vertical;outline:none;}
+.export-textarea:focus{border-color:var(--blue);}
+
+/* ── OA REPLEN ── */
+.oa-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:15px 17px;margin-bottom:10px;transition:border-color .2s;}
+.oa-card:hover{border-color:var(--border2);}
+.oa-card.overdue{border-color:var(--red);background:rgba(224,53,53,.05);}
+.oa-card.due{border-color:var(--amber);background:rgba(201,125,10,.05);}
+.oa-head{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap;}
+.oa-asin{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text);}
+.oa-status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.oa-status-pill.overdue{background:rgba(224,53,53,.2);color:var(--red);}
+.oa-status-pill.due{background:rgba(201,125,10,.2);color:#f5c056;}
+.oa-status-pill.ok{background:rgba(14,163,113,.15);color:#34d399;}
+.oa-sas-link{font-size:11px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:3px 9px;
+  border:1.5px solid rgba(45,110,223,.35);border-radius:6px;background:rgba(45,110,223,.1);
+  transition:all .15s;margin-left:auto;}
+.oa-sas-link:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.oa-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px;}
+.oa-field{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 11px;}
+.oa-field-lbl{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.oa-field-val{font-size:13px;font-weight:600;color:var(--text);}
+.oa-field-val.target{color:var(--green);}
+.oa-field-val.current{color:var(--amber);}
+.oa-note-row{font-size:12px;color:var(--text2);background:var(--card);border:1px solid var(--border);
+  border-radius:7px;padding:8px 11px;margin-bottom:11px;font-style:italic;}
+.oa-check-row{display:flex;align-items:center;gap:8px;padding-top:11px;border-top:1.5px solid var(--border);flex-wrap:wrap;}
+.oa-last-checked{font-size:11px;color:var(--muted);flex:1;}
+.oa-last-checked strong{color:var(--text2);}
+.oa-acts{display:flex;gap:6px;flex-wrap:wrap;}
+.oa-btn{padding:7px 13px;border:none;border-radius:7px;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
+.oa-btn.check{background:var(--green);}
+.oa-btn.check:hover{background:var(--green-d);}
+.oa-btn.edit-b{background:var(--card2);color:var(--text2);border:1px solid var(--border);}
+.oa-btn.edit-b:hover{background:var(--border);color:var(--text);}
+.oa-btn.buy{background:var(--teal);}
+.oa-btn.buy:hover{opacity:.85;}
+.oa-btn.del{background:transparent;color:var(--red);border:1.5px solid rgba(224,53,53,.35);}
+.oa-btn.del:hover{background:rgba(224,53,53,.15);}
+.oa-log{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+.oa-log-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.oa-log-entry{display:flex;gap:10px;margin-bottom:5px;font-size:11.5px;}
+.oa-log-date{color:var(--text2);font-weight:600;white-space:nowrap;min-width:46px;}
+.oa-log-note{color:var(--muted);font-style:italic;}
+.oa-ov-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;
+  cursor:pointer;transition:all .18s;}
+.oa-ov-card:hover{border-color:var(--border2);transform:translateX(3px);}
+.oa-ov-card.overdue{border-color:var(--red);background:rgba(224,53,53,.06);}
+.oa-ov-card.due{border-color:var(--amber);background:rgba(201,125,10,.06);}
+.oa-ov-asin{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);min-width:110px;}
+.oa-ov-days{font-size:12px;font-weight:700;}
+.oa-ov-days.overdue{color:var(--red);}
+.oa-ov-days.due{color:#f5c056;}
+.oa-ov-note{flex:1;font-size:11.5px;color:var(--muted);font-style:italic;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.oa-ov-arr{color:var(--muted);font-size:14px;}
+
+.tile-snooze-badge{position:absolute;bottom:8px;right:8px;font-size:9px;font-weight:700;
+  padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.9);}
+.t-neu .tile-snooze-badge{background:var(--border2);color:var(--muted);}
+.tile-updated{font-size:9.5px;color:rgba(255,255,255,.6);margin-top:2px;}
+.t-neu .tile-updated{color:var(--muted);}
+
+.bulk-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--blue);
+  border-radius:10px;padding:11px 16px;margin-bottom:14px;}
+.bulk-bar.show{display:flex;}
+.bulk-count{font-size:13px;font-weight:700;color:var(--text);}
+.bulk-btn{padding:7px 14px;border:none;border-radius:7px;font-family:var(--dm);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
+.bulk-btn.bb-buy{background:var(--green);}
+.bulk-btn.bb-buy:hover{background:var(--green-d);}
+.bulk-btn.bb-snooze{background:var(--amber);}
+.bulk-btn.bb-snooze:hover{background:var(--amber-d);}
+.bulk-btn.bb-del{background:var(--red);}
+.bulk-btn.bb-del:hover{background:var(--red-d);}
+.bulk-btn.bb-cancel{background:var(--card2);color:var(--text2);border:1px solid var(--border);}
+.bulk-btn.bb-cancel:hover{background:var(--border);}
+.bulk-sel-all{font-size:12px;font-weight:600;color:#7eb3ff;cursor:pointer;margin-left:auto;background:none;border:none;font-family:var(--dm);}
+
+.tile-cb-wrap{position:absolute;top:8px;left:8px;z-index:10;}
+.tile-cb{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
+.tile.bulk-mode{padding-left:32px;}
+
+/* Dup modal */
+.dup-loc{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;
+  display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.dup-loc-tab{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;
+  background:rgba(45,110,223,.2);color:#7eb3ff;}
+.dup-loc-asin{font-family:var(--mono);font-weight:600;color:var(--text);}
+.dup-del-btn{margin-left:auto;padding:5px 11px;border:none;border-radius:6px;background:rgba(224,53,53,.2);
+  color:var(--red);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--dm);}
+.dup-del-btn:hover{background:rgba(224,53,53,.35);}
+
+.sns-table-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+.sns-table{width:100%;border-collapse:collapse;}
+.sns-table th{background:var(--card2);color:var(--muted);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:11px 14px;text-align:left;border-bottom:2px solid var(--border);}
+.sns-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
+.sns-table tr:last-child td{border-bottom:none;}
+.sns-table tr:hover td{background:rgba(255,255,255,.02);}
+.sns-acc{font-family:var(--mono);font-weight:600;color:var(--text);font-size:13px;}
+.sns-date{font-size:12.5px;color:var(--text2);}
+.sns-days{font-size:12px;font-weight:600;}
+
+.sns-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.sns-status.active   {background:rgba(14,163,113,.18);color:#34d399;}
+.sns-status.soon     {background:rgba(201,125,10,.18);color:#f5c056;}
+.sns-status.edit-today{background:rgba(224,53,53,.22);color:#fc8181;animation:pulse 1.5s infinite;}
+.sns-status.needs    {background:rgba(224,53,53,.28);color:var(--red);font-weight:800;}
+.sns-status.review   {background:rgba(139,92,246,.22);color:#c4b5fd;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
+
+.sns-act-btn{padding:5px 12px;border-radius:6px;border:none;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
+.sns-act-btn.edit-btn{background:var(--blue);}
+.sns-act-btn.edit-btn:hover{background:var(--blue-d);}
+.sns-act-btn.next-btn{background:var(--red);animation:pulse 1.5s infinite;}
+.sns-act-btn.next-btn:hover{background:var(--red-d);animation:none;}
+
+.sns-hist-table{width:100%;border-collapse:collapse;font-size:12px;}
+.sns-hist-table th{background:var(--card2);color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:2px solid var(--border);}
+.sns-hist-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);}
+.sns-hist-table tr:last-child td{border-bottom:none;}
+
+/* KPI wide card for S&S */
+.kpi-wide{border-radius:11px;padding:16px 18px;cursor:pointer;transition:all .2s;color:#fff;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);display:flex;align-items:center;gap:16px;margin-top:26px;}
+.kpi-wide:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.kpi-wide.red{background:var(--red);}
+.kpi-wide.amber{background:var(--amber);}
+.kpi-wide.purple{background:var(--purple);}
+.kpi-wide-num{font-size:32px;font-weight:700;line-height:1;flex-shrink:0;}
+.kpi-wide-info{}
+.kpi-wide-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.92;}
+.kpi-wide-sub{font-size:11.5px;opacity:.8;margin-top:3px;}
+
+/* S&S alert banner on overview */
+.sns-alert-banner{background:rgba(224,53,53,.15);border:1.5px solid rgba(224,53,53,.4);border-radius:10px;
+  padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:20px;cursor:pointer;transition:all .2s;}
+.sns-alert-banner:hover{background:rgba(224,53,53,.22);}
+.sns-alert-banner.amber{background:rgba(201,125,10,.15);border-color:rgba(201,125,10,.4);}
+.sns-alert-banner.amber:hover{background:rgba(201,125,10,.22);}
+.sns-alert-icon{font-size:22px;flex-shrink:0;}
+.sns-alert-text{flex:1;}
+.sns-alert-title{font-size:13px;font-weight:700;color:var(--text);}
+.sns-alert-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.sns-alert-arrow{font-size:16px;color:var(--muted);}
+
+/* S&S popup overlay */
+.sns-popup-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;align-items:center;justify-content:center;}
+.sns-popup-bg.open{display:flex;animation:fu .2s;}
+.sns-popup{background:var(--surface);border:2px solid var(--red);border-radius:14px;padding:28px;
+  max-width:480px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+.sns-popup-title{font-size:17px;font-weight:700;color:var(--red);margin-bottom:8px;}
+.sns-popup-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;}
+.sns-popup-accounts{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.sns-popup-acc-row{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;
+  display:flex;align-items:center;gap:10px;}
+.sns-popup-acc-name{font-family:var(--mono);font-weight:600;color:var(--text);min-width:50px;}
+.sns-popup-acc-type{font-size:11px;padding:2px 7px;border-radius:4px;background:rgba(224,53,53,.2);color:var(--red);font-weight:700;}
+.sns-popup-dismiss{width:100%;padding:11px;background:var(--card2);color:var(--text2);border:1.5px solid var(--border);
+  border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.sns-popup-dismiss:hover{background:var(--border);}
+
+/* S&S next cycle modal */
+.sns-review-popup-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:700;align-items:center;justify-content:center;}
+.sns-review-popup-bg.open{display:flex;animation:fu .2s;}
+.sns-review-popup{background:var(--surface);border:2px solid var(--purple);border-radius:14px;padding:28px;
+  max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">A2A Tracker</div>
+      <div class="logo-sub" id="hdrDate"></div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="sw">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="si" id="searchInput" placeholder="Search ASIN…" oninput="runSearch(this.value)">
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="nav-sec-lbl">Main</div>
+    <button class="nb active" onclick="go('overview')">📊 Overview <span class="nbadge" id="nb-action">0</span></button>
+    <button class="nb" onclick="go('sourcing')">🔍 Sourcing <span class="nbadge blue" id="nb-sourcing">0</span></button>
+    <button class="nb" onclick="go('rebuy')">🔄 Rebuy <span class="nbadge grey" id="nb-rebuy">0</span></button>
+    <div class="nav-sec-lbl">Capture</div>
+    <button class="nb" onclick="go('inbox')">📥 Inbox <span class="nbadge amber" id="nb-inbox">0</span></button>
+    <button class="nb" onclick="go('watchlist')">👁 Watchlist <span class="nbadge grey" id="nb-watch">0</span></button>
+    <div class="nav-sec-lbl">Sub & Save</div>
+    <button class="nb" onclick="go('sns')">🔔 Sub &amp; Save <span class="nbadge" id="nb-sns">0</span></button>
+    <div class="nav-sec-lbl">Other</div>
+    <button class="nb" onclick="go('oareplen')">🔁 OA Replen <span class="nbadge grey" id="nb-oa">0</span></button>
+    <button class="nb" onclick="go('notes')">📝 Notes <span class="nbadge grey" id="nb-notes">0</span></button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ══════════════ OVERVIEW ══════════════ -->
+    <div id="overview" class="tc active">
+      <div class="pg-title">Good morning — here's today 👋</div>
+      <div class="kpi-row">
+        <div class="kpi green" onclick="go('sourcing');ss('sec-ready')"><div class="kpi-num" id="kpi-action">0</div><div class="kpi-lbl">Action Today</div></div>
+        <div class="kpi blue"  onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-watching">0</div><div class="kpi-lbl">Watching</div></div>
+        <div class="kpi amber" onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-tomorrow">0</div><div class="kpi-lbl">Ready Tomorrow</div></div>
+        <div class="kpi teal"  onclick="go('sourcing');ss('sec-ltd')"><div class="kpi-num" id="kpi-ltdopen">0</div><div class="kpi-lbl">Buy Window Open</div></div>
+      </div>
+
+      <div class="sec nt"><span class="sec-t">📌 Today's Priority — Click to Review & Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
+      <div class="tg" id="ov-priority"></div>
+
+      <div class="sec"><span class="sec-t">💰 Buy Window Open (LTD)</span><span class="sec-pill" id="ov-l-cnt">0</span></div>
+      <div class="tg" id="ov-ltd"></div>
+
+      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">🔄 Rebuys Ready Now</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
+      <div class="tg" id="ov-rebuy"></div>
+
+      <!-- S&S OVERVIEW ALERTS -->
+      <div id="ov-sns-alerts"></div>
+
+      <!-- OA REPLEN OVERVIEW -->
+      <div class="sec" id="ov-oa-sec"><span class="sec-t">🔁 OA Replen — Check Due</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
+      <div id="ov-oa-list"></div>
+    </div>
+
+    <!-- ══════════════ SOURCING ══════════════ -->
+    <div id="sourcing" class="tc">
+      <div class="pg-title">Sourcing Leads</div>
+
+      <div class="fc" id="src-fc">
+        <div class="fc-hd" onclick="toggleFC('src-fc')">
+          <div class="fc-title">➕ Add New Lead</div>
+          <div class="cico">▼</div>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="g4">
+            <div class="fg">
+              <label class="fl">ASIN *</label>
+              <input class="fi" id="s-asin" placeholder="B07X9KYZ6L" maxlength="10" oninput="this.value=this.value.toUpperCase();autoLink()">
+              <div class="ferr" id="e-asin">Valid ASIN required</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Marketplace *</label>
+              <select class="fs" id="s-market" onchange="autoLink()">
+                <option value="">-- Select --</option>
+                <option value="amazon.co.uk">🇬🇧 Amazon UK</option>
+                <option value="amazon.de">🇩🇪 Amazon DE</option>
+                <option value="amazon.fr">🇫🇷 Amazon FR</option>
+                <option value="amazon.es">🇪🇸 Amazon ES</option>
+                <option value="amazon.it">🇮🇹 Amazon IT</option>
+                <option value="amazon.nl">🇳🇱 Amazon NL</option>
+                <option value="amazon.com">🇺🇸 Amazon US</option>
+              </select>
+              <div class="ferr" id="e-market">Select marketplace</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Type *</label>
+              <select class="fs" id="s-type" onchange="toggleOA()">
+                <option value="">-- Select --</option>
+                <option value="A2A">A2A</option>
+                <option value="OA">OA</option>
+              </select>
+              <div class="ferr" id="e-type">Select type</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Found By</label>
+              <select class="fs" id="s-src">
+                <option value="">-- Optional --</option>
+                <option value="Myself">Myself</option>
+                <option value="Jack">Jack</option>
+                <option value="TFTJ">TFTJ</option>
+                <option value="VAA">VAA</option>
+                <option value="VAS">VAS</option>
+                <option value="Discord Group">Discord Group</option>
+              </select>
+            </div>
+          </div>
+          <div class="g4">
+            <div class="fg">
+              <label class="fl">Date Dropped (Keepa) *</label>
+              <input class="fi" id="s-date" type="date">
+              <div class="ferr" id="e-date">Select drop date</div>
+            </div>
+            <div class="fg">
+              <label class="fl">COG (£)</label>
+              <input class="fi" id="s-cog" type="number" placeholder="0.00" step="0.01" min="0">
+            </div>
+            <div class="fg">
+              <label class="fl">Competitors (FBA)</label>
+              <input class="fi" id="s-comp" type="number" placeholder="0" min="0">
+            </div>
+            <div class="fg">
+              <label class="fl">LTD End Date</label>
+              <input class="fi" id="s-end" type="date" oninput="previewBW()">
+            </div>
+          </div>
+          <div class="fg" id="oa-row" style="display:none">
+            <label class="fl">OA Source Link</label>
+            <input class="fi" id="s-oa" type="url" placeholder="https://retailer.com/product/…">
+          </div>
+          <div class="fg">
+            <label class="fl">Auto Amazon Link</label>
+            <input class="fi" id="s-amzlink" readonly placeholder="Select ASIN + Marketplace" style="opacity:.55;font-size:11.5px;">
+          </div>
+          <div id="bw-preview" style="display:none;margin-bottom:13px;"></div>
+          <div class="fg">
+            <label class="fl">Notes</label>
+            <textarea class="fta" id="s-notes" placeholder="Seller, competition, BSR notes…"></textarea>
+          </div>
+          <button class="badd" onclick="addLead()">Add Lead</button>
+        </div>
+      </div>
+
+      <div class="bulk-bar" id="bulk-bar">
+        <span class="bulk-count" id="bulk-count">0 selected</span>
+        <button class="bulk-btn bb-buy" onclick="bulkBought()">✅ Mark Bought</button>
+        <button class="bulk-btn bb-snooze" onclick="bulkSnooze()">💤 Snooze 3d</button>
+        <button class="bulk-btn bb-del" onclick="bulkDelete()">🗑️ Delete</button>
+        <button class="bulk-sel-all" onclick="bulkSelectAll()">Select All</button>
+        <button class="bulk-btn bb-cancel" onclick="clearBulk()">Cancel</button>
+      </div>
+
+      <div class="sec nt" id="sec-ready"><span class="sec-t">✅ Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
+      <div class="tg" id="ready-grid"></div>
+
+      <div class="sec" id="sec-watching"><span class="sec-t">⏳ Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
+      <div class="tg" id="watch-grid"></div>
+
+      <div class="sec" id="sec-ltd"><span class="sec-t">💰 LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
+      <div class="tg" id="ltd-grid"></div>
+    </div>
+
+    <!-- ══════════════ REBUY ══════════════ -->
+    <div id="rebuy" class="tc">
+      <div class="pg-title">Rebuy Queue</div>
+      <div class="fc" id="rb-fc">
+        <div class="fc-hd" onclick="toggleFC('rb-fc')">
+          <div class="fc-title">📦 Log Purchase</div>
+          <div class="cico">▼</div>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="g3">
+            <div class="fg">
+              <label class="fl">ASIN *</label>
+              <input class="fi" id="r-asin" placeholder="B07X9KYZ6L" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+              <div class="ferr" id="e-r-asin">Valid ASIN required</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Marketplace</label>
+              <select class="fs" id="r-market">
+                <option value="amazon.co.uk">🇬🇧 Amazon UK</option>
+                <option value="amazon.de">🇩🇪 Amazon DE</option>
+                <option value="amazon.fr">🇫🇷 Amazon FR</option>
+                <option value="amazon.es">🇪🇸 Amazon ES</option>
+                <option value="amazon.it">🇮🇹 Amazon IT</option>
+                <option value="amazon.nl">🇳🇱 Amazon NL</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Notes</label>
+              <input class="fi" id="r-notes" placeholder="e.g. Buy max 3 units on UK1">
+            </div>
+          </div>
+          <div class="g3">
+            <div class="fg"><label class="fl">UK1 Date</label><input class="fi" id="r-uk1" type="date"></div>
+            <div class="fg"><label class="fl">UK2 Date</label><input class="fi" id="r-uk2" type="date"></div>
+            <div class="fg"><label class="fl">UK3 Date</label><input class="fi" id="r-uk3" type="date"></div>
+          </div>
+          <div class="g3">
+            <div class="fg"><label class="fl">EU1 Date</label><input class="fi" id="r-eu1" type="date"></div>
+            <div class="fg"><label class="fl">EU2 Date</label><input class="fi" id="r-eu2" type="date"></div>
+            <div class="fg"><label class="fl">EU3 Date</label><input class="fi" id="r-eu3" type="date"></div>
+          </div>
+          <button class="badd" onclick="addRebuy()">Add to Rebuy Queue</button>
+        </div>
+      </div>
+      <div class="sec nt"><span class="sec-t">📋 Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span></div>
+      <div id="rebuy-list"></div>
+    </div>
+
+    <!-- ══════════════ INBOX ══════════════ -->
+    <div id="inbox" class="tc">
+      <div class="pg-title">📥 Quick Capture Inbox</div>
+      <div class="fc">
+        <div class="fc-hd" style="cursor:default">
+          <div class="fc-title">⚡ Quick Save — Don't Lose It</div>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="qc-bar">
+            <input class="qc-input" id="qc-asin" placeholder="ASIN or product name…" maxlength="50" oninput="if(this.value.length<=10)this.value=this.value.toUpperCase()">
+            <select class="qc-sel" id="qc-market">
+              <option value="amazon.co.uk">🇬🇧 UK</option>
+              <option value="amazon.de">🇩🇪 DE</option>
+              <option value="amazon.fr">🇫🇷 FR</option>
+              <option value="amazon.es">🇪🇸 ES</option>
+              <option value="amazon.it">🇮🇹 IT</option>
+              <option value="amazon.nl">🇳🇱 NL</option>
+              <option value="amazon.com">🇺🇸 US</option>
+            </select>
+            <select class="qc-sel" id="qc-src">
+              <option value="Myself">Myself</option>
+              <option value="Jack">Jack</option>
+              <option value="TFTJ">TFTJ</option>
+              <option value="VAA">VAA</option>
+              <option value="VAS">VAS</option>
+              <option value="Discord Group">Discord Group</option>
+            </select>
+            <button class="qc-btn" onclick="quickCapture()">+ Save</button>
+          </div>
+          <div class="fg">
+            <input class="fi" id="qc-note" placeholder="Optional note — why it caught your eye…" style="margin-top:-4px">
+          </div>
+        </div>
+      </div>
+      <div class="sec nt"><span class="sec-t">📥 Captured Items</span><span class="sec-pill" id="cnt-inbox">0</span></div>
+      <div id="inbox-list"></div>
+    </div>
+
+    <!-- ══════════════ WATCHLIST ══════════════ -->
+    <div id="watchlist" class="tc">
+      <div class="pg-title">👁 Watchlist — Parking Lot</div>
+      <div class="fc" id="wl-fc">
+        <div class="fc-hd" onclick="toggleFC('wl-fc')">
+          <div class="fc-title">➕ Add to Watchlist</div>
+          <div class="cico">▼</div>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="g4">
+            <div class="fg">
+              <label class="fl">ASIN *</label>
+              <input class="fi" id="w-asin" placeholder="B07X9KYZ6L" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+              <div class="ferr" id="e-w-asin">Valid ASIN required</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Marketplace</label>
+              <select class="fs" id="w-market">
+                <option value="amazon.co.uk">🇬🇧 Amazon UK</option>
+                <option value="amazon.de">🇩🇪 Amazon DE</option>
+                <option value="amazon.fr">🇫🇷 Amazon FR</option>
+                <option value="amazon.es">🇪🇸 Amazon ES</option>
+                <option value="amazon.it">🇮🇹 Amazon IT</option>
+                <option value="amazon.nl">🇳🇱 Amazon NL</option>
+                <option value="amazon.com">🇺🇸 Amazon US</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Type</label>
+              <select class="fs" id="w-type">
+                <option value="A2A">A2A</option>
+                <option value="OA">OA</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Found By</label>
+              <select class="fs" id="w-src">
+                <option value="">-- Optional --</option>
+                <option value="Myself">Myself</option>
+                <option value="Jack">Jack</option>
+                <option value="TFTJ">TFTJ</option>
+                <option value="VAA">VAA</option>
+                <option value="VAS">VAS</option>
+                <option value="Discord Group">Discord Group</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg">
+            <label class="fl">Notes / Reason for Watching</label>
+            <textarea class="fta" id="w-notes" placeholder="Why are you watching this? What would make you pull the trigger?"></textarea>
+          </div>
+          <button class="badd" onclick="addWatch()">Add to Watchlist</button>
+        </div>
+      </div>
+      <div class="sec nt"><span class="sec-t">👁 On Watch</span><span class="sec-pill" id="cnt-watch-list">0</span></div>
+      <div id="watch-list"></div>
+    </div>
+
+    <!-- ══════════════ SUBSCRIBE & SAVE ══════════════ -->
+    <div id="sns" class="tc">
+      <div class="pg-title">🔔 Subscribe &amp; Save Tracker</div>
+
+      <div class="sns-table-wrap">
+        <table class="sns-table" id="sns-main-table">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Last Edit Day</th>
+              <th>Delivery Day</th>
+              <th>Days Until Edit</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="sns-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="sec" style="margin-top:28px"><span class="sec-t">📋 Cycle History</span><span class="sec-pill" id="cnt-sns-hist">0</span></div>
+      <div class="sns-table-wrap">
+        <table class="sns-hist-table">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Last Edit Day</th>
+              <th>Delivery Day</th>
+              <th>Cycle</th>
+              <th>Date Recorded</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="sns-hist-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════ NOTES ══════════════ -->
+    <div id="notes" class="tc">
+      <div class="pg-title">📝 Notes</div>
+      <div class="notes-toolbar">
+        <input class="notes-new-title" id="notes-new-title" placeholder="Note title…" maxlength="60"
+          onkeydown="if(event.key==='Enter')addNote()">
+        <button class="notes-add-btn" onclick="addNote()">+ New Note</button>
+        <button class="notes-export-btn" onclick="openExport()">📤 Export All</button>
+      </div>
+      <div class="notes-grid" id="notes-grid"></div>
+    </div>
+
+    <!-- ══════════════ OA REPLEN ══════════════ -->
+    <div id="oareplen" class="tc">
+      <div class="pg-title">🔁 OA Replen</div>
+
+      <div class="fc" id="oa-fc">
+        <div class="fc-hd" onclick="toggleFC('oa-fc')">
+          <div class="fc-title">➕ Add OA Replen Item</div>
+          <div class="cico">▼</div>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="g3">
+            <div class="fg">
+              <label class="fl">ASIN *</label>
+              <input class="fi" id="oa-asin" placeholder="B07X9KYZ6L" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+              <div class="ferr" id="e-oa-asin">Valid ASIN required</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Target COG (£) *</label>
+              <input class="fi" id="oa-target" type="number" placeholder="e.g. 8.50" step="0.01" min="0">
+              <div class="ferr" id="e-oa-target">Enter target COG</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Current COG (£)</label>
+              <input class="fi" id="oa-current" type="number" placeholder="e.g. 11.00" step="0.01" min="0">
+            </div>
+          </div>
+          <div class="g2">
+            <div class="fg">
+              <label class="fl">Check Every</label>
+              <select class="fs" id="oa-freq">
+                <option value="7">Every 7 days</option>
+                <option value="10">Every 10 days</option>
+                <option value="14">Every 14 days</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">OA Source Link</label>
+              <input class="fi" id="oa-link" type="url" placeholder="https://retailer.com/product/…">
+            </div>
+          </div>
+          <div class="fg">
+            <label class="fl">Notes</label>
+            <textarea class="fta" id="oa-notes" placeholder="e.g. Goes on sale every 6 weeks — 8% then 10% off. Only buy at 10%."></textarea>
+          </div>
+          <button class="badd" onclick="addOA()">Add to OA Replen</button>
+        </div>
+      </div>
+
+      <div class="sec nt"><span class="sec-t">🔁 Watching for Price Drop</span><span class="sec-pill" id="cnt-oa">0</span></div>
+      <div id="oa-list"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- LEAD DETAIL MODAL -->
+<div class="mbg" id="leadModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Lead Detail</span><button class="mx" onclick="closeM('leadModal')">×</button></div>
+    <div id="lead-body"></div>
+  </div>
+</div>
+
+<!-- EDIT LEAD MODAL -->
+<div class="mbg" id="editModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Edit Lead</span><button class="mx" onclick="closeM('editModal')">×</button></div>
+    <input type="hidden" id="em-id">
+    <div class="fg"><label class="fl">ASIN</label><input class="fi" id="em-asin" readonly style="opacity:.5"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Marketplace</label>
+        <select class="fs" id="em-market">
+          <option value="amazon.co.uk">🇬🇧 Amazon UK</option><option value="amazon.de">🇩🇪 Amazon DE</option>
+          <option value="amazon.fr">🇫🇷 Amazon FR</option><option value="amazon.es">🇪🇸 Amazon ES</option>
+          <option value="amazon.it">🇮🇹 Amazon IT</option><option value="amazon.nl">🇳🇱 Amazon NL</option>
+          <option value="amazon.com">🇺🇸 Amazon US</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="em-type"><option value="A2A">A2A</option><option value="OA">OA</option></select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">COG (£)</label><input class="fi" id="em-cog" type="number" step="0.01" min="0"></div>
+      <div class="fg"><label class="fl">Competitors (FBA)</label><input class="fi" id="em-comp" type="number" min="0"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Found By</label>
+        <select class="fs" id="em-src">
+          <option value="">--</option><option value="Myself">Myself</option><option value="Jack">Jack</option>
+          <option value="TFTJ">TFTJ</option><option value="VAA">VAA</option>
+          <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">LTD End Date</label><input class="fi" id="em-end" type="date"></div>
+    </div>
+    <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="saveEdit()">Save</button>
+      <button class="mbtn cancel" onclick="closeM('editModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT WATCHLIST MODAL -->
+<div class="mbg" id="wEditModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Edit Watchlist Item</span><button class="mx" onclick="closeM('wEditModal')">×</button></div>
+    <input type="hidden" id="we-id">
+    <div class="fg"><label class="fl">ASIN</label><input class="fi" id="we-asin" readonly style="opacity:.5"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Marketplace</label>
+        <select class="fs" id="we-market">
+          <option value="amazon.co.uk">🇬🇧 Amazon UK</option><option value="amazon.de">🇩🇪 Amazon DE</option>
+          <option value="amazon.fr">🇫🇷 Amazon FR</option><option value="amazon.es">🇪🇸 Amazon ES</option>
+          <option value="amazon.it">🇮🇹 Amazon IT</option><option value="amazon.nl">🇳🇱 Amazon NL</option>
+          <option value="amazon.com">🇺🇸 Amazon US</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="we-type"><option value="A2A">A2A</option><option value="OA">OA</option></select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Found By</label>
+      <select class="fs" id="we-src">
+        <option value="">--</option><option value="Myself">Myself</option><option value="Jack">Jack</option>
+        <option value="TFTJ">TFTJ</option><option value="VAA">VAA</option>
+        <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="we-notes"></textarea></div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="saveWatchEdit()">Save</button>
+      <button class="mbtn cancel" onclick="closeM('wEditModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOURCING BOUGHT CONFIRM -->
+<div class="mbg" id="sbModal">
+  <div class="modal" style="max-width:400px">
+    <div class="mhd"><span class="mt">Confirm Purchase</span><button class="mx" onclick="closeM('sbModal')">×</button></div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:6px">Mark <strong id="sb-asin" style="color:var(--text);font-family:var(--mono)"></strong> as bought?</p>
+    <p style="font-size:12px;color:var(--muted)">It will be removed from active leads immediately.</p>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="confirmSrcBought()">✅ Yes, Bought It</button>
+      <button class="mbtn cancel" onclick="closeM('sbModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- REBUY BOUGHT MODAL -->
+<div class="mbg" id="rbModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Mark as Bought</span><button class="mx" onclick="closeM('rbModal')">×</button></div>
+    <p style="font-size:13px;color:var(--text2)">Which accounts for <strong id="rb-asin" style="color:var(--text);font-family:var(--mono)"></strong>?</p>
+    <div class="cbg">
+      <label class="cbr"><input type="checkbox" id="cb-uk1"><span>UK1</span></label>
+      <label class="cbr"><input type="checkbox" id="cb-uk2"><span>UK2</span></label>
+      <label class="cbr"><input type="checkbox" id="cb-uk3"><span>UK3</span></label>
+      <label class="cbr"><input type="checkbox" id="cb-eu1"><span>EU1</span></label>
+      <label class="cbr"><input type="checkbox" id="cb-eu2"><span>EU2</span></label>
+      <label class="cbr"><input type="checkbox" id="cb-eu3"><span>EU3</span></label>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="confirmRbBought()">Confirm</button>
+      <button class="mbtn cancel" onclick="closeM('rbModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROMOTE INBOX TO LEAD MODAL -->
+<div class="mbg" id="promoteModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Promote to Active Lead</span><button class="mx" onclick="closeM('promoteModal')">×</button></div>
+    <input type="hidden" id="pm-id">
+    <div class="fg"><label class="fl">ASIN</label><input class="fi" id="pm-asin" readonly style="opacity:.5"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Marketplace</label>
+        <select class="fs" id="pm-market">
+          <option value="amazon.co.uk">🇬🇧 Amazon UK</option><option value="amazon.de">🇩🇪 Amazon DE</option>
+          <option value="amazon.fr">🇫🇷 Amazon FR</option><option value="amazon.es">🇪🇸 Amazon ES</option>
+          <option value="amazon.it">🇮🇹 Amazon IT</option><option value="amazon.nl">🇳🇱 Amazon NL</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="pm-type"><option value="A2A">A2A</option><option value="OA">OA</option></select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Date Dropped *</label><input class="fi" id="pm-date" type="date"></div>
+      <div class="fg"><label class="fl">COG (£)</label><input class="fi" id="pm-cog" type="number" step="0.01" min="0"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Competitors (FBA)</label><input class="fi" id="pm-comp" type="number" min="0"></div>
+      <div class="fg"><label class="fl">LTD End Date</label><input class="fi" id="pm-end" type="date"></div>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="pm-notes"></textarea></div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="confirmPromote()">Move to Sourcing</button>
+      <button class="mbtn cancel" onclick="closeM('promoteModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES EXPORT MODAL -->
+<div class="mbg" id="exportModal">
+  <div class="modal" style="max-width:580px">
+    <div class="mhd">
+      <span class="mt">📤 Export All Notes</span>
+      <button class="mx" onclick="closeM('exportModal')">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">All your notes compiled into one block. Select all and copy, or use the button below.</p>
+    <textarea class="export-textarea" id="export-text" readonly></textarea>
+    <button class="export-copy-btn" onclick="copyExport()">📋 Copy to Clipboard</button>
+  </div>
+</div>
+
+<!-- DAY 8 DECISION MODAL -->
+<div class="mbg" id="day8Modal">
+  <div class="modal" style="max-width:460px">
+    <div class="mhd">
+      <span class="mt">⏰ Day 8 — Time to Decide</span>
+      <button class="mx" onclick="_day8SessionShown.add(parseInt(document.getElementById('day8-lead-id').value));closeM('day8Modal')" title="Dismiss for now — will reappear next session">×</button>
+    </div>
+    <div id="day8-asin-display" style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--text);margin-bottom:6px"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:18px">The 7-day window has passed. You need to make a decision on this lead.</div>
+    <input type="hidden" id="day8-lead-id">
+
+    <!-- Decision buttons -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <button class="mbtn ok" style="font-size:13px;padding:13px" onclick="day8Buy()">✅ Buy It — Mark as Bought</button>
+      <button style="width:100%;padding:11px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="day8Snooze()">💤 Not Sure Yet — Snooze 3 Days</button>
+      <button style="width:100%;padding:11px;background:var(--card2);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="toggleDay8Reject()">❌ Not Buying — Give Reason</button>
+    </div>
+
+    <!-- Reject reason panel (hidden by default) -->
+    <div id="day8-reject-panel" style="display:none;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Why aren't you buying?</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+        <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s" onclick="this.style.borderColor='var(--blue)'">
+          <input type="radio" name="day8reason" value="ltdConvert" style="accent-color:var(--blue)"> 
+          <span style="font-size:13px;color:var(--text)">It's actually an LTD — I'll add an end date</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;cursor:pointer" onclick="this.style.borderColor='var(--blue)'">
+          <input type="radio" name="day8reason" value="priceNotRight" style="accent-color:var(--blue)"> 
+          <span style="font-size:13px;color:var(--text)">Price not right</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;cursor:pointer" onclick="this.style.borderColor='var(--blue)'">
+          <input type="radio" name="day8reason" value="tooManyCompetitors" style="accent-color:var(--blue)"> 
+          <span style="font-size:13px;color:var(--text)">Too many competitors</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;cursor:pointer" onclick="this.style.borderColor='var(--blue)'">
+          <input type="radio" name="day8reason" value="other" style="accent-color:var(--blue)"> 
+          <span style="font-size:13px;color:var(--text)">Other</span>
+        </label>
+      </div>
+      <!-- LTD end date input — shown only when ltdConvert selected -->
+      <div id="day8-ltd-row" style="display:none;margin-bottom:12px">
+        <label class="fl">LTD End Date *</label>
+        <input class="fi" id="day8-ltd-end" type="date" placeholder="When does the deal end?">
+      </div>
+      <input class="fi" id="day8-other-text" placeholder="Any notes (optional)…" style="margin-bottom:12px">
+      <button class="mbtn danger" style="width:100%" onclick="day8Reject()">Confirm — Remove from Active Leads</button>
+    </div>
+  </div>
+</div>
+
+<!-- DUPLICATE WARNING MODAL -->
+<div class="mbg" id="dupModal">
+  <div class="modal" style="max-width:460px">
+    <div class="mhd">
+      <span class="mt">⚠️ Duplicate ASIN Found</span>
+      <button class="mx" onclick="closeM('dupModal')">×</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px"><strong id="dup-asin" style="color:var(--text);font-family:var(--mono)"></strong> already exists in:</p>
+    <div id="dup-locations"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px;margin-bottom:16px">You can delete it from its current location and re-add it where you want, or cancel and leave it as-is.</p>
+    <div class="mbtns">
+      <button class="mbtn ok" id="dup-add-anyway" onclick="dupAddAnyway()">Add Anyway</button>
+      <button class="mbtn cancel" onclick="closeM('dupModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- S&S NEEDS-DATES POPUP (persistent until resolved) -->
+<div class="sns-popup-bg" id="snsNeedsPopup">
+  <div class="sns-popup">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+      <div class="sns-popup-title">⚠️ Subscribe &amp; Save — Action Required</div>
+      <button class="mx" style="flex-shrink:0;margin-left:10px" onclick="window._snsPopupDismissed=true;closeM('snsNeedsPopup')" title="Dismiss for this session — will reappear next time">×</button>
+    </div>
+    <div class="sns-popup-sub">The following accounts have passed their Last Edit Day. You need to enter the next cycle's dates before this can be dismissed.</div>
+    <div class="sns-popup-accounts" id="sns-needs-list"></div>
+    <button class="sns-popup-dismiss" onclick="snsCheckAndDismiss()">I've Entered the New Dates — Check Again</button>
+  </div>
+</div>
+
+<!-- S&S REVIEW REMINDER POPUP (day after last edit — check & cancel window) -->
+<div class="sns-review-popup-bg" id="snsReviewPopup">
+  <div class="sns-review-popup">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+      <div style="font-size:17px;font-weight:700;color:#c4b5fd">📋 Sub &amp; Save — Review Day</div>
+      <button class="mx" style="flex-shrink:0;margin-left:10px" onclick="closeM('snsReviewPopup')" title="Dismiss for this session">×</button>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px" id="sns-review-msg"></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--text2)">
+      <div style="font-weight:700;color:var(--text);margin-bottom:6px">Checklist for today:</div>
+      <div>✅ Check all Sub &amp; Save prices are still good</div>
+      <div>✅ Cancel any you're no longer happy with</div>
+      <div>✅ Add confirmed ones to your purchase sheet</div>
+      <div>✅ Items dispatch tomorrow — this is your last chance</div>
+    </div>
+    <button style="width:100%;padding:11px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;" onclick="closeM('snsReviewPopup')">Got It — I'll Review Now</button>
+  </div>
+</div>
+
+<!-- S&S NEXT CYCLE / EDIT MODAL -->
+<div class="mbg" id="snsEditModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mhd">
+      <span class="mt" id="sns-edit-title">Update Cycle Dates</span>
+      <button class="mx" onclick="closeM('snsEditModal')">×</button>
+    </div>
+    <input type="hidden" id="sns-edit-acc">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Current cycle will be archived to history. Enter the new dates below.</p>
+    <div class="g2">
+      <div class="fg">
+        <label class="fl">New Last Edit Day *</label>
+        <input class="fi" id="sns-new-edit" type="date">
+        <div class="ferr" id="e-sns-edit">Required</div>
+      </div>
+      <div class="fg">
+        <label class="fl">New Delivery Day *</label>
+        <input class="fi" id="sns-new-delivery" type="date">
+        <div class="ferr" id="e-sns-del">Required</div>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Notes (optional)</label>
+      <input class="fi" id="sns-new-notes" placeholder="e.g. Price changed, skipped 2 items…">
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="saveSnsNextCycle()">Save New Cycle</button>
+      <button class="mbtn cancel" onclick="closeM('snsEditModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES EXPORT MODAL -->
+<div class="mbg" id="exportModal">
+  <div class="modal" style="max-width:600px">
+    <div class="mhd">
+      <span class="mt">📤 Export All Notes</span>
+      <button class="mx" onclick="closeM('exportModal')">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px">All your notes in one block — select all and copy, or download as a .txt file.</p>
+    <textarea class="export-textarea" id="export-textarea" readonly onclick="this.select()"></textarea>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="copyExport()">📋 Copy All</button>
+      <button class="mbtn cancel" style="flex:0.5" onclick="downloadExport()">⬇️ Download .txt</button>
+      <button class="mbtn cancel" style="flex:0.4" onclick="closeM('exportModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- OA CHECK MODAL -->
+<div class="mbg" id="oaCheckModal">
+  <div class="modal" style="max-width:420px">
+    <div class="mhd">
+      <span class="mt">✅ Log Check</span>
+      <button class="mx" onclick="closeM('oaCheckModal')">×</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Logging check for <strong id="oa-check-asin" style="color:var(--text);font-family:var(--mono)"></strong> — today <strong style="color:var(--text)" id="oa-check-date"></strong></p>
+    <input type="hidden" id="oa-check-id">
+    <div class="fg">
+      <label class="fl">Note (optional)</label>
+      <input class="fi" id="oa-check-note" placeholder="e.g. Still £11.00, no promo yet…">
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="confirmOACheck()">Save Check</button>
+      <button class="mbtn cancel" onclick="closeM('oaCheckModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- OA EDIT MODAL -->
+<div class="mbg" id="oaEditModal">
+  <div class="modal" style="max-width:460px">
+    <div class="mhd">
+      <span class="mt">Edit OA Replen Item</span>
+      <button class="mx" onclick="closeM('oaEditModal')">×</button>
+    </div>
+    <input type="hidden" id="oae-id">
+    <div class="fg"><label class="fl">ASIN</label><input class="fi" id="oae-asin" readonly style="opacity:.5"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Target COG (£)</label><input class="fi" id="oae-target" type="number" step="0.01" min="0"></div>
+      <div class="fg"><label class="fl">Current COG (£)</label><input class="fi" id="oae-current" type="number" step="0.01" min="0"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Check Frequency</label>
+        <select class="fs" id="oae-freq">
+          <option value="7">Every 7 days</option>
+          <option value="10">Every 10 days</option>
+          <option value="14">Every 14 days</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="oae-link" type="url"></div>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="oae-notes"></textarea></div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="saveOAEdit()">Save</button>
+      <button class="mbtn cancel" onclick="closeM('oaEditModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════
+const SK='a2a_src_v5',RK='a2a_rb_v5',IK='a2a_inbox_v5',WK='a2a_watch_v5';
+const ld=k=>{try{return JSON.parse(localStorage.getItem(k))||null;}catch{return null;}};
+const sv2=( k,d)=>localStorage.setItem(k,JSON.stringify(d));
+
+// ═══════════════════════════════════
+// DEMO DATA
+// ═══════════════════════════════════
+const dAgo=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().split('T')[0];};
+const dAhd=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];};
+
+let leads     = ld(SK) || [];
+let rebuys    = ld(RK) || [];
+let inbox     = ld(IK) || [];
+let watchlist = ld(WK) || [];
+let editId=null,rbBoughtId=null,srcBoughtId=null,promoteId=null,wEditId=null;
+
+// ═══════════════════════════════════
+// DATE HELPERS
+// ═══════════════════════════════════
+const today=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());};
+const pd=s=>{if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const diff=(a,b)=>Math.round((b-a)/86400000);
+const addD=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r;};
+const fmt=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
+const fmtLong=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'—';
+const amzUrl=(asin,mkt)=>`https://www.${mkt||'amazon.co.uk'}/dp/${asin}`;
+const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term%5D=${asin}`;
+
+// ═══════════════════════════════════
+// LEAD CALC
+// ═══════════════════════════════════
+function calcLead(l){
+  const now=today(),found=pd(l.dateDropped);
+  if(!found)return{status:'unknown'};
+  const readyDate=addD(found,7);
+  if(l.endDate){
+    const endD=pd(l.endDate);
+    if(endD<now)return{status:'expired',endDate:endD};
+    const buyBy=addD(endD,-5);
+    if(now<readyDate){
+      const wd=diff(readyDate,buyBy);
+      return wd<2?{status:'review',readyDate,buyBy,endDate:endD,daysLeft:diff(now,readyDate)}
+                 :{status:'waiting',readyDate,buyBy,endDate:endD,daysLeft:diff(now,readyDate)};
+    }
+    if(now>=readyDate&&now<=buyBy)return{status:'buywindow',readyDate,buyBy,endDate:endD,daysLeft:diff(now,buyBy)};
+    return{status:'review',readyDate,buyBy,endDate:endD,daysLeft:0};
+  }
+  const left=7-diff(found,now);
+  if(left>0)return{status:'watching',readyDate,daysLeft:left};
+  if(left===-1)return{status:'missed',readyDate,daysLeft:-1};
+  return{status:'ready',readyDate,daysLeft:left};
+}
+
+function bwHtml(l,c){
+  if(!l.endDate)return'';
+  const endD=pd(l.endDate),found=pd(l.dateDropped),readyDate=addD(found,7),buyBy=addD(endD,-5);
+  const wd=diff(readyDate,buyBy);
+  let cls='warn',advice='';
+  if(c.status==='buywindow'){cls='ok';advice=`✅ Buy now — window closes ${fmt(buyBy)} (${c.daysLeft} day${c.daysLeft!==1?'s':''} left)`;}
+  else if(c.status==='waiting'){cls='warn';advice=`⏳ Wait until ${fmt(readyDate)} then buy before ${fmt(buyBy)}`;}
+  else{cls='bad';advice=`⚠️ Tight window — manual decision required`;}
+  return`<div class="bwb ${cls}" style="margin-bottom:12px">
+    <div class="bwb-row"><span class="bwb-lbl">Deal ends</span><span class="bwb-val">${fmtLong(endD)}</span></div>
+    <div class="bwb-row"><span class="bwb-lbl">7-day wait clears</span><span class="bwb-val ${c.status==='waiting'?'warn':'ok'}">${fmtLong(readyDate)}</span></div>
+    <div class="bwb-row"><span class="bwb-lbl">Latest buy date</span><span class="bwb-val ${wd<3?'bad':'ok'}">${fmtLong(buyBy)}</span></div>
+    <div class="bwb-row"><span class="bwb-lbl">Window</span><span class="bwb-val ${wd<3?'bad':wd<5?'warn':'ok'}">${wd} day${wd!==1?'s':''}</span></div>
+    <div style="margin-top:7px;font-size:12px;font-weight:600;color:var(--text)">${advice}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════
+// FORM HELPERS
+// ═══════════════════════════════════
+function autoLink(){
+  const a=gv('s-asin'),m=gv('s-market');
+  document.getElementById('s-amzlink').value=(a&&m)?amzUrl(a,m):'';
+}
+function toggleOA(){
+  document.getElementById('oa-row').style.display=gv('s-type')==='OA'?'':'none';
+}
+function previewBW(){
+  const end=gv('s-end'),date=gv('s-date'),box=document.getElementById('bw-preview');
+  if(!end||!date){box.style.display='none';return;}
+  const fl={dateDropped:date,endDate:end},c=calcLead(fl),h=bwHtml(fl,c);
+  box.innerHTML=h;box.style.display=h?'block':'none';
+}
+function toggleFC(id){document.getElementById(id).classList.toggle('coll');}
+
+// ═══════════════════════════════════
+// DAY 8 DECISION FLOW
+// ═══════════════════════════════════
+let _day8SessionShown=new Set(); // don't re-show per session once dismissed
+
+function checkDay8Leads(){
+  const now=today();
+  // Find leads that are exactly on day 8 (daysLeft === 0 from calcLead returning 'ready'
+  // but specifically those where waited === 7, i.e. diff(found, now) === 7)
+  const day8Leads=leads.filter(l=>{
+    if(l.bought||l.snoozed&&pd(l.snoozeUntil)>now)return false;
+    if(l.endDate)return false; // LTDs handled separately
+    if(l.rejectedAt)return false; // already decided
+    if(_day8SessionShown.has(l.id))return false;
+    const found=pd(l.dateDropped);
+    if(!found)return false;
+    const waited=diff(found,now);
+    return waited===7; // exactly day 8
+  });
+  if(day8Leads.length>0){
+    // Show for first one — they can work through them one at a time
+    openDay8Modal(day8Leads[0].id);
+  }
+}
+
+function openDay8Modal(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  document.getElementById('day8-lead-id').value=id;
+  document.getElementById('day8-asin-display').textContent=l.asin;
+  // Reset state
+  document.getElementById('day8-reject-panel').style.display='none';
+  document.getElementById('day8-ltd-row').style.display='none';
+  document.getElementById('day8-ltd-end').value='';
+  document.getElementById('day8-other-text').value='';
+  document.querySelectorAll('input[name="day8reason"]').forEach(r=>r.checked=false);
+  openM('day8Modal');
+}
+
+function toggleDay8Reject(){
+  const panel=document.getElementById('day8-reject-panel');
+  panel.style.display=panel.style.display==='none'?'block':'none';
+}
+
+// Watch for LTD radio selection to show end date input
+document.addEventListener('change',e=>{
+  if(e.target.name==='day8reason'){
+    document.getElementById('day8-ltd-row').style.display=
+      e.target.value==='ltdConvert'?'block':'none';
+  }
+});
+
+function day8Buy(){
+  const id=parseInt(document.getElementById('day8-lead-id').value);
+  const l=leads.find(x=>x.id===id);
+  if(l){l.bought=true;l.updatedAt=todayStr();}
+  sv2(SK,leads);
+  _day8SessionShown.add(id);
+  closeM('day8Modal');
+  render();
+  toast(`${l?.asin} marked as bought ✓`,'ok');
+  // Check if more day 8 leads
+  setTimeout(checkDay8Leads,400);
+}
+
+function day8Snooze(){
+  const id=parseInt(document.getElementById('day8-lead-id').value);
+  const l=leads.find(x=>x.id===id);
+  if(l){
+    const wakeDate=addD(today(),3).toISOString().split('T')[0];
+    l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();
+  }
+  sv2(SK,leads);
+  _day8SessionShown.add(id);
+  closeM('day8Modal');
+  render();
+  toast(`${l?.asin} snoozed for 3 days 💤`,'info');
+}
+
+function day8Reject(){
+  const id=parseInt(document.getElementById('day8-lead-id').value);
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const reason=document.querySelector('input[name="day8reason"]:checked')?.value;
+  if(!reason){toast('Select a reason first','bad');return;}
+
+  if(reason==='ltdConvert'){
+    const endDate=document.getElementById('day8-ltd-end').value;
+    if(!endDate){toast('Add the LTD end date','bad');return;}
+    // Reclassify as LTD — stays in sourcing, LTD logic now applies
+    l.endDate=endDate;l.updatedAt=todayStr();
+    sv2(SK,leads);
+    _day8SessionShown.add(id);
+    closeM('day8Modal');
+    render();
+    toast(`${l.asin} reclassified as LTD — buy window calculated ✓`,'ok');
+    setTimeout(checkDay8Leads,400);
+    return;
+  }
+
+  // All other reasons — mark as rejected
+  const reasonLabels={priceNotRight:'Price not right',tooManyCompetitors:'Too many competitors',other:'Other'};
+  l.rejectedAt=todayStr();
+  l.rejectReason=reasonLabels[reason]||reason;
+  l.rejectNote=document.getElementById('day8-other-text').value.trim();
+  l.updatedAt=todayStr();
+  sv2(SK,leads);
+  _day8SessionShown.add(id);
+  closeM('day8Modal');
+  render();
+  toast(`${l.asin} rejected — removed from active leads`,'info');
+  setTimeout(checkDay8Leads,400);
+}
+let _dupPendingFn=null;
+
+function findDups(asin){
+  const locs=[];
+  if(leads.find(l=>l.asin===asin&&!l.bought))locs.push({tab:'Sourcing',label:'Sourcing',id:leads.find(l=>l.asin===asin&&!l.bought).id,store:'leads'});
+  if(inbox.find(i=>i.asin===asin))locs.push({tab:'Inbox',label:'Inbox',id:inbox.find(i=>i.asin===asin).id,store:'inbox'});
+  if(watchlist.find(w=>w.asin===asin))locs.push({tab:'Watchlist',label:'Watchlist',id:watchlist.find(w=>w.asin===asin).id,store:'watchlist'});
+  return locs;
+}
+
+function showDupModal(asin, onAddAnyway){
+  const locs=findDups(asin);
+  document.getElementById('dup-asin').textContent=asin;
+  _dupPendingFn=onAddAnyway;
+  const locsDiv=document.getElementById('dup-locations');
+  locsDiv.innerHTML=locs.map(loc=>`<div class="dup-loc">
+    <span class="dup-loc-tab">${loc.label}</span>
+    <span class="dup-loc-asin">${asin}</span>
+    <button class="dup-del-btn" onclick="dupDeleteFrom('${loc.store}',${loc.id})">Delete from ${loc.label}</button>
+  </div>`).join('');
+  openM('dupModal');
+}
+
+function dupDeleteFrom(store,id){
+  if(store==='leads'){leads=leads.filter(l=>l.id!==id);sv2(SK,leads);}
+  else if(store==='inbox'){inbox=inbox.filter(i=>i.id!==id);sv2(IK,inbox);}
+  else if(store==='watchlist'){watchlist=watchlist.filter(w=>w.id!==id);sv2(WK,watchlist);}
+  render();
+  // Re-check if any dups remain — if none, close modal
+  const asin=document.getElementById('dup-asin').textContent;
+  const remaining=findDups(asin);
+  if(remaining.length===0){closeM('dupModal');if(_dupPendingFn){_dupPendingFn();_dupPendingFn=null;}}
+  else{
+    document.getElementById('dup-locations').innerHTML=remaining.map(loc=>`<div class="dup-loc">
+      <span class="dup-loc-tab">${loc.label}</span>
+      <span class="dup-loc-asin">${asin}</span>
+      <button class="dup-del-btn" onclick="dupDeleteFrom('${loc.store}',${loc.id})">Delete from ${loc.label}</button>
+    </div>`).join('');
+  }
+  toast(`Removed from ${store} ✓`,'ok');
+}
+
+function dupAddAnyway(){
+  closeM('dupModal');
+  if(_dupPendingFn){_dupPendingFn();_dupPendingFn=null;}
+}
+
+// ═══════════════════════════════════
+// SNOOZE
+// ═══════════════════════════════════
+function snoozeLead(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const wakeDate=addD(today(),3).toISOString().split('T')[0];
+  l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();
+  sv2(SK,leads);render();toast(`${l.asin} snoozed for 3 days 💤`,'info');
+}
+
+function isSnoozed(l){
+  if(!l.snoozed||!l.snoozeUntil)return false;
+  return pd(l.snoozeUntil)>today();
+}
+
+// ═══════════════════════════════════
+// BULK ACTIONS
+// ═══════════════════════════════════
+let bulkSelected=new Set();
+
+function toggleBulk(id,cb){
+  if(cb.checked)bulkSelected.add(id);
+  else bulkSelected.delete(id);
+  updateBulkBar();
+}
+
+function updateBulkBar(){
+  const bar=document.getElementById('bulk-bar');
+  const cnt=document.getElementById('bulk-count');
+  if(bulkSelected.size>0){bar.classList.add('show');cnt.textContent=`${bulkSelected.size} selected`;}
+  else{bar.classList.remove('show');}
+}
+
+function bulkSelectAll(){
+  document.querySelectorAll('.tile-cb').forEach(cb=>{
+    cb.checked=true;
+    const id=parseInt(cb.dataset.id);
+    if(id)bulkSelected.add(id);
+  });
+  updateBulkBar();
+}
+
+function clearBulk(){
+  bulkSelected.clear();
+  document.querySelectorAll('.tile-cb').forEach(cb=>cb.checked=false);
+  updateBulkBar();
+}
+
+function bulkBought(){
+  if(!bulkSelected.size)return;
+  if(!confirm(`Mark ${bulkSelected.size} lead${bulkSelected.size!==1?'s':''} as bought?`))return;
+  bulkSelected.forEach(id=>{const l=leads.find(x=>x.id===id);if(l)l.bought=true;});
+  sv2(SK,leads);bulkSelected.clear();render();toast(`${bulkSelected.size||'All selected'} marked as bought ✓`,'ok');
+}
+
+function bulkSnooze(){
+  if(!bulkSelected.size)return;
+  const wakeDate=addD(today(),3).toISOString().split('T')[0];
+  bulkSelected.forEach(id=>{
+    const l=leads.find(x=>x.id===id);
+    if(l){l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();}
+  });
+  sv2(SK,leads);const n=bulkSelected.size;bulkSelected.clear();render();
+  toast(`${n} lead${n!==1?'s':''} snoozed for 3 days 💤`,'info');
+}
+
+function bulkDelete(){
+  if(!bulkSelected.size)return;
+  if(!confirm(`Delete ${bulkSelected.size} lead${bulkSelected.size!==1?'s':''}? This cannot be undone.`))return;
+  const n=bulkSelected.size;
+  leads=leads.filter(l=>!bulkSelected.has(l.id));
+  sv2(SK,leads);bulkSelected.clear();render();toast(`${n} lead${n!==1?'s':''} deleted`,'info');
+}
+
+// ═══════════════════════════════════
+// LAST UPDATED HELPER
+// ═══════════════════════════════════
+const todayStr=()=>today().toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'});
+const fmtShort=d=>d?pd(d)?.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'})||d:null;
+
+// ═══════════════════════════════════
+// ADD LEAD (with dup check)
+// ═══════════════════════════════════
+function addLead(){
+  const asin=gv('s-asin').trim().toUpperCase(),market=gv('s-market'),type=gv('s-type'),
+    dateD=gv('s-date'),cog=gv('s-cog'),comp=gv('s-comp'),end=gv('s-end'),
+    src=gv('s-src'),oaLink=gv('s-oa').trim(),notes=gv('s-notes').trim();
+  let ok=true;
+  if(!asin||asin.length<5){se('e-asin',1);ok=false;}else se('e-asin',0);
+  if(!market){se('e-market',1);ok=false;}else se('e-market',0);
+  if(!type){se('e-type',1);ok=false;}else se('e-type',0);
+  if(!dateD){se('e-date',1);ok=false;}else se('e-date',0);
+  if(!ok){toast('Fix the errors above','bad');return;}
+
+  const doAdd=()=>{
+    leads.push({id:Date.now(),asin,market,type,dateDropped:dateD,cog:cog?parseFloat(cog):null,
+      comp:comp?parseInt(comp):null,src:src||null,endDate:end||null,oaLink:oaLink||null,
+      notes,bought:false,snoozed:false,snoozeUntil:null,updatedAt:todayStr()});
+    sv2(SK,leads);
+    ['s-asin','s-cog','s-comp','s-oa','s-notes'].forEach(i=>sv(i,''));
+    ['s-type','s-date','s-end','s-market','s-src'].forEach(i=>sv(i,''));
+    document.getElementById('s-amzlink').value='';
+    document.getElementById('bw-preview').style.display='none';
+    document.getElementById('oa-row').style.display='none';
+    render();toast(`${asin} added ✓`,'ok');
+  };
+
+  const dups=findDups(asin);
+  if(dups.length>0){showDupModal(asin,doAdd);return;}
+  doAdd();
+}
+
+// ═══════════════════════════════════
+// LEAD DETAIL
+// ═══════════════════════════════════
+function openLead(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const c=calcLead(l),amz=amzUrl(l.asin,l.market),sas=sasUrl(l.asin);
+  const statusMap={
+    watching:{bg:'var(--amber)',t:`⏳ ${c.daysLeft} Day${c.daysLeft!==1?'s':''} Left`,s:'Waiting for 7-day window to clear'},
+    ready:{bg:'var(--green)',t:'✅ Ready to Buy',s:'Window is open — go buy this now'},
+    missed:{bg:'var(--red)',t:'⚠️ Missed Window',s:'You were supposed to buy this yesterday'},
+    buywindow:{bg:'var(--teal)',t:'✅ LTD Buy Window Open',s:`Buy before ${fmt(c.buyBy)} — ${c.daysLeft} day${c.daysLeft!==1?'s':''} left`},
+    waiting:{bg:'var(--blue)',t:`⏳ LTD — Wait ${c.daysLeft} More Day${c.daysLeft!==1?'s':''}`,s:`Window opens ${fmt(c.readyDate)}`},
+    review:{bg:'var(--orange)',t:'⚠️ Needs Review',s:'Window too short to auto-calculate'},
+    expired:{bg:'var(--border2)',t:'❌ Expired',s:'This LTD deal has ended'},
+  };
+  const st=statusMap[c.status]||{bg:'var(--blue)',t:'Unknown',s:''};
+  const compTxt=l.comp!=null?`${l.comp} FBA seller${l.comp!==1?'s':''}`:null;
+  document.getElementById('lead-body').innerHTML=`
+    <div class="ld-asin">${l.asin}</div>
+    <span class="ld-badge ${l.type}">${l.type} · ${l.market}${l.src?' · '+l.src:''}</span>
+    <div class="ld-status" style="background:${st.bg}">
+      <div class="ld-st-title">${st.t}</div>
+      <div class="ld-st-sub">${st.s}</div>
+    </div>
+    ${bwHtml(l,c)}
+    <div class="ld-grid">
+      <div class="ld-f"><div class="ld-fl">Date Dropped</div><div class="ld-fv">${fmtLong(pd(l.dateDropped))}</div></div>
+      <div class="ld-f"><div class="ld-fl">COG</div><div class="ld-fv">${l.cog?'£'+l.cog.toFixed(2):'Not set'}</div></div>
+      <div class="ld-f"><div class="ld-fl">Competitors</div><div class="ld-fv">${compTxt||'Not set'}</div></div>
+      <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A'}</div></div>
+    </div>
+    ${l.notes?`<div class="ld-notes">📝 ${l.notes}</div>`:''}
+    <div class="ld-links">
+      <a href="${amz}" target="_blank" class="ld-link">🛒 Amazon</a>
+      <a href="${sas}" target="_blank" class="ld-link">📊 SAS</a>
+      ${l.oaLink?`<a href="${l.oaLink}" target="_blank" class="ld-link">🔗 OA Source</a>`:''}
+    </div>
+    ${c.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">✅ I Bought This — Mark as Done</button>`:''}
+    <div style="display:flex;gap:8px">
+      <button class="mbtn cancel" style="flex:1" onclick="closeM('leadModal');openEdit(${l.id})">✏️ Edit</button>
+      <button class="mbtn danger" style="flex:1" onclick="if(confirm('Delete?')){leads=leads.filter(x=>x.id!==${l.id});sv2(SK,leads);closeM('leadModal');render();toast('Deleted','info')}">🗑️ Delete</button>
+    </div>`;
+  openM('leadModal');
+}
+
+function openSrcBought(id){
+  srcBoughtId=id;
+  const l=leads.find(x=>x.id===id);
+  document.getElementById('sb-asin').textContent=l?.asin||'';
+  openM('sbModal');
+}
+function confirmSrcBought(){
+  const l=leads.find(x=>x.id===srcBoughtId);
+  if(l){l.bought=true;sv2(SK,leads);}
+  closeM('sbModal');closeM('leadModal');render();
+  toast(`${l?.asin} marked as bought ✓`,'ok');
+}
+
+// ═══════════════════════════════════
+// EDIT LEAD
+// ═══════════════════════════════════
+function openEdit(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  editId=id;
+  sv('em-id',id);sv('em-asin',l.asin);sv('em-market',l.market||'amazon.co.uk');
+  sv('em-type',l.type||'A2A');sv('em-cog',l.cog||'');sv('em-comp',l.comp!=null?l.comp:'');
+  sv('em-src',l.src||'');sv('em-end',l.endDate||'');sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
+  openM('editModal');
+}
+function saveEdit(){
+  const l=leads.find(x=>x.id===editId);if(!l)return;
+  l.market=gv('em-market');l.type=gv('em-type');l.src=gv('em-src')||null;
+  l.cog=gv('em-cog')?parseFloat(gv('em-cog')):null;
+  l.comp=gv('em-comp')!==''?parseInt(gv('em-comp')):null;
+  l.endDate=gv('em-end')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
+  l.updatedAt=todayStr();
+  sv2(SK,leads);closeM('editModal');render();toast('Saved ✓','ok');
+}
+
+// ═══════════════════════════════════
+// QUICK CAPTURE
+// ═══════════════════════════════════
+function quickCapture(){
+  const asin=gv('qc-asin').trim().toUpperCase()||gv('qc-asin').trim();
+  if(!asin){toast('Enter an ASIN or name','bad');return;}
+  const doAdd=()=>{
+    const item={id:Date.now(),asin,market:gv('qc-market'),src:gv('qc-src'),note:gv('qc-note').trim(),ts:Date.now()};
+    inbox.unshift(item);sv2(IK,inbox);
+    sv('qc-asin','');sv('qc-note','');
+    render();toast(`Saved to inbox ✓`,'ok');
+  };
+  const dups=findDups(asin);
+  if(dups.length>0){showDupModal(asin,doAdd);return;}
+  doAdd();
+}
+
+function delInbox(id){inbox=inbox.filter(x=>x.id!==id);sv2(IK,inbox);render();toast('Removed','info');}
+
+function openPromote(id){
+  const item=inbox.find(x=>x.id===id);if(!item)return;
+  promoteId=id;
+  sv('pm-id',id);sv('pm-asin',item.asin);sv('pm-market',item.market||'amazon.co.uk');
+  sv('pm-type','A2A');sv('pm-date','');sv('pm-cog','');sv('pm-comp','');sv('pm-end','');sv('pm-notes',item.note||'');
+  document.getElementById('pm-date').valueAsDate=new Date();
+  openM('promoteModal');
+}
+function confirmPromote(){
+  const dateD=gv('pm-date');
+  if(!dateD){toast('Enter the drop date','bad');return;}
+  const item=inbox.find(x=>x.id===promoteId);
+  leads.push({id:Date.now(),asin:gv('pm-asin'),market:gv('pm-market'),type:gv('pm-type'),
+    dateDropped:dateD,cog:gv('pm-cog')?parseFloat(gv('pm-cog')):null,
+    comp:gv('pm-comp')!==''?parseInt(gv('pm-comp')):null,
+    src:item?.src||null,endDate:gv('pm-end')||null,oaLink:null,notes:gv('pm-notes'),bought:false});
+  inbox=inbox.filter(x=>x.id!==promoteId);
+  sv2(SK,leads);sv2(IK,inbox);
+  closeM('promoteModal');render();toast(`Moved to Sourcing ✓`,'ok');
+}
+
+// ═══════════════════════════════════
+// WATCHLIST
+// ═══════════════════════════════════
+function addWatch(){
+  const asin=gv('w-asin').trim().toUpperCase();
+  if(!asin||asin.length<5){se('e-w-asin',1);toast('Valid ASIN required','bad');return;}
+  se('e-w-asin',0);
+  const doAdd=()=>{
+    watchlist.push({id:Date.now(),asin,market:gv('w-market'),type:gv('w-type'),src:gv('w-src')||null,notes:gv('w-notes').trim()});
+    sv2(WK,watchlist);
+    ['w-asin','w-notes'].forEach(i=>sv(i,''));sv('w-src','');
+    render();toast(`${asin} added to watchlist ✓`,'ok');
+  };
+  const dups=findDups(asin);
+  if(dups.length>0){showDupModal(asin,doAdd);return;}
+  doAdd();
+}
+
+function delWatch(id){watchlist=watchlist.filter(w=>w.id!==id);sv2(WK,watchlist);render();toast('Removed','info');}
+
+function openWatchEdit(id){
+  const w=watchlist.find(x=>x.id===id);if(!w)return;
+  wEditId=id;
+  sv('we-id',id);sv('we-asin',w.asin);sv('we-market',w.market||'amazon.co.uk');
+  sv('we-type',w.type||'A2A');sv('we-src',w.src||'');sv('we-notes',w.notes||'');
+  openM('wEditModal');
+}
+function saveWatchEdit(){
+  const w=watchlist.find(x=>x.id===wEditId);if(!w)return;
+  w.market=gv('we-market');w.type=gv('we-type');w.src=gv('we-src')||null;w.notes=gv('we-notes');
+  sv2(WK,watchlist);closeM('wEditModal');render();toast('Saved ✓','ok');
+}
+
+function promoteWatch(id){
+  const w=watchlist.find(x=>x.id===id);if(!w)return;
+  // Add to inbox for review first
+  inbox.unshift({id:Date.now(),asin:w.asin,market:w.market,src:w.src,note:w.notes,ts:Date.now()});
+  watchlist=watchlist.filter(x=>x.id!==id);
+  sv2(IK,inbox);sv2(WK,watchlist);
+  render();go('inbox');toast(`${w.asin} moved to Inbox — add drop date to promote ✓`,'ok');
+}
+
+// ═══════════════════════════════════
+// REBUY
+// ═══════════════════════════════════
+function addRebuy(){
+  const asin=gv('r-asin').trim().toUpperCase();
+  if(!asin||asin.length<5){se('e-r-asin',1);toast('Valid ASIN required','bad');return;}
+  se('e-r-asin',0);
+  const accounts={};['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>accounts[a]=gv(`r-${a}`)||null);
+  if(!Object.values(accounts).some(Boolean)){toast('Enter at least one purchase date','bad');return;}
+  if(rebuys.find(r=>r.asin===asin)){toast(`${asin} already in queue`,'bad');return;}
+  rebuys.push({id:Date.now(),asin,market:gv('r-market'),notes:gv('r-notes').trim(),accounts});
+  sv2(RK,rebuys);
+  ['r-asin','r-notes','r-uk1','r-uk2','r-uk3','r-eu1','r-eu2','r-eu3'].forEach(i=>sv(i,''));
+  render();toast(`${asin} added to rebuy ✓`,'ok');
+}
+function calcAcc(ds){
+  if(!ds)return{type:'none'};
+  const rd=addD(pd(ds),8),d=diff(today(),rd);
+  return d<=0?{type:'ready'}:{type:'soon',days:d};
+}
+function skipRebuy(id){if(!confirm('Remove?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Skipped','info');}
+function delRebuy(id){if(!confirm('Delete?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Deleted','info');}
+function openRbBought(id){
+  const r=rebuys.find(x=>x.id===id);if(!r)return;
+  rbBoughtId=id;document.getElementById('rb-asin').textContent=r.asin;
+  ['cb-uk1','cb-uk2','cb-uk3','cb-eu1','cb-eu2','cb-eu3'].forEach(c=>document.getElementById(c).checked=false);
+  openM('rbModal');
+}
+function confirmRbBought(){
+  const sel=['uk1','uk2','uk3','eu1','eu2','eu3'].filter(a=>document.getElementById(`cb-${a}`).checked);
+  if(!sel.length){toast('Select at least one account','bad');return;}
+  const r=rebuys.find(x=>x.id===rbBoughtId);
+  if(r){const ts=today().toISOString().split('T')[0];sel.forEach(a=>r.accounts[a]=ts);sv2(RK,rebuys);}
+  closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')} ✓`,'ok');
+}
+
+// ═══════════════════════════════════
+// RENDER
+// ═══════════════════════════════════
+const TCLS={watching:'t-neu',ready:'t-green',missed:'t-red',buywindow:'t-teal',waiting:'t-blue',review:'t-orange'};
+
+function buildTile(l,c){
+  const cls=TCLS[c.status]||'t-neu';
+  const cog=l.cog?`£${l.cog.toFixed(2)}`:'';
+  const typeTag=`${l.type}${cog?' · '+cog:''}`;
+  let st='',meta='';
+  if(c.status==='watching'){st=c.daysLeft===1?'⚡ 1 DAY LEFT':`${c.daysLeft} DAYS LEFT`;meta=typeTag;}
+  else if(c.status==='ready'){st='✅ READY TO BUY';meta=typeTag;}
+  else if(c.status==='missed'){st='⚠️ MISSED';meta=typeTag;}
+  else if(c.status==='buywindow'){st='✅ BUY NOW';meta=`${fmt(c.readyDate)}–${fmt(c.buyBy)}<span class="iw"><span class="idot">i</span><span class="itip">Buy by ${fmt(c.buyBy)} · Ends ${fmt(c.endDate)}</span></span>`;}
+  else if(c.status==='waiting'){st=`⏳ WAIT ${c.daysLeft}d`;meta=`LTD · Ends ${fmt(c.endDate)}<span class="iw"><span class="idot">i</span><span class="itip">Window opens ${fmt(c.readyDate)}</span></span>`;}
+  else if(c.status==='review'){st='⚠️ REVIEW';meta=`LTD · Ends ${fmt(c.endDate)}`;}
+  const srcBadge=l.src?`<div class="tile-src">${l.src}</div>`:'';
+  const compBadge=l.comp!=null?`<div class="tile-comp">👥 ${l.comp}</div>`:'';
+  const noteHtml=l.notes?`<div class="tile-note">${l.notes.substring(0,48)}${l.notes.length>48?'…':''}</div>`:'';
+  const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">💤 Was snoozed</div>`:'';
+  const updatedHtml=l.updatedAt?`<div class="tile-updated">Updated ${fmtShort(l.updatedAt)}</div>`:'';
+  const cbHtml=`<div class="tile-cb-wrap" onclick="event.stopPropagation()"><input type="checkbox" class="tile-cb" data-id="${l.id}" onchange="toggleBulk(${l.id},this)"></div>`;
+  return`<div class="tile ${cls}" id="tile-${l.id}" onclick="openLead(${l.id})">${cbHtml}${srcBadge}
+    <div class="tile-asin" style="padding-right:${l.src?'52px':'0'};padding-left:22px">${l.asin}</div>
+    <div class="tile-status">${st}</div>
+    <div class="tile-meta">${meta}</div>
+    ${compBadge}${noteHtml}${updatedHtml}${snoozeBadge}
+    <div class="tbtns" onclick="event.stopPropagation()">
+      <button class="tbtn" onclick="window.open('${sasUrl(l.asin)}','_blank')">SAS</button>
+      <button class="tbtn" onclick="window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>
+      <button class="tbtn buy" onclick="openSrcBought(${l.id})">Bought</button>
+      <button class="tbtn" onclick="snoozeLead(${l.id})" title="Snooze 3 days">💤</button>
+    </div>
+  </div>`;
+}
+
+function buildRC(r){
+  const amz=amzUrl(r.asin,r.market||'amazon.co.uk'),sas=sasUrl(r.asin);
+  const accs=['uk1','uk2','uk3','eu1','eu2','eu3'];
+  const pills=accs.map(a=>{
+    const s=calcAcc(r.accounts[a]);
+    if(s.type==='none')return`<div class="acc">${a.toUpperCase()} —</div>`;
+    if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()} ✓</div>`;
+    return`<div class="acc soon">${a.toUpperCase()} +${s.days}d</div>`;
+  }).join('');
+  const noteHtml=r.notes?`<div class="rc-note">📝 ${r.notes}</div>`:'';
+  return`<div class="rc" id="rebuy-${r.id}">
+    <div class="rc-head"><div class="rc-asin">${r.asin}</div><a href="${amz}" target="_blank" class="rc-amz">Amazon ↗</a></div>
+    <div class="acc-grid">${pills}</div>
+    ${noteHtml}
+    <div class="rc-acts">
+      <button class="rb sas" onclick="window.open('${sas}','_blank')">SAS</button>
+      <button class="rb bought" onclick="openRbBought(${r.id})">Bought</button>
+      <button class="rb skip" onclick="skipRebuy(${r.id})">Skip</button>
+      <button class="rb del" onclick="delRebuy(${r.id})">Delete</button>
+    </div>
+  </div>`;
+}
+
+function buildInboxCard(item){
+  const ts=new Date(item.ts);
+  const tsStr=ts.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+ts.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  return`<div class="inbox-card" id="inbox-${item.id}">
+    <div class="inbox-asin">${item.asin}</div>
+    <span class="inbox-market">${item.market}</span>
+    ${item.src?`<span class="inbox-market" style="background:rgba(45,110,223,.15);border-color:rgba(45,110,223,.3);color:#7eb3ff">${item.src}</span>`:''}
+    <div class="inbox-note">${item.note||'No note'}</div>
+    <div class="inbox-ts">${tsStr}</div>
+    <div class="inbox-actions">
+      <button class="ib promote" onclick="openPromote(${item.id})">Promote →</button>
+      <button class="ib del" onclick="delInbox(${item.id})">Remove</button>
+    </div>
+  </div>`;
+}
+
+function buildWLCard(w){
+  return`<div class="wl-card" id="wl-${w.id}">
+    <div class="wl-asin">${w.asin}</div>
+    <span class="wl-badge">${w.type}</span>
+    <span class="wl-market">${w.market}</span>
+    ${w.src?`<span class="wl-src">${w.src}</span>`:''}
+    <div class="wl-note">${w.notes||'No notes'}</div>
+    <div class="wl-actions">
+      <button class="wb promote" onclick="promoteWatch(${w.id})">→ Inbox</button>
+      <button class="wb edit" onclick="openWatchEdit(${w.id})">Edit</button>
+      <button class="wb del" onclick="delWatch(${w.id})">Remove</button>
+    </div>
+  </div>`;
+}
+
+const emp=m=>`<div class="empty">${m}</div>`;
+const set=(id,h)=>{const e=document.getElementById(id);if(e)e.innerHTML=h;};
+const setN=(id,n)=>{const e=document.getElementById(id);if(e)e.textContent=n;};
+
+function render(){
+  const watching=[],readyBuy=[],ltdOpen=[],ltdWait=[],ltdRev=[],expired=[];
+  leads.forEach(l=>{
+    if(l.bought)return;
+    if(l.rejectedAt)return;
+    if(isSnoozed(l))return;
+    const c=calcLead(l);l._c=c;
+    if(l.endDate){
+      if(c.status==='expired'){expired.push(l);return;}
+      if(c.status==='buywindow')ltdOpen.push(l);
+      else if(c.status==='waiting')ltdWait.push(l);
+      else ltdRev.push(l);
+    }else{
+      if(c.status==='watching')watching.push(l);
+      else if(c.status==='ready'||c.status==='missed')readyBuy.push(l);
+    }
+  });
+  watching.sort((a,b)=>a._c.daysLeft-b._c.daysLeft);
+
+  // Sourcing
+  set('watch-grid',watching.map(l=>buildTile(l,l._c)).join('')||emp('No leads being watched.'));
+  set('ready-grid',readyBuy.map(l=>buildTile(l,l._c)).join('')||emp('Nothing ready yet.'));
+  const ltd=[...ltdOpen,...ltdWait,...ltdRev];
+  set('ltd-grid',ltd.map(l=>buildTile(l,l._c)).join('')||emp('No LTD deals.'));
+  setN('cnt-watch',watching.length);setN('cnt-ready',readyBuy.length);setN('cnt-ltd',ltd.length);
+
+  // Rebuy
+  set('rebuy-list',rebuys.map(buildRC).join('')||emp('No rebuy entries.'));
+  setN('cnt-rebuy',rebuys.length);
+
+  // Inbox
+  set('inbox-list',inbox.map(buildInboxCard).join('')||emp('Inbox empty — use Quick Save above to capture items on the fly.'));
+  setN('cnt-inbox',inbox.length);
+
+  // Watchlist
+  set('watch-list',watchlist.map(buildWLCard).join('')||emp('Nothing on the watchlist.'));
+  setN('cnt-watch-list',watchlist.length);
+
+  // Overview
+  const rbRdy=rebuys.filter(r=>['uk1','uk2','uk3','eu1','eu2','eu3'].some(a=>calcAcc(r.accounts[a]).type==='ready'));
+  const actionTotal=readyBuy.length+ltdOpen.length+rbRdy.length;
+  setN('kpi-action',actionTotal);
+  setN('kpi-watching',watching.length);
+  setN('kpi-tomorrow',watching.filter(l=>l._c.daysLeft===1).length);
+  setN('kpi-ltdopen',ltdOpen.length);
+
+  const prio=[...readyBuy];
+  set('ov-priority',prio.map(l=>buildTile(l,l._c)).join('')||emp('Nothing priority right now.'));
+  setN('ov-p-cnt',prio.length);
+  set('ov-ltd',ltdOpen.map(l=>buildTile(l,l._c)).join('')||emp('No LTD buy windows open.'));
+  setN('ov-l-cnt',ltdOpen.length);
+
+  set('ov-rebuy',rbRdy.map(r=>`<button class="tile t-green" onclick="go('rebuy');setTimeout(()=>{document.getElementById('rebuy-${r.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
+    <div class="tile-asin">${r.asin}</div>
+    <div class="tile-status">Rebuy Ready</div>
+    <div class="tile-meta">Tap to go to rebuy</div>
+  </button>`).join('')||emp('No rebuys ready today.'));
+  setN('ov-r-cnt',rbRdy.length);
+
+  setN('nb-action',actionTotal);setN('nb-sourcing',leads.filter(l=>!l.bought).length);
+  setN('nb-rebuy',rebuys.length);setN('nb-inbox',inbox.length);setN('nb-watch',watchlist.length);
+
+  const q=document.getElementById('searchInput').value;
+  if(q)runSearch(q);
+}
+
+// ═══════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════
+function runSearch(q){
+  const t=q.trim().toUpperCase();
+  document.querySelectorAll('.tile[id^="tile-"]').forEach(el=>{
+    el.style.display=(!t||el.querySelector('.tile-asin')?.textContent?.includes(t))?'':'none';
+  });
+  document.querySelectorAll('.rc[id^="rebuy-"]').forEach(el=>{
+    el.style.display=(!t||el.querySelector('.rc-asin')?.textContent?.includes(t))?'':'none';
+  });
+  document.querySelectorAll('.inbox-card[id^="inbox-"]').forEach(el=>{
+    el.style.display=(!t||el.querySelector('.inbox-asin')?.textContent?.includes(t))?'':'none';
+  });
+}
+
+// ═══════════════════════════════════
+// NAV
+// ═══════════════════════════════════
+function go(name){
+  document.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById(name)?.classList.add('active');
+  const map={overview:0,sourcing:1,rebuy:2,inbox:3,watchlist:4,sns:5,oareplen:6,notes:7};
+  document.querySelectorAll('.nb')[map[name]??0]?.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function ss(id){setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}),130);}
+
+// ═══════════════════════════════════
+// MODAL
+// ═══════════════════════════════════
+const openM=id=>document.getElementById(id).classList.add('open');
+const closeM=id=>document.getElementById(id).classList.remove('open');
+window.addEventListener('click',e=>{
+  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','exportModal'].forEach(id=>{
+    if(e.target===document.getElementById(id))closeM(id);
+  });
+});
+
+// ═══════════════════════════════════
+// TOAST
+// ═══════════════════════════════════
+let _tt;
+function toast(msg,type='info'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ═══════════════════════════════════
+// NOTES
+// ═══════════════════════════════════
+const NK='a2a_notes_v5';
+const loadNotes=()=>{try{return JSON.parse(localStorage.getItem(NK))||[];}catch{return[];}};
+let notes=loadNotes();
+
+if(!localStorage.getItem(NK)){localStorage.setItem(NK,JSON.stringify(notes));}
+
+let _noteSaveTimers={};
+
+function saveNotes(){localStorage.setItem(NK,JSON.stringify(notes));}
+
+function addNote(){
+  const titleEl=document.getElementById('notes-new-title');
+  const title=titleEl.value.trim()||'Untitled Note';
+  const note={id:Date.now(),title,body:'',created:todayStr()};
+  notes.unshift(note);
+  saveNotes();
+  titleEl.value='';
+  renderNotes();
+  // Focus the new note's textarea
+  setTimeout(()=>{
+    const ta=document.querySelector(`#note-${note.id} .note-textarea`);
+    if(ta)ta.focus();
+  },100);
+  updateNoteBadge();
+  toast(`"${title}" created`,'ok');
+}
+
+function deleteNote(id){
+  if(!confirm('Delete this note?'))return;
+  notes=notes.filter(n=>n.id!==id);
+  saveNotes();renderNotes();updateNoteBadge();
+  toast('Note deleted','info');
+}
+
+function updateNoteTitle(id,val){
+  const n=notes.find(x=>x.id===id);
+  if(n){n.title=val||'Untitled Note';autoSaveNote(id);}
+}
+
+function updateNoteBody(id,val){
+  const n=notes.find(x=>x.id===id);
+  if(n){n.body=val;autoSaveNote(id);}
+}
+
+function autoSaveNote(id){
+  clearTimeout(_noteSaveTimers[id]);
+  _noteSaveTimers[id]=setTimeout(()=>{
+    saveNotes();
+    // Flash saved indicator
+    const el=document.getElementById(`note-saved-${id}`);
+    if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500);}
+  },600);
+}
+
+function updateNoteBadge(){
+  const el=document.getElementById('nb-notes');
+  if(el)el.textContent=notes.length;
+}
+
+function renderNotes(){
+  const grid=document.getElementById('notes-grid');
+  if(!grid)return;
+  if(notes.length===0){
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1">No notes yet — create your first one above.</div>`;
+    return;
+  }
+  grid.innerHTML=notes.map(n=>`
+    <div class="note-card" id="note-${n.id}">
+      <div class="note-card-hd">
+        <input class="note-title-input" value="${n.title.replace(/"/g,'&quot;')}" placeholder="Note title…"
+          oninput="updateNoteTitle(${n.id},this.value)" maxlength="60">
+        <span class="note-date">${n.created||''}</span>
+        <button class="note-del-btn" onclick="deleteNote(${n.id})" title="Delete note">×</button>
+      </div>
+      <textarea class="note-textarea" placeholder="Start typing…"
+        oninput="updateNoteBody(${n.id},this.value);updateCharCount(${n.id},this.value)"
+        >${n.body.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+      <div class="note-footer">
+        <span class="note-char-count" id="note-chars-${n.id}">${n.body.length} chars</span>
+        <span class="note-saved" id="note-saved-${n.id}">✓ Saved</span>
+      </div>
+    </div>
+  `).join('');
+  updateNoteBadge();
+}
+
+function updateCharCount(id,val){
+  const el=document.getElementById(`note-chars-${id}`);
+  if(el)el.textContent=`${val.length} chars`;
+}
+
+function openExport(){
+  const text=notes.map(n=>{
+    const line='─'.repeat(50);
+    return`${line}\n📝 ${n.title}\nCreated: ${n.created||'—'}\n${line}\n${n.body||'(empty)'}\n`;
+  }).join('\n');
+  const ta=document.getElementById('export-text')||document.getElementById('export-textarea');
+  if(ta)ta.value=text||'No notes to export.';
+  openM('exportModal');
+}
+
+function copyExport(){
+  const ta=document.getElementById('export-text')||document.getElementById('export-textarea');
+  if(!ta)return;
+  ta.select();
+  try{document.execCommand('copy');toast('Copied to clipboard ✓','ok');}
+  catch{navigator.clipboard?.writeText(ta.value).then(()=>toast('Copied ✓','ok'));}
+}
+
+function downloadExport(){
+  const ta=document.getElementById('export-text')||document.getElementById('export-textarea');
+  const text=ta?.value||'';
+  const blob=new Blob([text],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`a2a-notes-${new Date().toLocaleDateString('en-GB').replace(/\//g,'-')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Downloaded ✓','ok');
+}
+
+// ═══════════════════════════════════
+// OA REPLEN
+// ═══════════════════════════════════
+const OAK='a2a_oa_v5';
+const loadOA=()=>{try{return JSON.parse(localStorage.getItem(OAK))||[];}catch{return[];}};
+let oaItems=loadOA();
+
+function calcOAStatus(item){
+  if(!item.lastChecked)return{status:'due',daysSince:999};
+  const now=today(),last=pd(item.lastChecked);
+  const daysSince=diff(last,now);
+  const freq=parseInt(item.freq)||7;
+  if(daysSince>freq+3)return{status:'overdue',daysSince};
+  if(daysSince>=freq)return{status:'due',daysSince};
+  return{status:'ok',daysSince,daysUntil:freq-daysSince};
+}
+
+function addOA(){
+  const asin=gv('oa-asin').trim().toUpperCase();
+  const target=gv('oa-target');
+  let ok=true;
+  if(!asin||asin.length<5){se('e-oa-asin',1);ok=false;}else se('e-oa-asin',0);
+  if(!target){se('e-oa-target',1);ok=false;}else se('e-oa-target',0);
+  if(!ok){toast('Fix the errors above','bad');return;}
+  if(oaItems.find(o=>o.asin===asin)){toast(`${asin} already in OA Replen`,'bad');return;}
+  const item={id:Date.now(),asin,target:parseFloat(target),
+    current:gv('oa-current')?parseFloat(gv('oa-current')):null,
+    freq:parseInt(gv('oa-freq'))||7,link:gv('oa-link').trim(),
+    notes:gv('oa-notes').trim(),lastChecked:null,checkLog:[]};
+  oaItems.push(item);
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  ['oa-asin','oa-target','oa-current','oa-link','oa-notes'].forEach(i=>sv(i,''));
+  sv('oa-freq','7');
+  renderOA();toast(`${asin} added to OA Replen ✓`,'ok');
+}
+
+function openOACheck(id){
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  sv('oa-check-id',id);
+  document.getElementById('oa-check-asin').textContent=item.asin;
+  document.getElementById('oa-check-date').textContent=todayStr();
+  sv('oa-check-note','');
+  openM('oaCheckModal');
+}
+
+function confirmOACheck(){
+  const id=parseInt(gv('oa-check-id'));
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  const note=gv('oa-check-note').trim();
+  const dateStr=todayStr();
+  item.lastChecked=today().toISOString().split('T')[0];
+  item.checkLog=item.checkLog||[];
+  item.checkLog.push({date:dateStr,note:note||'Checked — no change'});
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  closeM('oaCheckModal');renderOA();
+  toast(`${item.asin} check logged ✓`,'ok');
+}
+
+function openOAEdit(id){
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  sv('oae-id',id);sv('oae-asin',item.asin);sv('oae-target',item.target||'');
+  sv('oae-current',item.current||'');sv('oae-freq',item.freq||7);
+  sv('oae-link',item.link||'');sv('oae-notes',item.notes||'');
+  openM('oaEditModal');
+}
+
+function saveOAEdit(){
+  const id=parseInt(gv('oae-id'));
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  item.target=gv('oae-target')?parseFloat(gv('oae-target')):item.target;
+  item.current=gv('oae-current')?parseFloat(gv('oae-current')):null;
+  item.freq=parseInt(gv('oae-freq'))||7;
+  item.link=gv('oae-link').trim();item.notes=gv('oae-notes').trim();
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  closeM('oaEditModal');renderOA();toast('Saved ✓','ok');
+}
+
+function delOA(id){
+  if(!confirm('Remove from OA Replen?'))return;
+  oaItems=oaItems.filter(x=>x.id!==id);
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  renderOA();toast('Removed','info');
+}
+
+function buildOACard(item){
+  const c=calcOAStatus(item);
+  const sas=sasUrl(item.asin);
+  const cls=c.status==='overdue'?'overdue':c.status==='due'?'due':'';
+  const pillCls=c.status;
+  const pillTxt=c.status==='overdue'?`⚠️ Overdue — ${c.daysSince}d since check`
+    :c.status==='due'?`⏰ Due — ${c.daysSince}d since check`
+    :`✅ OK — check in ${c.daysUntil}d`;
+  const lastChk=item.lastChecked?`Last checked <strong>${fmtShort(item.lastChecked)}</strong>`:'Never checked';
+  const logHtml=item.checkLog&&item.checkLog.length>0
+    ?`<div class="oa-log">
+        <div class="oa-log-title">Check History</div>
+        ${item.checkLog.slice(-5).reverse().map(e=>`<div class="oa-log-entry">
+          <span class="oa-log-date">${e.date}</span>
+          <span class="oa-log-note">${e.note||'—'}</span>
+        </div>`).join('')}
+      </div>`:'';
+
+  return`<div class="oa-card ${cls}" id="oa-${item.id}">
+    <div class="oa-head">
+      <span class="oa-asin">${item.asin}</span>
+      <span class="oa-status-pill ${pillCls}">${pillTxt}</span>
+      <a href="${sas}" target="_blank" class="oa-sas-link">SAS ↗</a>
+      ${item.link?`<a href="${item.link}" target="_blank" class="oa-sas-link" style="margin-left:4px">Source ↗</a>`:''}
+    </div>
+    <div class="oa-fields">
+      <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
+      <div class="oa-field"><div class="oa-field-lbl">Current COG</div><div class="oa-field-val current">${item.current?'£'+item.current.toFixed(2):'Not set'}</div></div>
+      <div class="oa-field"><div class="oa-field-lbl">Check Frequency</div><div class="oa-field-val">Every ${item.freq} days</div></div>
+    </div>
+    ${item.notes?`<div class="oa-note-row">📝 ${item.notes}</div>`:''}
+    <div class="oa-check-row">
+      <span class="oa-last-checked">${lastChk}</span>
+      <div class="oa-acts">
+        <button class="oa-btn check" onclick="openOACheck(${item.id})">✅ Checked</button>
+        <button class="oa-btn edit-b" onclick="openOAEdit(${item.id})">Edit</button>
+        <button class="oa-btn del" onclick="delOA(${item.id})">Remove</button>
+      </div>
+    </div>
+    ${logHtml}
+  </div>`;
+}
+
+function renderOA(){
+  const list=document.getElementById('oa-list');
+  if(!list)return;
+  // Sort: overdue first, then due, then ok
+  const sorted=[...oaItems].sort((a,b)=>{
+    const order={overdue:0,due:1,ok:2};
+    return(order[calcOAStatus(a).status]||2)-(order[calcOAStatus(b).status]||2);
+  });
+  list.innerHTML=sorted.map(buildOACard).join('')||emp('No OA Replen items yet.');
+  document.getElementById('cnt-oa').textContent=oaItems.length;
+  document.getElementById('nb-oa').textContent=oaItems.length;
+
+  // Overview section
+  const ovList=document.getElementById('ov-oa-list');
+  const ovCnt=document.getElementById('ov-oa-cnt');
+  const dueItems=sorted.filter(i=>{const s=calcOAStatus(i).status;return s==='due'||s==='overdue';});
+  if(ovCnt)ovCnt.textContent=dueItems.length;
+  if(ovList){
+    ovList.innerHTML=dueItems.length===0
+      ?emp('No OA items due for checking.')
+      :dueItems.map(item=>{
+          const c=calcOAStatus(item);
+          const cls=c.status;
+          return`<div class="oa-ov-card ${cls}" onclick="go('oareplen');setTimeout(()=>document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'}),120)">
+            <span class="oa-ov-asin">${item.asin}</span>
+            <span class="oa-ov-days ${cls}">${c.status==='overdue'?`⚠️ ${c.daysSince}d overdue`:`⏰ ${c.daysSince}d since check`}</span>
+            <span class="oa-ov-note">${item.notes||'No notes'}</span>
+            <span class="oa-ov-arr">→</span>
+          </div>`;
+        }).join('');
+  }
+}
+
+// ═══════════════════════════════════
+// SUBSCRIBE & SAVE
+// ═══════════════════════════════════
+const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5';
+
+const SNS_ACCOUNTS=['EU01','EU02','EU03','Biz1','Biz2','Biz3'];
+
+const DEMO_SNS={
+  EU01:{editDay:null,deliveryDay:null},
+  EU02:{editDay:null,deliveryDay:null},
+  EU03:{editDay:null,deliveryDay:null},
+  Biz1:{editDay:null,deliveryDay:null},
+  Biz2:{editDay:null,deliveryDay:null},
+  Biz3:{editDay:null,deliveryDay:null},
+};
+
+let snsData = ld(SNSK) || DEMO_SNS;
+let snsHist = ld(SNSHK) || [];
+
+function saveSns(){sv2(SNSK,snsData);sv2(SNSHK,snsHist);}
+
+function calcSnsStatus(acc){
+  const d=snsData[acc];
+  if(!d||!d.editDay)return{status:'no-data',daysLeft:null};
+  const now=today(),editD=pd(d.editDay),delivD=pd(d.deliveryDay);
+  const daysToEdit=diff(now,editD);
+  const dayAfterEdit=addD(editD,1);
+  // Day after last edit = review day
+  const isReviewDay=(diff(now,dayAfterEdit)===0);
+  if(isReviewDay)return{status:'review-day',daysLeft:0,editD,delivD};
+  if(daysToEdit<0)return{status:'needs',daysLeft:daysToEdit,editD,delivD};
+  if(daysToEdit===0)return{status:'edit-today',daysLeft:0,editD,delivD};
+  if(daysToEdit<=3)return{status:'soon',daysLeft:daysToEdit,editD,delivD};
+  return{status:'active',daysLeft:daysToEdit,editD,delivD};
+}
+
+function renderSns(){
+  const tbody=document.getElementById('sns-tbody');
+  const histTbody=document.getElementById('sns-hist-tbody');
+  if(!tbody)return;
+
+  let needsCount=0, alertAccounts=[], reviewAccounts=[];
+
+  tbody.innerHTML=SNS_ACCOUNTS.map(acc=>{
+    const c=calcSnsStatus(acc);
+    const d=snsData[acc]||{};
+    let statusHtml='',daysHtml='',actionHtml='';
+
+    if(c.status==='no-data'){
+      statusHtml=`<span class="sns-status needs">No Data</span>`;
+      daysHtml=`<span style="color:var(--muted)">—</span>`;
+      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Dates</button>`;
+      needsCount++;alertAccounts.push({acc,type:'no-data'});
+    } else if(c.status==='needs'){
+      statusHtml=`<span class="sns-status needs">⚠️ Needs Next Dates</span>`;
+      daysHtml=`<span style="color:var(--red);font-weight:700">Passed</span>`;
+      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
+      needsCount++;alertAccounts.push({acc,type:'needs'});
+    } else if(c.status==='edit-today'){
+      statusHtml=`<span class="sns-status edit-today">🔴 Edit Today</span>`;
+      daysHtml=`<span style="color:var(--red);font-weight:700">Today</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+    } else if(c.status==='review-day'){
+      statusHtml=`<span class="sns-status review">📋 Review Day</span>`;
+      daysHtml=`<span style="color:#c4b5fd;font-weight:700">Check &amp; Cancel</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" style="background:var(--purple)" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
+      reviewAccounts.push(acc);
+    } else if(c.status==='soon'){
+      statusHtml=`<span class="sns-status soon">⚡ Edit Soon</span>`;
+      daysHtml=`<span style="color:#f5c056;font-weight:700">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+    } else {
+      statusHtml=`<span class="sns-status active">✅ Active</span>`;
+      daysHtml=`<span style="color:var(--green);font-weight:600">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+    }
+
+    return`<tr>
+      <td><span class="sns-acc">${acc}</span></td>
+      <td><span class="sns-date">${d.editDay?fmtLong(pd(d.editDay)):'—'}</span></td>
+      <td><span class="sns-date">${d.deliveryDay?fmtLong(pd(d.deliveryDay)):'—'}</span></td>
+      <td>${daysHtml}</td>
+      <td>${statusHtml}</td>
+      <td>${actionHtml}</td>
+    </tr>`;
+  }).join('');
+
+  // History
+  if(histTbody){
+    histTbody.innerHTML=snsHist.length===0
+      ?`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No history yet</td></tr>`
+      :snsHist.slice().reverse().map(h=>`<tr>
+        <td><span class="sns-acc">${h.acc}</span></td>
+        <td>${h.editDay?fmtLong(pd(h.editDay)):'—'}</td>
+        <td>${h.deliveryDay?fmtLong(pd(h.deliveryDay)):'—'}</td>
+        <td>${h.cycle||'—'}</td>
+        <td>${h.recorded?fmtLong(pd(h.recorded)):'—'}</td>
+        <td style="color:var(--muted);font-style:italic">${h.notes||'—'}</td>
+      </tr>`).join('');
+    document.getElementById('cnt-sns-hist').textContent=snsHist.length;
+  }
+
+  // Nav badge
+  const nbSns=document.getElementById('nb-sns');
+  if(nbSns)nbSns.textContent=needsCount;
+
+  // Overview S&S alerts
+  const ovDiv=document.getElementById('ov-sns-alerts');
+  if(ovDiv){
+    let alertHtml='';
+    if(alertAccounts.length>0){
+      alertHtml+=`<div class="sns-alert-banner" onclick="go('sns')">
+        <div class="sns-alert-icon">⚠️</div>
+        <div class="sns-alert-text">
+          <div class="sns-alert-title">Subscribe &amp; Save — ${needsCount} account${needsCount!==1?'s':''} need${needsCount===1?'s':''} next cycle dates</div>
+          <div class="sns-alert-sub">${alertAccounts.map(a=>a.acc).join(', ')} — click to update</div>
+        </div>
+        <div class="sns-alert-arrow">→</div>
+      </div>`;
+    }
+    if(reviewAccounts.length>0){
+      alertHtml+=`<div class="sns-alert-banner amber" onclick="document.getElementById('snsReviewPopup').classList.add('open')">
+        <div class="sns-alert-icon">📋</div>
+        <div class="sns-alert-text">
+          <div class="sns-alert-title">Sub &amp; Save Review Day — ${reviewAccounts.join(', ')}</div>
+          <div class="sns-alert-sub">Last edit was yesterday — check prices, cancel if needed. Dispatches tomorrow.</div>
+        </div>
+        <div class="sns-alert-arrow">→</div>
+      </div>`;
+    }
+    ovDiv.innerHTML=alertHtml;
+  }
+
+  // Persistent needs-dates popup
+  if(alertAccounts.length>0){
+    const list=document.getElementById('sns-needs-list');
+    if(list){
+      list.innerHTML=alertAccounts.map(a=>`<div class="sns-popup-acc-row">
+        <span class="sns-popup-acc-name">${a.acc}</span>
+        <span class="sns-popup-acc-type">${a.type==='no-data'?'No Data':'Needs Next Dates'}</span>
+        <button class="sns-act-btn edit-btn" style="margin-left:auto;font-size:10px" onclick="closeM('snsNeedsPopup');openSnsEdit('${a.acc}',true)">Enter Dates →</button>
+      </div>`).join('');
+    }
+    // Only show popup if not already dismissed this session
+    if(!window._snsPopupDismissed){
+      document.getElementById('snsNeedsPopup').classList.add('open');
+    }
+  }
+
+  // Review reminder popup — show once per session on review day
+  if(reviewAccounts.length>0&&!window._snsReviewShown){
+    window._snsReviewShown=true;
+    const msg=document.getElementById('sns-review-msg');
+    if(msg)msg.innerHTML=`<strong style="color:var(--text)">${reviewAccounts.join(', ')}</strong> had their last edit day yesterday. Money goes out <strong style="color:#c4b5fd">today</strong>. Dispatches <strong style="color:var(--red)">tomorrow</strong>.<br><br>This is your final window to cancel anything you're not happy with.`;
+    document.getElementById('snsReviewPopup').classList.add('open');
+  }
+}
+
+function snsCheckAndDismiss(){
+  // Re-check — if all resolved, close popup
+  const stillNeeds=SNS_ACCOUNTS.filter(acc=>{
+    const c=calcSnsStatus(acc);
+    return c.status==='needs'||c.status==='no-data';
+  });
+  if(stillNeeds.length===0){
+    window._snsPopupDismissed=true;
+    document.getElementById('snsNeedsPopup').classList.remove('open');
+    toast('All Sub & Save dates are up to date ✓','ok');
+  } else {
+    toast(`Still needs dates: ${stillNeeds.join(', ')}`, 'bad');
+  }
+}
+
+function openSnsEdit(acc, isNextCycle){
+  sv('sns-edit-acc',acc);
+  document.getElementById('sns-edit-title').textContent=isNextCycle?`${acc} — Enter Next Cycle`:`${acc} — Edit Dates`;
+  sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-notes','');
+  se('e-sns-edit',0);se('e-sns-del',0);
+  openM('snsEditModal');
+}
+
+function saveSnsNextCycle(){
+  const acc=gv('sns-edit-acc');
+  const newEdit=gv('sns-new-edit');
+  const newDel=gv('sns-new-delivery');
+  const notes=gv('sns-new-notes');
+  let ok=true;
+  if(!newEdit){se('e-sns-edit',1);ok=false;}else se('e-sns-edit',0);
+  if(!newDel){se('e-sns-del',1);ok=false;}else se('e-sns-del',0);
+  if(!ok){toast('Enter both dates','bad');return;}
+
+  // Archive current to history
+  const current=snsData[acc];
+  if(current&&current.editDay){
+    const editDObj=pd(current.editDay);
+    const cycle=editDObj?editDObj.toLocaleDateString('en-GB',{month:'long',year:'numeric'}):'Unknown';
+    snsHist.push({acc,editDay:current.editDay,deliveryDay:current.deliveryDay,
+      cycle,recorded:today().toISOString().split('T')[0],notes});
+  }
+
+  // Set new active
+  snsData[acc]={editDay:newEdit,deliveryDay:newDel};
+  saveSns();
+  closeM('snsEditModal');
+  window._snsPopupDismissed=false; // re-evaluate popup
+  renderSns();
+  render();
+  toast(`${acc} updated — previous cycle archived ✓`,'ok');
+}
+
+const gv=id=>document.getElementById(id)?.value||'';
+const sv=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
+const se=(id,show)=>{const e=document.getElementById(id);if(e)e.style.display=show?'block':'none';};
+
+window.addEventListener('click',e=>{
+  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal',
+   'snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal'].forEach(id=>{
+    if(e.target===document.getElementById(id))closeM(id);
+  });
+});
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+(function(){
+  document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('s-date').valueAsDate=new Date();
+  render();
+  renderNotes();
+  renderSns();
+  renderOA();
+  setTimeout(checkDay8Leads,600);
+})();
+</script>
+</body>
+</html>
