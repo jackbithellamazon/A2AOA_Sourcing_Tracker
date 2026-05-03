@@ -1449,7 +1449,7 @@ const pd=s=>{if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new 
 const diff=(a,b)=>Math.round((b-a)/86400000);
 const addD=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r;};
 const fmt=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
-const fmtLong=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'—';
+const fmtLong=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long'}):'—';
 const amzUrl=(asin,mkt)=>`https://www.${mkt||'amazon.co.uk'}/dp/${asin}`;
 const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term%5D=${asin}`;
 
@@ -1966,6 +1966,15 @@ function calcAcc(ds){
 }
 function skipRebuy(id){if(!confirm('Remove?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Skipped','info');}
 function delRebuy(id){if(!confirm('Delete?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Deleted','info');}
+
+function markDelivered(id,acc){
+  const r=rebuys.find(x=>x.id===id);if(!r)return;
+  const delivDate=today().toISOString().split('T')[0];
+  if(!r.delivered)r.delivered={};
+  r.delivered[acc]=delivDate;
+  sv2(RK,rebuys);render();
+  toast(`${acc.toUpperCase()} delivered today — rebuy countdown started ✓`,'ok');
+}
 function openRbBought(id){
   const r=rebuys.find(x=>x.id===id);if(!r)return;
   rbBoughtId=id;document.getElementById('rb-asin').textContent=r.asin;
@@ -2020,8 +2029,17 @@ function buildRC(r){
   const amz=amzUrl(r.asin,r.market||'amazon.co.uk'),sas=sasUrl(r.asin);
   const accs=['uk1','uk2','uk3','eu1','eu2','eu3'];
   const pills=accs.map(a=>{
-    const s=calcAcc(r.accounts[a]);
-    if(s.type==='none')return`<div class="acc">${a.toUpperCase()} —</div>`;
+    const purchased=r.accounts[a];
+    const delivered=r.delivered?.[a];
+    if(!purchased)return`<div class="acc">${a.toUpperCase()} —</div>`;
+    if(!delivered){
+      // Purchased but not delivered yet
+      return`<div class="acc soon" style="cursor:pointer" onclick="markDelivered(${r.id},'${a}')" title="Click to mark delivered">
+        ${a.toUpperCase()}<br><span style="font-size:9px">📦 Awaiting</span>
+      </div>`;
+    }
+    // Delivered — calc rebuy from delivery date
+    const s=calcAcc(delivered);
     if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()} ✓</div>`;
     return`<div class="acc soon">${a.toUpperCase()} +${s.days}d</div>`;
   }).join('');
