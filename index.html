@@ -2730,9 +2730,9 @@ function updateDate(){
 (function(){
   updateDate();
   // Auto-update date at midnight without needing a refresh
-  const now=new Date();  const msUntilMidnight=(new Date(now.getFullYear(),now.getMonth(),now.getDate()+1)-now);
+  const now=new Date();
+  const msUntilMidnight=(new Date(now.getFullYear(),now.getMonth(),now.getDate()+1)-now);
   setTimeout(()=>{updateDate();setInterval(updateDate,86400000);},msUntilMidnight);
-  document.getElementById('s-date').valueAsDate=new Date();
   render();
   renderNotes();
   renderSns();
