@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A2A Tracker</title>
+<title>A2AOA Sourcing Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -638,7 +638,7 @@ header{
   <div class="logo">
     <div class="logo-icon">⚡</div>
     <div>
-      <div class="logo-text">A2A Tracker</div>
+      <div class="logo-text">A2AOA Sourcing</div>
       <div class="logo-sub" id="hdrDate"></div>
     </div>
   </div>
@@ -750,9 +750,8 @@ header{
           </div>
           <div class="g4">
             <div class="fg">
-              <label class="fl">Date Dropped (Keepa) *</label>
+              <label class="fl">Date Dropped (Keepa)</label>
               <input class="fi" id="s-date" type="date">
-              <div class="ferr" id="e-date">Select drop date</div>
             </div>
             <div class="fg">
               <label class="fl">COG (£)</label>
@@ -796,11 +795,11 @@ header{
       <div class="sec nt" id="sec-ready"><span class="sec-t">✅ Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
       <div class="tg" id="ready-grid"></div>
 
-      <div class="sec" id="sec-watching"><span class="sec-t">⏳ Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
-      <div class="tg" id="watch-grid"></div>
-
       <div class="sec" id="sec-ltd"><span class="sec-t">💰 LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
       <div class="tg" id="ltd-grid"></div>
+
+      <div class="sec" id="sec-watching"><span class="sec-t">⏳ Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
+      <div class="tg" id="watch-grid"></div>
     </div>
 
     <!-- ══════════════ REBUY ══════════════ -->
@@ -1749,7 +1748,12 @@ function bulkDelete(){
 // LAST UPDATED HELPER
 // ═══════════════════════════════════
 const todayStr=()=>today().toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'});
-const fmtShort=d=>d?pd(d)?.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'})||d:null;
+const fmtShort=d=>{
+  if(!d)return null;
+  const parsed=pd(d);
+  if(!parsed||isNaN(parsed))return null;
+  return parsed.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+};
 
 // ═══════════════════════════════════
 // ADD LEAD (with dup check)
@@ -1762,7 +1766,6 @@ function addLead(){
   if(!asin||asin.length<5){se('e-asin',1);ok=false;}else se('e-asin',0);
   if(!market){se('e-market',1);ok=false;}else se('e-market',0);
   if(!type){se('e-type',1);ok=false;}else se('e-type',0);
-  if(!dateD){se('e-date',1);ok=false;}else se('e-date',0);
   if(!ok){toast('Fix the errors above','bad');return;}
 
   const doAdd=()=>{
@@ -2009,7 +2012,8 @@ function buildTile(l,c){
   const compBadge=l.comp!=null?`<div class="tile-comp">👥 ${l.comp}</div>`:'';
   const noteHtml=l.notes?`<div class="tile-note">${l.notes.substring(0,48)}${l.notes.length>48?'…':''}</div>`:'';
   const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">💤 Was snoozed</div>`:'';
-  const updatedHtml=l.updatedAt?`<div class="tile-updated">Updated ${fmtShort(l.updatedAt)}</div>`:'';
+  const updatedFmt=l.updatedAt?fmtShort(l.updatedAt):null;
+  const updatedHtml=updatedFmt?`<div class="tile-updated">Updated ${updatedFmt}</div>`:'';
   const cbHtml=`<div class="tile-cb-wrap" onclick="event.stopPropagation()"><input type="checkbox" class="tile-cb" data-id="${l.id}" onchange="toggleBulk(${l.id},this)"></div>`;
   return`<div class="tile ${cls}" id="tile-${l.id}" onclick="openLead(${l.id})">${cbHtml}${srcBadge}
     <div class="tile-asin" style="padding-right:${l.src?'52px':'0'};padding-left:22px">${l.asin}</div>
@@ -2341,7 +2345,7 @@ const loadOA=()=>{try{return JSON.parse(localStorage.getItem(OAK))||[];}catch{re
 let oaItems=loadOA();
 
 function calcOAStatus(item){
-  if(!item.lastChecked)return{status:'due',daysSince:999};
+  if(!item.lastChecked)return{status:'never',daysSince:null};
   const now=today(),last=pd(item.lastChecked);
   const daysSince=diff(last,now);
   const freq=parseInt(item.freq)||7;
@@ -2421,11 +2425,12 @@ function buildOACard(item){
   const c=calcOAStatus(item);
   const sas=sasUrl(item.asin);
   const cls=c.status==='overdue'?'overdue':c.status==='due'?'due':'';
-  const pillCls=c.status;
-  const pillTxt=c.status==='overdue'?`⚠️ Overdue — ${c.daysSince}d since check`
+  const pillCls=c.status==='never'?'ok':c.status;
+  const pillTxt=c.status==='never'?'🆕 Not checked yet'
+    :c.status==='overdue'?`⚠️ Overdue — ${c.daysSince}d since check`
     :c.status==='due'?`⏰ Due — ${c.daysSince}d since check`
     :`✅ OK — check in ${c.daysUntil}d`;
-  const lastChk=item.lastChecked?`Last checked <strong>${fmtShort(item.lastChecked)}</strong>`:'Never checked';
+  const lastChk=item.lastChecked?`Last checked <strong>${fmtShort(item.lastChecked)}</strong>`:'Never checked — press Checked when you first review it';
   const logHtml=item.checkLog&&item.checkLog.length>0
     ?`<div class="oa-log">
         <div class="oa-log-title">Check History</div>
@@ -2465,7 +2470,7 @@ function renderOA(){
   if(!list)return;
   // Sort: overdue first, then due, then ok
   const sorted=[...oaItems].sort((a,b)=>{
-    const order={overdue:0,due:1,ok:2};
+    const order={overdue:0,due:1,ok:2,never:3};
     return(order[calcOAStatus(a).status]||2)-(order[calcOAStatus(b).status]||2);
   });
   list.innerHTML=sorted.map(buildOACard).join('')||emp('No OA Replen items yet.');
@@ -2717,8 +2722,16 @@ window.addEventListener('click',e=>{
 // ═══════════════════════════════════
 // INIT
 // ═══════════════════════════════════
+function updateDate(){
+  const el=document.getElementById('hdrDate');
+  if(el)el.textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'long'});
+}
+
 (function(){
-  document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+  updateDate();
+  // Auto-update date at midnight without needing a refresh
+  const now=new Date();  const msUntilMidnight=(new Date(now.getFullYear(),now.getMonth(),now.getDate()+1)-now);
+  setTimeout(()=>{updateDate();setInterval(updateDate,86400000);},msUntilMidnight);
   document.getElementById('s-date').valueAsDate=new Date();
   render();
   renderNotes();
