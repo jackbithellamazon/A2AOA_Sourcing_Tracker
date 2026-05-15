@@ -8,31 +8,31 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#252830;
-  --surface:#2e3240;
-  --card:#363b4e;
-  --card2:#3f4557;
-  --border:#4a5068;
-  --border2:#5a6080;
+  --bg:#0d1117;
+  --surface:#13191f;
+  --card:#1c2330;
+  --card2:#222b3a;
+  --border:#263044;
+  --border2:#344060;
 
-  --text:#f1f3f9;
-  --text2:#c4c9db;
-  --muted:#828aaa;
+  --text:#e8eaf6;
+  --text2:#8892b0;
+  --muted:#4a5578;
 
-  /* Tile colours — darker/richer so white text pops */
-  --green:#0ea371;
-  --green-d:#0b8a5f;
-  --red:#e03535;
-  --red-d:#c42a2a;
-  --blue:#2d6edf;
-  --blue-d:#2459c0;
-  --amber:#c97d0a;
-  --amber-d:#a86509;
-  --teal:#0e9080;
-  --teal-d:#0b7568;
-  --orange:#d95f10;
-  --orange-d:#b84e0d;
-  --purple:#7c4ddb;
+  --green:#00d084;
+  --green-d:#00a868;
+  --red:#ff4560;
+  --red-d:#e02040;
+  --blue:#5b8eff;
+  --blue-d:#3a6de8;
+  --amber:#ffb830;
+  --amber-d:#e09420;
+  --teal:#00c4b4;
+  --teal-d:#009688;
+  --orange:#ff6b35;
+  --orange-d:#e05020;
+  --purple:#a259ff;
+  --purple-d:#8040e8;
 
   --dm:'DM Sans',sans-serif;
   --mono:'DM Mono',monospace;
@@ -42,86 +42,99 @@ body{background:var(--bg);color:var(--text);font-family:var(--dm);font-size:14px
 
 /* ── HEADER ── */
 header{
-  background:linear-gradient(135deg,#2d6edf 0%,#1e54c0 100%);
-  padding:0 26px;height:60px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 18px;height:52px;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
-  position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4);
+  position:sticky;top:0;z-index:100;
 }
-.logo{display:flex;align-items:center;gap:11px;}
-.logo-icon{font-size:21px;}
-.logo-text{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px;}
-.logo-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
+.sidebar-toggle{background:none;border:none;color:var(--text2);cursor:pointer;
+  padding:7px;border-radius:6px;display:flex;align-items:center;transition:all .15s;}
+.sidebar-toggle:hover{background:var(--card);color:var(--text);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase;}
+.logo-divider{width:1px;height:16px;background:var(--border2);}
+.logo-sub{font-size:11px;color:var(--muted);}
 .hdr-r{display:flex;align-items:center;gap:10px;}
 .sw{position:relative;}
-.sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.55);pointer-events:none;}
-.si{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.22);color:#fff;
-  padding:7px 13px 7px 32px;border-radius:8px;font-family:var(--dm);font-size:13px;width:190px;transition:all .2s;}
-.si::placeholder{color:rgba(255,255,255,.5);}
-.si:focus{outline:none;background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.55);}
+.sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.si{background:var(--card);border:1.5px solid var(--border);color:var(--text);
+  padding:7px 13px 7px 32px;border-radius:7px;font-family:var(--dm);font-size:13px;width:180px;transition:all .2s;}
+.si::placeholder{color:var(--muted);}
+.si:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 2px rgba(91,142,255,.15);}
 
-/* ── LAYOUT ── */
-.layout{display:grid;grid-template-columns:215px 1fr;min-height:calc(100vh - 60px);}
+/* ── SIDEBAR TOGGLE STATES ── */
+.layout{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 52px);transition:grid-template-columns .2s ease;}
+.layout.collapsed{grid-template-columns:52px 1fr;}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:10px 6px;
+  overflow:hidden;transition:all .2s ease;}
+.layout.collapsed .sidebar{padding:10px 4px;}
+.layout.collapsed .nb-label{display:none;}
+.layout.collapsed .nbadge{display:none;}
+.layout.collapsed .nav-sec-lbl{display:none;}
+.layout.collapsed .nb{justify-content:center;padding:9px;}
+.layout.collapsed .nb.active{border-left:none;padding-left:9px;border-radius:6px;}
+.nb-icon{width:15px;height:15px;flex-shrink:0;stroke:currentColor;}
+.nb-label{flex:1;}
 
-/* ── SIDEBAR ── */
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 10px;}
-.nav-sec-lbl{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.1px;padding:0 10px;margin:14px 0 4px;}
-.nav-sec-lbl:first-child{margin-top:0;}
-.nb{display:flex;align-items:center;gap:9px;width:100%;padding:10px 11px;border:none;background:none;border-radius:8px;
-  color:var(--text2);font-family:var(--dm);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;margin-bottom:2px;}
+/* ── SIDEBAR NAV ── */
+.nav-sec-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px;padding:0 8px;margin:14px 0 3px;}
+.nav-sec-lbl:first-child{margin-top:4px;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:none;background:none;border-radius:6px;
+  color:var(--text2);font-family:var(--dm);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .13s;text-align:left;margin-bottom:1px;}
 .nb:hover{background:var(--card);color:var(--text);}
-.nb.active{background:rgba(45,110,223,.28);color:#7eb3ff;font-weight:600;}
-.nbadge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;
-  background:var(--red);color:#fff;min-width:20px;text-align:center;}
+.nb.active{background:rgba(91,142,255,.12);color:var(--blue);font-weight:600;border-left:2px solid var(--blue);padding-left:8px;}
+.nbadge{margin-left:auto;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:8px;
+  background:var(--red);color:#fff;min-width:16px;text-align:center;}
 .nbadge.blue{background:var(--blue);}
-.nbadge.grey{background:var(--border);color:var(--muted);}
+.nbadge.grey{background:var(--border2);color:var(--muted);}
 .nbadge.green{background:var(--green);}
 .nbadge.amber{background:var(--amber);}
 
 /* ── MAIN ── */
-.main{padding:24px 26px;overflow-y:auto;}
+.main{padding:20px 22px;overflow-y:auto;}
 .tc{display:none;}
-.tc.active{display:block;animation:fu .2s ease;}
-@keyframes fu{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
-.pg-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-.2px;}
+.tc.active{display:block;animation:fu .18s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.pg-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;letter-spacing:-.2px;}
 
 /* ── KPI ROW ── */
-.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:26px;}
-.kpi{border-radius:11px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;color:#fff;
-  box-shadow:0 3px 12px rgba(0,0,0,.25);}
-.kpi:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
-.kpi.green{background:var(--green);}
-.kpi.red{background:var(--red);}
-.kpi.blue{background:var(--blue);}
-.kpi.amber{background:var(--amber);}
-.kpi.teal{background:var(--teal);}
-.kpi-num{font-size:34px;font-weight:700;line-height:1;margin-bottom:5px;}
-.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;opacity:.92;}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:22px;}
+.kpi{border-radius:9px;padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;color:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.5);}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.6);}
+.kpi.green{background:linear-gradient(135deg,var(--green),var(--green-d));}
+.kpi.red{background:linear-gradient(135deg,var(--red),var(--red-d));}
+.kpi.blue{background:linear-gradient(135deg,var(--blue),var(--blue-d));}
+.kpi.amber{background:linear-gradient(135deg,var(--amber),var(--amber-d));}
+.kpi.teal{background:linear-gradient(135deg,var(--teal),var(--teal-d));}
+.kpi-num{font-size:30px;font-weight:700;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;opacity:.9;}
 
 /* ── SECTION HDR ── */
-.sec{display:flex;align-items:center;gap:10px;margin-bottom:13px;padding-bottom:10px;
-  border-bottom:2px solid var(--border);margin-top:26px;}
+.sec{display:flex;align-items:center;gap:10px;margin-bottom:11px;padding-bottom:9px;
+  border-bottom:2px solid var(--border);margin-top:24px;}
 .sec.nt{margin-top:0;}
-.sec-t{font-size:11.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;}
+.sec-t{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;}
 .sec-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
-  background:var(--card);color:var(--muted);border:1px solid var(--border);}
+  background:rgba(45,110,223,.18);color:#7eb3ff;border:1px solid rgba(45,110,223,.3);}
 
 /* ── TILE GRID ── */
-.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:9px;margin-bottom:4px;}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:4px;}
 
-.tile{border-radius:10px;padding:13px 12px;cursor:pointer;transition:all .18s;
-  display:flex;flex-direction:column;gap:4px;min-height:116px;text-align:left;
-  color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);border:none;position:relative;}
-.tile:hover{transform:translateY(-3px);box-shadow:0 7px 22px rgba(0,0,0,.4);}
+.tile{border-radius:10px;padding:12px 11px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;gap:3px;min-height:106px;text-align:left;
+  color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);border:none;position:relative;}
+.tile:hover{transform:translateY(-3px);box-shadow:0 8px 26px rgba(0,0,0,.45);}
 
-/* Solid rich colours — darker so white text is legible */
-.t-green {background:var(--green);}
-.t-red   {background:var(--red);}
-.t-amber {background:var(--amber);}
-.t-teal  {background:var(--teal);}
-.t-orange{background:var(--orange);}
-.t-blue  {background:var(--blue);}
-.t-neu   {background:var(--card);color:var(--text);}
-.t-purple{background:var(--purple);}
+.t-green {background:linear-gradient(145deg,#00d084,#009060);}
+.t-red   {background:linear-gradient(145deg,#ff4560,#c82040);}
+.t-amber {background:linear-gradient(145deg,#ffb830,#cc8800);}
+.t-teal  {background:linear-gradient(145deg,#00c4b4,#008878);}
+.t-orange{background:linear-gradient(145deg,#ff6b35,#cc4010);}
+.t-blue  {background:linear-gradient(145deg,#5b8eff,#2a55d4);}
+.t-neu   {background:var(--card);border:1.5px solid var(--border2);color:var(--text);}
+.t-purple{background:linear-gradient(145deg,#a259ff,#7030e0);}
 
 /* Source badge top-right */
 .tile-src{
@@ -132,14 +145,14 @@ header{
 }
 .t-neu .tile-src{background:var(--border);color:var(--muted);}
 
-.tile-asin{font-family:var(--mono);font-size:13px;font-weight:500;word-break:break-all;
+.tile-asin{font-family:var(--mono);font-size:12.5px;font-weight:500;word-break:break-all;
   text-shadow:0 1px 3px rgba(0,0,0,.3);}
 .t-neu .tile-asin{color:var(--text2);text-shadow:none;}
 
-.tile-status{font-size:12px;font-weight:700;line-height:1.3;text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.tile-status{font-size:11.5px;font-weight:700;line-height:1.3;text-shadow:0 1px 2px rgba(0,0,0,.25);}
 .t-neu .tile-status{color:var(--text);}
 
-.tile-meta{font-size:11px;opacity:.92;line-height:1.5;flex:1;text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.tile-meta{font-size:10.5px;opacity:.92;line-height:1.5;flex:1;text-shadow:0 1px 2px rgba(0,0,0,.2);}
 .t-neu .tile-meta{color:var(--text2);opacity:1;text-shadow:none;}
 
 .tile-note{font-size:10px;opacity:.82;font-style:italic;margin-top:2px;
@@ -165,32 +178,30 @@ header{
 .idot{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;
   background:rgba(0,0,0,.25);color:#fff;border-radius:50%;font-size:9px;font-weight:700;cursor:help;}
 .itip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
-  background:#1a1f2e;color:#fff;padding:7px 11px;border-radius:7px;font-size:11px;
+  background:#0d1117;color:#fff;padding:7px 11px;border-radius:7px;font-size:11px;
   white-space:nowrap;z-index:400;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.5);
   border:1px solid var(--border);}
 .iw:hover .itip{display:block;}
 
 /* ── COLLAPSIBLE FORM ── */
-.fc{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;margin-bottom:24px;overflow:hidden;}
-.fc-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;
+.fc{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;margin-bottom:22px;overflow:hidden;}
+.fc-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;
   cursor:pointer;user-select:none;transition:background .15s;}
 .fc-hd:hover{background:var(--card);}
-.fc-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
-.cico{font-size:16px;color:var(--muted);transition:transform .25s;width:24px;height:24px;
-  display:flex;align-items:center;justify-content:center;background:var(--card);
-  border-radius:6px;border:1px solid var(--border);}
+.fc-title{font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.cico{color:var(--muted);transition:transform .25s;width:18px;height:18px;flex-shrink:0;}
 .fc.coll .cico{transform:rotate(-90deg);}
 .fb{padding:0 20px 20px;border-top:1px solid var(--border);}
 .fc.coll .fb{display:none;}
 
 /* ── FORM FIELDS ── */
-.fg{margin-bottom:13px;}
+.fg{margin-bottom:12px;}
 .fg:last-child{margin-bottom:0;}
-.fl{display:block;margin-bottom:4px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
-.fi,.fs,.fta{width:100%;padding:9px 11px;background:var(--card);border:1.5px solid var(--border);
-  border-radius:8px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
+.fl{display:block;margin-bottom:4px;font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;}
+.fi,.fs,.fta{width:100%;padding:8px 11px;background:var(--bg);border:1.5px solid var(--border2);
+  border-radius:7px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
 .fi::placeholder,.fta::placeholder{color:var(--muted);}
-.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
+.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 2px rgba(91,142,255,.18);}
 .fi.err{border-color:var(--red);}
 .ferr{font-size:10.5px;color:var(--red);margin-top:3px;display:none;}
 .fs option{background:var(--card);}
@@ -198,9 +209,9 @@ header{
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:13px;}
-.badd{width:100%;margin-top:14px;padding:11px;background:var(--blue);color:#fff;border:none;
-  border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
-.badd:hover{background:var(--blue-d,#2459c0);box-shadow:0 4px 14px rgba(45,110,223,.4);transform:translateY(-1px);}
+.badd{width:100%;margin-top:12px;padding:10px;background:var(--blue);color:#fff;border:none;
+  border-radius:7px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.badd:hover{background:var(--blue-d);box-shadow:0 4px 18px rgba(91,142,255,.35);transform:translateY(-1px);}
 
 /* ── QUICK CAPTURE ── */
 .qc-bar{display:flex;gap:10px;margin-bottom:20px;}
@@ -292,51 +303,13 @@ header{
 .bwb-val.warn{color:#f5c056;}
 .bwb-val.bad{color:var(--red);}
 
-/* ── NOTES ── */
-.notes-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-.notes-new-title{flex:1;min-width:160px;padding:10px 13px;background:var(--card);border:1.5px solid var(--border);
-  border-radius:9px;color:var(--text);font-family:var(--dm);font-size:13px;transition:all .2s;}
-.notes-new-title::placeholder{color:var(--muted);}
-.notes-new-title:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,110,223,.15);}
-.notes-add-btn{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:9px;
-  font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
-.notes-add-btn:hover{background:#2459c0;transform:translateY(-1px);}
-.notes-export-btn{padding:10px 16px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);
-  border-radius:9px;font-family:var(--dm);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
-.notes-export-btn:hover{background:var(--card2);border-color:var(--border2);}
-.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
-.note-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
-  display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s;min-height:200px;}
-.note-card:hover{border-color:var(--border2);}
-.note-card-hd{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--card);}
-.note-title-input{flex:1;background:none;border:none;color:var(--text);font-family:var(--dm);
-  font-size:13px;font-weight:700;outline:none;cursor:text;}
-.note-title-input::placeholder{color:var(--muted);font-weight:400;}
-.note-date{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
-.note-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
-  width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s;flex-shrink:0;}
-.note-del-btn:hover{background:rgba(224,53,53,.2);color:var(--red);}
-.note-textarea{width:100%;min-height:160px;background:none;border:none;
-  color:var(--text2);font-family:var(--dm);font-size:13px;line-height:1.6;
-  padding:13px 14px;resize:none;outline:none;display:block;}
-.note-textarea::placeholder{color:var(--muted);}
-.note-footer{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;
-  justify-content:space-between;background:var(--card);}
-.note-char-count{font-size:10px;color:var(--muted);}
-.note-saved{font-size:10px;color:var(--green);opacity:0;transition:opacity .4s;}
-.note-saved.show{opacity:1;}
-.export-textarea{width:100%;min-height:320px;background:var(--card);border:1.5px solid var(--border);
-  border-radius:8px;color:var(--text2);font-family:var(--mono);font-size:12px;line-height:1.6;
-  padding:14px;resize:vertical;outline:none;}
-.export-copy-btn{width:100%;margin-top:12px;padding:11px;background:var(--green);color:#fff;border:none;
-  border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
-.export-copy-btn:hover{background:#0b8a5f;}
+/* ── NOTES (defined below) ── */
 
 /* ── MODAL ── */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;}
 .mbg.open{display:flex;animation:fu .15s;}
-.modal{background:var(--surface);border:1.5px solid var(--border2);border-radius:14px;padding:24px;
-  max-width:520px;width:92%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+.modal{background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;padding:22px;
+  max-width:520px;width:92%;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.8);}
 .mhd{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
 .mt{font-size:16px;font-weight:700;color:var(--text);}
 .mx{background:var(--card);border:none;color:var(--muted);font-size:20px;width:30px;height:30px;
@@ -387,13 +360,13 @@ header{
 .exp-asin{font-family:var(--mono);font-weight:600;color:var(--text2);}
 
 /* ── EMPTY ── */
-.empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;
-  border:1.5px dashed var(--border);border-radius:10px;background:var(--surface);}
+.empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;
+  border:1.5px dashed var(--border2);border-radius:9px;background:var(--surface);}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:20px;right:20px;padding:11px 17px;border-radius:10px;font-size:13px;
+.toast{position:fixed;bottom:20px;right:20px;padding:10px 16px;border-radius:8px;font-size:12.5px;
   font-weight:600;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;
-  box-shadow:0 8px 24px rgba(0,0,0,.4);pointer-events:none;color:#fff;}
+  box-shadow:0 8px 30px rgba(0,0,0,.7);pointer-events:none;color:#fff;}
 .toast.show{opacity:1;transform:none;}
 .toast.ok{background:var(--green);}
 .toast.bad{background:var(--red);}
@@ -466,48 +439,63 @@ header{
   padding:14px;resize:vertical;outline:none;}
 .export-textarea:focus{border-color:var(--blue);}
 
-/* ── OA REPLEN ── */
-.oa-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
-  padding:15px 17px;margin-bottom:10px;transition:border-color .2s;}
-.oa-card:hover{border-color:var(--border2);}
-.oa-card.overdue{border-color:var(--red);background:rgba(224,53,53,.05);}
-.oa-card.due{border-color:var(--amber);background:rgba(201,125,10,.05);}
-.oa-head{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap;}
-.oa-asin{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text);}
-.oa-status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
-.oa-status-pill.overdue{background:rgba(224,53,53,.2);color:var(--red);}
-.oa-status-pill.due{background:rgba(201,125,10,.2);color:#f5c056;}
-.oa-status-pill.ok{background:rgba(14,163,113,.15);color:#34d399;}
-.oa-sas-link{font-size:11px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:3px 9px;
-  border:1.5px solid rgba(45,110,223,.35);border-radius:6px;background:rgba(45,110,223,.1);
-  transition:all .15s;margin-left:auto;}
-.oa-sas-link:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
-.oa-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px;}
+/* ── OA REPLEN TILE GRID ── */
+.oa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-bottom:4px;}
+
+.oa-tile{border-radius:11px;padding:13px 13px 11px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;gap:5px;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);border:none;position:relative;text-align:left;
+  background:var(--card);border:1.5px solid var(--border);}
+.oa-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35);}
+.oa-tile.oa-overdue{background:var(--red);border-color:var(--red);}
+.oa-tile.oa-due{background:var(--amber);border-color:var(--amber);}
+.oa-tile.oa-ok{background:var(--green);border-color:var(--green);}
+.oa-tile.oa-snoozed{background:var(--purple);border-color:var(--purple);}
+.oa-tile.oa-never{background:var(--card);border-color:var(--border2);color:var(--text);}
+
+.oa-tile-asin{font-family:var(--mono);font-size:13px;font-weight:600;
+  text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.oa-tile.oa-never .oa-tile-asin{color:var(--text);text-shadow:none;}
+
+.oa-tile-status{font-size:11px;font-weight:700;line-height:1.3;
+  text-shadow:0 1px 2px rgba(0,0,0,.15);}
+.oa-tile.oa-never .oa-tile-status{color:var(--text2);}
+
+.oa-tile-meta{font-size:10.5px;opacity:.9;line-height:1.5;
+  text-shadow:0 1px 1px rgba(0,0,0,.15);}
+.oa-tile.oa-never .oa-tile-meta{color:var(--muted);opacity:1;text-shadow:none;}
+
+.oa-tile-note{font-size:10px;opacity:.82;font-style:italic;margin-top:1px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.oa-tile.oa-never .oa-tile-note{color:var(--muted);}
+
+.oa-tile-snooze{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;
+  background:rgba(0,0,0,.2);color:rgba(255,255,255,.85);display:inline-block;margin-top:2px;align-self:flex-start;}
+.oa-tile.oa-never .oa-tile-snooze{background:var(--border2);color:var(--muted);}
+
+.oa-tbtns{display:flex;gap:3px;margin-top:6px;}
+.oa-tbtn{flex:1;padding:5px 2px;font-size:9px;font-family:var(--dm);font-weight:700;
+  border:none;border-radius:5px;background:rgba(0,0,0,.2);color:#fff;
+  cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.3px;}
+.oa-tbtn:hover{background:rgba(0,0,0,.38);}
+.oa-tile.oa-never .oa-tbtn{background:var(--card2);color:var(--text2);}
+.oa-tile.oa-never .oa-tbtn:hover{background:var(--border);}
+
+/* OA detail modal content */
+.oa-detail-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
 .oa-field{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:8px 11px;}
 .oa-field-lbl{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
 .oa-field-val{font-size:13px;font-weight:600;color:var(--text);}
 .oa-field-val.target{color:var(--green);}
 .oa-field-val.current{color:var(--amber);}
 .oa-note-row{font-size:12px;color:var(--text2);background:var(--card);border:1px solid var(--border);
-  border-radius:7px;padding:8px 11px;margin-bottom:11px;font-style:italic;}
-.oa-check-row{display:flex;align-items:center;gap:8px;padding-top:11px;border-top:1.5px solid var(--border);flex-wrap:wrap;}
-.oa-last-checked{font-size:11px;color:var(--muted);flex:1;}
-.oa-last-checked strong{color:var(--text2);}
-.oa-acts{display:flex;gap:6px;flex-wrap:wrap;}
-.oa-btn{padding:7px 13px;border:none;border-radius:7px;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
-.oa-btn.check{background:var(--green);}
-.oa-btn.check:hover{background:var(--green-d);}
-.oa-btn.edit-b{background:var(--card2);color:var(--text2);border:1px solid var(--border);}
-.oa-btn.edit-b:hover{background:var(--border);color:var(--text);}
-.oa-btn.buy{background:var(--teal);}
-.oa-btn.buy:hover{opacity:.85;}
-.oa-btn.del{background:transparent;color:var(--red);border:1.5px solid rgba(224,53,53,.35);}
-.oa-btn.del:hover{background:rgba(224,53,53,.15);}
-.oa-log{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+  border-radius:7px;padding:9px 11px;margin-bottom:12px;font-style:italic;}
 .oa-log-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
 .oa-log-entry{display:flex;gap:10px;margin-bottom:5px;font-size:11.5px;}
 .oa-log-date{color:var(--text2);font-weight:600;white-space:nowrap;min-width:46px;}
 .oa-log-note{color:var(--muted);font-style:italic;}
+
+/* OA overview cards */
 .oa-ov-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
   padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;
   cursor:pointer;transition:all .18s;}
@@ -520,6 +508,16 @@ header{
 .oa-ov-days.due{color:#f5c056;}
 .oa-ov-note{flex:1;font-size:11.5px;color:var(--muted);font-style:italic;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .oa-ov-arr{color:var(--muted);font-size:14px;}
+
+/* OA snooze dropdown */
+.oa-snooze-menu{display:none;position:absolute;bottom:calc(100% + 4px);right:0;
+  background:var(--surface);border:1.5px solid var(--border2);border-radius:9px;
+  padding:5px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.5);min-width:130px;}
+.oa-snooze-menu.open{display:block;}
+.oa-snooze-opt{display:block;width:100%;padding:7px 11px;border:none;background:none;
+  color:var(--text2);font-family:var(--dm);font-size:12px;font-weight:600;
+  cursor:pointer;border-radius:6px;text-align:left;transition:all .12s;}
+.oa-snooze-opt:hover{background:var(--card2);color:var(--text);}
 
 .tile-snooze-badge{position:absolute;bottom:8px;right:8px;font-size:9px;font-weight:700;
   padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.9);}
@@ -558,7 +556,7 @@ header{
 
 .sns-table-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
 .sns-table{width:100%;border-collapse:collapse;}
-.sns-table th{background:var(--card2);color:var(--muted);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:11px 14px;text-align:left;border-bottom:2px solid var(--border);}
+.sns-table th{background:var(--card);color:var(--muted);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border2);}
 .sns-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
 .sns-table tr:last-child td{border-bottom:none;}
 .sns-table tr:hover td{background:rgba(255,255,255,.02);}
@@ -566,12 +564,12 @@ header{
 .sns-date{font-size:12.5px;color:var(--text2);}
 .sns-days{font-size:12px;font-weight:600;}
 
-.sns-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
-.sns-status.active   {background:rgba(14,163,113,.18);color:#34d399;}
-.sns-status.soon     {background:rgba(201,125,10,.18);color:#f5c056;}
-.sns-status.edit-today{background:rgba(224,53,53,.22);color:#fc8181;animation:pulse 1.5s infinite;}
-.sns-status.needs    {background:rgba(224,53,53,.28);color:var(--red);font-weight:800;}
-.sns-status.review   {background:rgba(139,92,246,.22);color:#c4b5fd;}
+.sns-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:.3px;}
+.sns-status.active{background:rgba(0,208,132,.12);color:var(--green);}
+.sns-status.soon{background:rgba(255,184,48,.12);color:var(--amber);}
+.sns-status.edit-today{background:rgba(255,69,96,.18);color:var(--red);animation:pulse 1.5s infinite;}
+.sns-status.needs{background:rgba(255,69,96,.2);color:var(--red);font-weight:700;}
+.sns-status.review{background:rgba(162,89,255,.15);color:var(--purple);}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
 .sns-act-btn{padding:5px 12px;border-radius:6px;border:none;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
@@ -635,10 +633,13 @@ header{
 <body>
 
 <header>
-  <div class="logo">
-    <div class="logo-icon">⚡</div>
-    <div>
-      <div class="logo-text">A2AOA Sourcing</div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="logo">
+      <div class="logo-text">A2AOA</div>
+      <div class="logo-divider"></div>
       <div class="logo-sub" id="hdrDate"></div>
     </div>
   </div>
@@ -650,27 +651,50 @@ header{
   </div>
 </header>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="nav-sec-lbl">Main</div>
-    <button class="nb active" onclick="go('overview')">📊 Overview <span class="nbadge" id="nb-action">0</span></button>
-    <button class="nb" onclick="go('sourcing')">🔍 Sourcing <span class="nbadge blue" id="nb-sourcing">0</span></button>
-    <button class="nb" onclick="go('rebuy')">🔄 Rebuy <span class="nbadge grey" id="nb-rebuy">0</span></button>
-    <div class="nav-sec-lbl">Capture</div>
-    <button class="nb" onclick="go('inbox')">📥 Inbox <span class="nbadge amber" id="nb-inbox">0</span></button>
-    <button class="nb" onclick="go('watchlist')">👁 Watchlist <span class="nbadge grey" id="nb-watch">0</span></button>
-    <div class="nav-sec-lbl">Sub & Save</div>
-    <button class="nb" onclick="go('sns')">🔔 Sub &amp; Save <span class="nbadge" id="nb-sns">0</span></button>
-    <div class="nav-sec-lbl">Other</div>
-    <button class="nb" onclick="go('oareplen')">🔁 OA Replen <span class="nbadge grey" id="nb-oa">0</span></button>
-    <button class="nb" onclick="go('notes')">📝 Notes <span class="nbadge grey" id="nb-notes">0</span></button>
+<div class="layout" id="appLayout">
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-sec-lbl nb-lbl">Menu</div>
+    <button class="nb active" onclick="go('overview')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="nb-label">Overview</span><span class="nbadge" id="nb-action">0</span>
+    </button>
+    <button class="nb" onclick="go('sourcing')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="nb-label">Sourcing</span><span class="nbadge blue" id="nb-sourcing">0</span>
+    </button>
+    <button class="nb" onclick="go('rebuy')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <span class="nb-label">Rebuy</span><span class="nbadge grey" id="nb-rebuy">0</span>
+    </button>
+    <div class="nav-sec-lbl nb-lbl">Capture</div>
+    <button class="nb" onclick="go('inbox')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+      <span class="nb-label">Inbox</span><span class="nbadge amber" id="nb-inbox">0</span>
+    </button>
+    <button class="nb" onclick="go('watchlist')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span class="nb-label">Watchlist</span><span class="nbadge grey" id="nb-watch">0</span>
+    </button>
+    <div class="nav-sec-lbl nb-lbl">Tracking</div>
+    <button class="nb" onclick="go('sns')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span class="nb-label">Sub &amp; Save</span><span class="nbadge" id="nb-sns">0</span>
+    </button>
+    <button class="nb" onclick="go('oareplen')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <span class="nb-label">OA Replen</span><span class="nbadge grey" id="nb-oa">0</span>
+    </button>
+    <button class="nb" onclick="go('notes')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="nb-label">Notes</span><span class="nbadge grey" id="nb-notes">0</span>
+    </button>
   </nav>
 
   <main class="main">
 
     <!-- ══════════════ OVERVIEW ══════════════ -->
     <div id="overview" class="tc active">
-      <div class="pg-title">Good morning — here's today 👋</div>
+      <div class="pg-title">Today's Actions</div>
       <div class="kpi-row">
         <div class="kpi green" onclick="go('sourcing');ss('sec-ready')"><div class="kpi-num" id="kpi-action">0</div><div class="kpi-lbl">Action Today</div></div>
         <div class="kpi blue"  onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-watching">0</div><div class="kpi-lbl">Watching</div></div>
@@ -678,31 +702,31 @@ header{
         <div class="kpi teal"  onclick="go('sourcing');ss('sec-ltd')"><div class="kpi-num" id="kpi-ltdopen">0</div><div class="kpi-lbl">Buy Window Open</div></div>
       </div>
 
-      <div class="sec nt"><span class="sec-t">📌 Today's Priority — Click to Review & Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
+      <div class="sec nt"><span class="sec-t">Today's Priority — Click to Review & Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
       <div class="tg" id="ov-priority"></div>
 
-      <div class="sec"><span class="sec-t">💰 Buy Window Open (LTD)</span><span class="sec-pill" id="ov-l-cnt">0</span></div>
+      <div class="sec"><span class="sec-t">Buy Window Open</span><span class="sec-pill" id="ov-l-cnt">0</span></div>
       <div class="tg" id="ov-ltd"></div>
 
-      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">🔄 Rebuys Ready Now</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
+      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">Rebuys Ready</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
       <div class="tg" id="ov-rebuy"></div>
 
       <!-- S&S OVERVIEW ALERTS -->
       <div id="ov-sns-alerts"></div>
 
       <!-- OA REPLEN OVERVIEW -->
-      <div class="sec" id="ov-oa-sec"><span class="sec-t">🔁 OA Replen — Check Due</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
+      <div class="sec" id="ov-oa-sec"><span class="sec-t">OA Replen — Due Today</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
       <div id="ov-oa-list"></div>
     </div>
 
     <!-- ══════════════ SOURCING ══════════════ -->
     <div id="sourcing" class="tc">
-      <div class="pg-title">Sourcing Leads</div>
+      <div class="pg-title">Sourcing</div>
 
       <div class="fc" id="src-fc">
         <div class="fc-hd" onclick="toggleFC('src-fc')">
-          <div class="fc-title">➕ Add New Lead</div>
-          <div class="cico">▼</div>
+          <div class="fc-title">Add New Lead</div>
+          <svg class="cico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="fb">
           <div style="height:14px"></div>
@@ -785,30 +809,30 @@ header{
 
       <div class="bulk-bar" id="bulk-bar">
         <span class="bulk-count" id="bulk-count">0 selected</span>
-        <button class="bulk-btn bb-buy" onclick="bulkBought()">✅ Mark Bought</button>
-        <button class="bulk-btn bb-snooze" onclick="bulkSnooze()">💤 Snooze 3d</button>
+        <button class="bulk-btn bb-buy" onclick="bulkBought()">Mark Bought</button>
+        <button class="bulk-btn bb-snooze" onclick="bulkSnooze()">Snooze 3d</button>
         <button class="bulk-btn bb-del" onclick="bulkDelete()">🗑️ Delete</button>
         <button class="bulk-sel-all" onclick="bulkSelectAll()">Select All</button>
         <button class="bulk-btn bb-cancel" onclick="clearBulk()">Cancel</button>
       </div>
 
-      <div class="sec nt" id="sec-ready"><span class="sec-t">✅ Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
+      <div class="sec nt" id="sec-ready"><span class="sec-t">Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
       <div class="tg" id="ready-grid"></div>
 
-      <div class="sec" id="sec-ltd"><span class="sec-t">💰 LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
+      <div class="sec" id="sec-ltd"><span class="sec-t">LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
       <div class="tg" id="ltd-grid"></div>
 
-      <div class="sec" id="sec-watching"><span class="sec-t">⏳ Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
+      <div class="sec" id="sec-watching"><span class="sec-t">Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
       <div class="tg" id="watch-grid"></div>
     </div>
 
     <!-- ══════════════ REBUY ══════════════ -->
     <div id="rebuy" class="tc">
-      <div class="pg-title">Rebuy Queue</div>
+      <div class="pg-title">Rebuy</div>
       <div class="fc" id="rb-fc">
         <div class="fc-hd" onclick="toggleFC('rb-fc')">
-          <div class="fc-title">📦 Log Purchase</div>
-          <div class="cico">▼</div>
+          <div class="fc-title">Log Purchase</div>
+          <svg class="cico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="fb">
           <div style="height:14px"></div>
@@ -847,16 +871,16 @@ header{
           <button class="badd" onclick="addRebuy()">Add to Rebuy Queue</button>
         </div>
       </div>
-      <div class="sec nt"><span class="sec-t">📋 Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span></div>
+      <div class="sec nt"><span class="sec-t">Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span></div>
       <div id="rebuy-list"></div>
     </div>
 
     <!-- ══════════════ INBOX ══════════════ -->
     <div id="inbox" class="tc">
-      <div class="pg-title">📥 Quick Capture Inbox</div>
+      <div class="pg-title">Inbox</div>
       <div class="fc">
         <div class="fc-hd" style="cursor:default">
-          <div class="fc-title">⚡ Quick Save — Don't Lose It</div>
+          <div class="fc-title">Quick Save</div>
         </div>
         <div class="fb">
           <div style="height:14px"></div>
@@ -886,17 +910,17 @@ header{
           </div>
         </div>
       </div>
-      <div class="sec nt"><span class="sec-t">📥 Captured Items</span><span class="sec-pill" id="cnt-inbox">0</span></div>
+      <div class="sec nt"><span class="sec-t">Captured Items</span><span class="sec-pill" id="cnt-inbox">0</span></div>
       <div id="inbox-list"></div>
     </div>
 
     <!-- ══════════════ WATCHLIST ══════════════ -->
     <div id="watchlist" class="tc">
-      <div class="pg-title">👁 Watchlist — Parking Lot</div>
+      <div class="pg-title">Watchlist</div>
       <div class="fc" id="wl-fc">
         <div class="fc-hd" onclick="toggleFC('wl-fc')">
-          <div class="fc-title">➕ Add to Watchlist</div>
-          <div class="cico">▼</div>
+          <div class="fc-title">Add to Watchlist</div>
+          <svg class="cico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="fb">
           <div style="height:14px"></div>
@@ -945,31 +969,31 @@ header{
           <button class="badd" onclick="addWatch()">Add to Watchlist</button>
         </div>
       </div>
-      <div class="sec nt"><span class="sec-t">👁 On Watch</span><span class="sec-pill" id="cnt-watch-list">0</span></div>
+      <div class="sec nt"><span class="sec-t">On Watch</span><span class="sec-pill" id="cnt-watch-list">0</span></div>
       <div id="watch-list"></div>
     </div>
 
     <!-- ══════════════ SUBSCRIBE & SAVE ══════════════ -->
     <div id="sns" class="tc">
-      <div class="pg-title">🔔 Subscribe &amp; Save Tracker</div>
+      <div class="pg-title">Subscribe &amp; Save</div>
 
       <div class="sns-table-wrap">
         <table class="sns-table" id="sns-main-table">
           <thead>
             <tr>
               <th>Account</th>
-              <th>Last Edit Day</th>
-              <th>Delivery Day</th>
-              <th>Days Until Edit</th>
+              <th>Edit Day</th>
+              <th>Review Date</th>
+              <th>Delivery</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="sns-tbody"></tbody>
         </table>
       </div>
 
-      <div class="sec" style="margin-top:28px"><span class="sec-t">📋 Cycle History</span><span class="sec-pill" id="cnt-sns-hist">0</span></div>
+      <div class="sec" style="margin-top:28px"><span class="sec-t">Cycle History</span><span class="sec-pill" id="cnt-sns-hist">0</span></div>
       <div class="sns-table-wrap">
         <table class="sns-hist-table">
           <thead>
@@ -989,7 +1013,7 @@ header{
 
     <!-- ══════════════ NOTES ══════════════ -->
     <div id="notes" class="tc">
-      <div class="pg-title">📝 Notes</div>
+      <div class="pg-title">Notes</div>
       <div class="notes-toolbar">
         <input class="notes-new-title" id="notes-new-title" placeholder="Note title…" maxlength="60"
           onkeydown="if(event.key==='Enter')addNote()">
@@ -1001,12 +1025,12 @@ header{
 
     <!-- ══════════════ OA REPLEN ══════════════ -->
     <div id="oareplen" class="tc">
-      <div class="pg-title">🔁 OA Replen</div>
+      <div class="pg-title">OA Replen</div>
 
       <div class="fc" id="oa-fc">
         <div class="fc-hd" onclick="toggleFC('oa-fc')">
-          <div class="fc-title">➕ Add OA Replen Item</div>
-          <div class="cico">▼</div>
+          <div class="fc-title">Add OA Replen Item</div>
+          <svg class="cico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="fb">
           <div style="height:14px"></div>
@@ -1033,6 +1057,9 @@ header{
                 <option value="7">Every 7 days</option>
                 <option value="10">Every 10 days</option>
                 <option value="14">Every 14 days</option>
+                <option value="15">Every 15 days</option>
+                <option value="21">Every 21 days</option>
+                <option value="30">Every 30 days</option>
               </select>
             </div>
             <div class="fg">
@@ -1048,8 +1075,8 @@ header{
         </div>
       </div>
 
-      <div class="sec nt"><span class="sec-t">🔁 Watching for Price Drop</span><span class="sec-pill" id="cnt-oa">0</span></div>
-      <div id="oa-list"></div>
+      <div class="sec nt"><span class="sec-t">Watching for Price Drop</span><span class="sec-pill" id="cnt-oa">0</span></div>
+      <div class="oa-grid" id="oa-list"></div>
     </div>
 
   </main>
@@ -1146,7 +1173,7 @@ header{
     <p style="font-size:13px;color:var(--text2);margin-bottom:6px">Mark <strong id="sb-asin" style="color:var(--text);font-family:var(--mono)"></strong> as bought?</p>
     <p style="font-size:12px;color:var(--muted)">It will be removed from active leads immediately.</p>
     <div class="mbtns">
-      <button class="mbtn ok" onclick="confirmSrcBought()">✅ Yes, Bought It</button>
+      <button class="mbtn ok" onclick="confirmSrcBought()">Yes, Bought It</button>
       <button class="mbtn cancel" onclick="closeM('sbModal')">Cancel</button>
     </div>
   </div>
@@ -1215,7 +1242,7 @@ header{
     </div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:12px">All your notes compiled into one block. Select all and copy, or use the button below.</p>
     <textarea class="export-textarea" id="export-text" readonly></textarea>
-    <button class="export-copy-btn" onclick="copyExport()">📋 Copy to Clipboard</button>
+    <button class="export-copy-btn" onclick="copyExport()">Copy to Clipboard</button>
   </div>
 </div>
 
@@ -1232,8 +1259,8 @@ header{
 
     <!-- Decision buttons -->
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
-      <button class="mbtn ok" style="font-size:13px;padding:13px" onclick="day8Buy()">✅ Buy It — Mark as Bought</button>
-      <button style="width:100%;padding:11px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="day8Snooze()">💤 Not Sure Yet — Snooze 3 Days</button>
+      <button class="mbtn ok" style="font-size:13px;padding:13px" onclick="day8Buy()">Buy It — Mark as Bought</button>
+      <button style="width:100%;padding:11px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="day8Snooze()">Not Sure Yet — Snooze 3 Days</button>
       <button style="width:100%;padding:11px;background:var(--card2);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="toggleDay8Reject()">❌ Not Buying — Give Reason</button>
     </div>
 
@@ -1273,7 +1300,7 @@ header{
 <div class="mbg" id="dupModal">
   <div class="modal" style="max-width:460px">
     <div class="mhd">
-      <span class="mt">⚠️ Duplicate ASIN Found</span>
+      <span class="mt">Duplicate ASIN Found</span>
       <button class="mx" onclick="closeM('dupModal')">×</button>
     </div>
     <p style="font-size:13px;color:var(--text2);margin-bottom:16px"><strong id="dup-asin" style="color:var(--text);font-family:var(--mono)"></strong> already exists in:</p>
@@ -1290,7 +1317,7 @@ header{
 <div class="sns-popup-bg" id="snsNeedsPopup">
   <div class="sns-popup">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-      <div class="sns-popup-title">⚠️ Subscribe &amp; Save — Action Required</div>
+      <div class="sns-popup-title">Sub &amp; Save — Action Required</div>
       <button class="mx" style="flex-shrink:0;margin-left:10px" onclick="window._snsPopupDismissed=true;closeM('snsNeedsPopup')" title="Dismiss for this session — will reappear next time">×</button>
     </div>
     <div class="sns-popup-sub">The following accounts have passed their Last Edit Day. You need to enter the next cycle's dates before this can be dismissed.</div>
@@ -1303,16 +1330,16 @@ header{
 <div class="sns-review-popup-bg" id="snsReviewPopup">
   <div class="sns-review-popup">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-      <div style="font-size:17px;font-weight:700;color:#c4b5fd">📋 Sub &amp; Save — Review Day</div>
+      <div style="font-size:17px;font-weight:700;color:#c4b5fd">Sub &amp; Save — Review Day</div>
       <button class="mx" style="flex-shrink:0;margin-left:10px" onclick="closeM('snsReviewPopup')" title="Dismiss for this session">×</button>
     </div>
     <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px" id="sns-review-msg"></div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--text2)">
       <div style="font-weight:700;color:var(--text);margin-bottom:6px">Checklist for today:</div>
-      <div>✅ Check all Sub &amp; Save prices are still good</div>
-      <div>✅ Cancel any you're no longer happy with</div>
-      <div>✅ Add confirmed ones to your purchase sheet</div>
-      <div>✅ Items dispatch tomorrow — this is your last chance</div>
+      <div>Check all Sub &amp; Save prices are still good</div>
+      <div>Cancel any you're no longer happy with</div>
+      <div>Add confirmed ones to your purchase sheet</div>
+      <div>Items dispatch tomorrow — this is your last chance</div>
     </div>
     <button style="width:100%;padding:11px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;" onclick="closeM('snsReviewPopup')">Got It — I'll Review Now</button>
   </div>
@@ -1327,16 +1354,20 @@ header{
     </div>
     <input type="hidden" id="sns-edit-acc">
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Current cycle will be archived to history. Enter the new dates below.</p>
-    <div class="g2">
+    <div class="g3">
       <div class="fg">
-        <label class="fl">New Last Edit Day *</label>
+        <label class="fl">Last Edit Day *</label>
         <input class="fi" id="sns-new-edit" type="date">
         <div class="ferr" id="e-sns-edit">Required</div>
       </div>
       <div class="fg">
-        <label class="fl">New Delivery Day *</label>
+        <label class="fl">Delivery Day *</label>
         <input class="fi" id="sns-new-delivery" type="date">
         <div class="ferr" id="e-sns-del">Required</div>
+      </div>
+      <div class="fg">
+        <label class="fl">Review Date</label>
+        <input class="fi" id="sns-new-review" type="date">
       </div>
     </div>
     <div class="fg">
@@ -1360,9 +1391,32 @@ header{
     <p style="font-size:12px;color:var(--muted);margin-bottom:14px">All your notes in one block — select all and copy, or download as a .txt file.</p>
     <textarea class="export-textarea" id="export-textarea" readonly onclick="this.select()"></textarea>
     <div class="mbtns">
-      <button class="mbtn ok" onclick="copyExport()">📋 Copy All</button>
+      <button class="mbtn ok" onclick="copyExport()">Copy All</button>
       <button class="mbtn cancel" style="flex:0.5" onclick="downloadExport()">⬇️ Download .txt</button>
       <button class="mbtn cancel" style="flex:0.4" onclick="closeM('exportModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- OA DETAIL MODAL -->
+<div class="mbg" id="oaDetailModal">
+  <div class="modal" style="max-width:500px">
+    <div class="mhd">
+      <span class="mt" id="oad-asin-title" style="font-family:var(--mono);font-size:17px"></span>
+      <button class="mx" onclick="closeM('oaDetailModal')">×</button>
+    </div>
+    <div id="oad-status-bar" style="border-radius:8px;padding:10px 13px;margin-bottom:14px;font-weight:700;font-size:13px;color:#fff"></div>
+    <div class="oa-detail-fields" id="oad-fields"></div>
+    <div id="oad-note-row"></div>
+    <div id="oad-link-row" style="margin-bottom:12px"></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:14px">
+      <div class="oa-log-title">Check History</div>
+      <div id="oad-log"></div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" style="background:var(--green)" onclick="closeM('oaDetailModal');openOACheck(window._oaDetailId)">Log Check</button>
+      <button class="mbtn cancel" onclick="closeM('oaDetailModal');openOAEdit(window._oaDetailId)">✏️ Edit</button>
+      <button class="mbtn danger" style="flex:0.5" onclick="closeM('oaDetailModal');delOA(window._oaDetailId)">🗑️</button>
     </div>
   </div>
 </div>
@@ -1371,17 +1425,28 @@ header{
 <div class="mbg" id="oaCheckModal">
   <div class="modal" style="max-width:420px">
     <div class="mhd">
-      <span class="mt">✅ Log Check</span>
+      <span class="mt" style="font-family:var(--mono)" id="oa-check-asin">Log Check</span>
       <button class="mx" onclick="closeM('oaCheckModal')">×</button>
     </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Logging check for <strong id="oa-check-asin" style="color:var(--text);font-family:var(--mono)"></strong> — today <strong style="color:var(--text)" id="oa-check-date"></strong></p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Checked today — <strong style="color:var(--text2)" id="oa-check-date"></strong></p>
     <input type="hidden" id="oa-check-id">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Did you buy?</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <label style="flex:1;display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--card);border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;transition:all .15s" id="oa-buy-yes-lbl">
+        <input type="radio" name="oa-check-bought" value="yes" style="accent-color:var(--green)" onchange="document.getElementById('oa-buy-yes-lbl').style.borderColor='var(--green)';document.getElementById('oa-buy-no-lbl').style.borderColor='var(--border2)'">
+        <span style="font-size:13px;font-weight:600;color:var(--text)">Yes — bought it</span>
+      </label>
+      <label style="flex:1;display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--card);border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;transition:all .15s" id="oa-buy-no-lbl">
+        <input type="radio" name="oa-check-bought" value="no" style="accent-color:var(--amber)" onchange="document.getElementById('oa-buy-no-lbl').style.borderColor='var(--amber)';document.getElementById('oa-buy-yes-lbl').style.borderColor='var(--border2)'">
+        <span style="font-size:13px;font-weight:600;color:var(--text)">No — not yet</span>
+      </label>
+    </div>
     <div class="fg">
       <label class="fl">Note (optional)</label>
-      <input class="fi" id="oa-check-note" placeholder="e.g. Still £11.00, no promo yet…">
+      <input class="fi" id="oa-check-note" placeholder="e.g. Still £11 — no promo active yet">
     </div>
     <div class="mbtns">
-      <button class="mbtn ok" onclick="confirmOACheck()">Save Check</button>
+      <button class="mbtn ok" onclick="confirmOACheck()">Save</button>
       <button class="mbtn cancel" onclick="closeM('oaCheckModal')">Cancel</button>
     </div>
   </div>
@@ -1406,6 +1471,9 @@ header{
           <option value="7">Every 7 days</option>
           <option value="10">Every 10 days</option>
           <option value="14">Every 14 days</option>
+          <option value="15">Every 15 days</option>
+          <option value="21">Every 21 days</option>
+          <option value="30">Every 30 days</option>
         </select>
       </div>
       <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="oae-link" type="url"></div>
@@ -1482,9 +1550,9 @@ function bwHtml(l,c){
   const endD=pd(l.endDate),found=pd(l.dateDropped),readyDate=addD(found,7),buyBy=addD(endD,-5);
   const wd=diff(readyDate,buyBy);
   let cls='warn',advice='';
-  if(c.status==='buywindow'){cls='ok';advice=`✅ Buy now — window closes ${fmt(buyBy)} (${c.daysLeft} day${c.daysLeft!==1?'s':''} left)`;}
+  if(c.status==='buywindow'){cls='ok';advice=`Buy now — window closes ${fmt(buyBy)} (${c.daysLeft} day${c.daysLeft!==1?'s':''} left)`;}
   else if(c.status==='waiting'){cls='warn';advice=`⏳ Wait until ${fmt(readyDate)} then buy before ${fmt(buyBy)}`;}
-  else{cls='bad';advice=`⚠️ Tight window — manual decision required`;}
+  else{cls='bad';advice=`Tight window — manual decision required`;}
   return`<div class="bwb ${cls}" style="margin-bottom:12px">
     <div class="bwb-row"><span class="bwb-lbl">Deal ends</span><span class="bwb-val">${fmtLong(endD)}</span></div>
     <div class="bwb-row"><span class="bwb-lbl">7-day wait clears</span><span class="bwb-val ${c.status==='waiting'?'warn':'ok'}">${fmtLong(readyDate)}</span></div>
@@ -1794,11 +1862,11 @@ function openLead(id){
   const c=calcLead(l),amz=amzUrl(l.asin,l.market),sas=sasUrl(l.asin);
   const statusMap={
     watching:{bg:'var(--amber)',t:`⏳ ${c.daysLeft} Day${c.daysLeft!==1?'s':''} Left`,s:'Waiting for 7-day window to clear'},
-    ready:{bg:'var(--green)',t:'✅ Ready to Buy',s:'Window is open — go buy this now'},
-    missed:{bg:'var(--red)',t:'⚠️ Missed Window',s:'You were supposed to buy this yesterday'},
-    buywindow:{bg:'var(--teal)',t:'✅ LTD Buy Window Open',s:`Buy before ${fmt(c.buyBy)} — ${c.daysLeft} day${c.daysLeft!==1?'s':''} left`},
+    ready:{bg:'var(--green)',t:'Ready to Buy',s:'Window is open — go buy this now'},
+    missed:{bg:'var(--red)',t:'Missed Window',s:'You were supposed to buy this yesterday'},
+    buywindow:{bg:'var(--teal)',t:'LTD Buy Window Open',s:`Buy before ${fmt(c.buyBy)} — ${c.daysLeft} day${c.daysLeft!==1?'s':''} left`},
     waiting:{bg:'var(--blue)',t:`⏳ LTD — Wait ${c.daysLeft} More Day${c.daysLeft!==1?'s':''}`,s:`Window opens ${fmt(c.readyDate)}`},
-    review:{bg:'var(--orange)',t:'⚠️ Needs Review',s:'Window too short to auto-calculate'},
+    review:{bg:'var(--orange)',t:'Needs Review',s:'Window too short to auto-calculate'},
     expired:{bg:'var(--border2)',t:'❌ Expired',s:'This LTD deal has ended'},
   };
   const st=statusMap[c.status]||{bg:'var(--blue)',t:'Unknown',s:''};
@@ -1817,13 +1885,13 @@ function openLead(id){
       <div class="ld-f"><div class="ld-fl">Competitors</div><div class="ld-fv">${compTxt||'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A'}</div></div>
     </div>
-    ${l.notes?`<div class="ld-notes">📝 ${l.notes}</div>`:''}
+    ${l.notes?`<div class="ld-notes">${l.notes}</div>`:''}
     <div class="ld-links">
-      <a href="${amz}" target="_blank" class="ld-link">🛒 Amazon</a>
-      <a href="${sas}" target="_blank" class="ld-link">📊 SAS</a>
-      ${l.oaLink?`<a href="${l.oaLink}" target="_blank" class="ld-link">🔗 OA Source</a>`:''}
+      <a href="${amz}" target="_blank" class="ld-link">Amazon</a>
+      <a href="${sas}" target="_blank" class="ld-link">SAS</a>
+      ${l.oaLink?`<a href="${l.oaLink}" target="_blank" class="ld-link">OA Source</a>`:''}
     </div>
-    ${c.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">✅ I Bought This — Mark as Done</button>`:''}
+    ${c.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">I Bought This — Mark as Done</button>`:''}
     <div style="display:flex;gap:8px">
       <button class="mbtn cancel" style="flex:1" onclick="closeM('leadModal');openEdit(${l.id})">✏️ Edit</button>
       <button class="mbtn danger" style="flex:1" onclick="if(confirm('Delete?')){leads=leads.filter(x=>x.id!==${l.id});sv2(SK,leads);closeM('leadModal');render();toast('Deleted','info')}">🗑️ Delete</button>
@@ -2002,16 +2070,16 @@ function buildTile(l,c){
   const cog=l.cog?`£${l.cog.toFixed(2)}`:'';
   const typeTag=`${l.type}${cog?' · '+cog:''}`;
   let st='',meta='';
-  if(c.status==='watching'){st=c.daysLeft===1?'⚡ 1 DAY LEFT':`${c.daysLeft} DAYS LEFT`;meta=typeTag;}
-  else if(c.status==='ready'){st='✅ READY TO BUY';meta=typeTag;}
-  else if(c.status==='missed'){st='⚠️ MISSED';meta=typeTag;}
-  else if(c.status==='buywindow'){st='✅ BUY NOW';meta=`${fmt(c.readyDate)}–${fmt(c.buyBy)}<span class="iw"><span class="idot">i</span><span class="itip">Buy by ${fmt(c.buyBy)} · Ends ${fmt(c.endDate)}</span></span>`;}
+  if(c.status==='watching'){st=c.daysLeft===1?'1 DAY LEFT':`${c.daysLeft} DAYS LEFT`;meta=typeTag;}
+  else if(c.status==='ready'){st='READY TO BUY';meta=typeTag;}
+  else if(c.status==='missed'){st='MISSED';meta=typeTag;}
+  else if(c.status==='buywindow'){st='BUY NOW';meta=`${fmt(c.readyDate)}–${fmt(c.buyBy)}<span class="iw"><span class="idot">i</span><span class="itip">Buy by ${fmt(c.buyBy)} · Ends ${fmt(c.endDate)}</span></span>`;}
   else if(c.status==='waiting'){st=`⏳ WAIT ${c.daysLeft}d`;meta=`LTD · Ends ${fmt(c.endDate)}<span class="iw"><span class="idot">i</span><span class="itip">Window opens ${fmt(c.readyDate)}</span></span>`;}
-  else if(c.status==='review'){st='⚠️ REVIEW';meta=`LTD · Ends ${fmt(c.endDate)}`;}
+  else if(c.status==='review'){st='REVIEW';meta=`LTD · Ends ${fmt(c.endDate)}`;}
   const srcBadge=l.src?`<div class="tile-src">${l.src}</div>`:'';
   const compBadge=l.comp!=null?`<div class="tile-comp">👥 ${l.comp}</div>`:'';
   const noteHtml=l.notes?`<div class="tile-note">${l.notes.substring(0,48)}${l.notes.length>48?'…':''}</div>`:'';
-  const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">💤 Was snoozed</div>`:'';
+  const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">Was snoozed</div>`:'';
   const updatedFmt=l.updatedAt?fmtShort(l.updatedAt):null;
   const updatedHtml=updatedFmt?`<div class="tile-updated">Updated ${updatedFmt}</div>`:'';
   const cbHtml=`<div class="tile-cb-wrap" onclick="event.stopPropagation()"><input type="checkbox" class="tile-cb" data-id="${l.id}" onchange="toggleBulk(${l.id},this)"></div>`;
@@ -2047,7 +2115,7 @@ function buildRC(r){
     if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()} ✓</div>`;
     return`<div class="acc soon">${a.toUpperCase()} +${s.days}d</div>`;
   }).join('');
-  const noteHtml=r.notes?`<div class="rc-note">📝 ${r.notes}</div>`:'';
+  const noteHtml=r.notes?`<div class="rc-note">${r.notes}</div>`:'';
   return`<div class="rc" id="rebuy-${r.id}">
     <div class="rc-head"><div class="rc-asin">${r.asin}</div><a href="${amz}" target="_blank" class="rc-amz">Amazon ↗</a></div>
     <div class="acc-grid">${pills}</div>
@@ -2309,7 +2377,7 @@ function updateCharCount(id,val){
 function openExport(){
   const text=notes.map(n=>{
     const line='─'.repeat(50);
-    return`${line}\n📝 ${n.title}\nCreated: ${n.created||'—'}\n${line}\n${n.body||'(empty)'}\n`;
+    return`${line}\n${n.title}\nCreated: ${n.created||'—'}\n${line}\n${n.body||'(empty)'}\n`;
   }).join('\n');
   const ta=document.getElementById('export-text')||document.getElementById('export-textarea');
   if(ta)ta.value=text||'No notes to export.';
@@ -2344,16 +2412,6 @@ const OAK='a2a_oa_v5';
 const loadOA=()=>{try{return JSON.parse(localStorage.getItem(OAK))||[];}catch{return[];}};
 let oaItems=loadOA();
 
-function calcOAStatus(item){
-  if(!item.lastChecked)return{status:'never',daysSince:null};
-  const now=today(),last=pd(item.lastChecked);
-  const daysSince=diff(last,now);
-  const freq=parseInt(item.freq)||7;
-  if(daysSince>freq+3)return{status:'overdue',daysSince};
-  if(daysSince>=freq)return{status:'due',daysSince};
-  return{status:'ok',daysSince,daysUntil:freq-daysSince};
-}
-
 function addOA(){
   const asin=gv('oa-asin').trim().toUpperCase();
   const target=gv('oa-target');
@@ -2362,10 +2420,13 @@ function addOA(){
   if(!target){se('e-oa-target',1);ok=false;}else se('e-oa-target',0);
   if(!ok){toast('Fix the errors above','bad');return;}
   if(oaItems.find(o=>o.asin===asin)){toast(`${asin} already in OA Replen`,'bad');return;}
+  const todayISO=today().toISOString().split('T')[0];
   const item={id:Date.now(),asin,target:parseFloat(target),
     current:gv('oa-current')?parseFloat(gv('oa-current')):null,
     freq:parseInt(gv('oa-freq'))||7,link:gv('oa-link').trim(),
-    notes:gv('oa-notes').trim(),lastChecked:null,checkLog:[]};
+    notes:gv('oa-notes').trim(),
+    lastChecked:todayISO,
+    checkLog:[{date:todayStr(),note:'Added — initial check done'}]};
   oaItems.push(item);
   localStorage.setItem(OAK,JSON.stringify(oaItems));
   ['oa-asin','oa-target','oa-current','oa-link','oa-notes'].forEach(i=>sv(i,''));
@@ -2379,6 +2440,9 @@ function openOACheck(id){
   document.getElementById('oa-check-asin').textContent=item.asin;
   document.getElementById('oa-check-date').textContent=todayStr();
   sv('oa-check-note','');
+  document.querySelectorAll('input[name="oa-check-bought"]').forEach(r=>r.checked=false);
+  document.getElementById('oa-buy-yes-lbl').style.borderColor='var(--border2)';
+  document.getElementById('oa-buy-no-lbl').style.borderColor='var(--border2)';
   openM('oaCheckModal');
 }
 
@@ -2386,13 +2450,31 @@ function confirmOACheck(){
   const id=parseInt(gv('oa-check-id'));
   const item=oaItems.find(x=>x.id===id);if(!item)return;
   const note=gv('oa-check-note').trim();
+  const bought=document.querySelector('input[name="oa-check-bought"]:checked')?.value;
+  if(!bought){toast('Did you buy it?','bad');return;}
   const dateStr=todayStr();
   item.lastChecked=today().toISOString().split('T')[0];
+  item.snoozedUntil=null; // clear any snooze
   item.checkLog=item.checkLog||[];
-  item.checkLog.push({date:dateStr,note:note||'Checked — no change'});
-  localStorage.setItem(OAK,JSON.stringify(oaItems));
-  closeM('oaCheckModal');renderOA();
-  toast(`${item.asin} check logged ✓`,'ok');
+  if(bought==='yes'){
+    item.checkLog.push({date:dateStr,note:`Bought — ${note||'no notes'}`});
+    localStorage.setItem(OAK,JSON.stringify(oaItems));
+    // Archive it
+    const arch=JSON.parse(localStorage.getItem('a2a_oa_arch_v5')||'[]');
+    arch.unshift({...item,archivedAt:dateStr});
+    localStorage.setItem('a2a_oa_arch_v5',JSON.stringify(arch));
+    oaItems=oaItems.filter(x=>x.id!==id);
+    localStorage.setItem(OAK,JSON.stringify(oaItems));
+    closeM('oaCheckModal');renderOA();
+    toast(`${item.asin} marked as bought — archived ✓`,'ok');
+  } else {
+    item.checkLog.push({date:dateStr,note:note||'Checked — not buying yet'});
+    // Snooze by frequency
+    item.snoozedUntil=addD(today(),parseInt(item.freq)||7).toISOString().split('T')[0];
+    localStorage.setItem(OAK,JSON.stringify(oaItems));
+    closeM('oaCheckModal');renderOA();
+    toast(`${item.asin} checked — next check in ${item.freq||7} days`,'ok');
+  }
 }
 
 function openOAEdit(id){
@@ -2421,61 +2503,115 @@ function delOA(id){
   renderOA();toast('Removed','info');
 }
 
-function buildOACard(item){
-  const c=calcOAStatus(item);
-  const sas=sasUrl(item.asin);
-  const cls=c.status==='overdue'?'overdue':c.status==='due'?'due':'';
-  const pillCls=c.status==='never'?'ok':c.status;
-  const pillTxt=c.status==='never'?'🆕 Not checked yet'
-    :c.status==='overdue'?`⚠️ Overdue — ${c.daysSince}d since check`
-    :c.status==='due'?`⏰ Due — ${c.daysSince}d since check`
-    :`✅ OK — check in ${c.daysUntil}d`;
-  const lastChk=item.lastChecked?`Last checked <strong>${fmtShort(item.lastChecked)}</strong>`:'Never checked — press Checked when you first review it';
-  const logHtml=item.checkLog&&item.checkLog.length>0
-    ?`<div class="oa-log">
-        <div class="oa-log-title">Check History</div>
-        ${item.checkLog.slice(-5).reverse().map(e=>`<div class="oa-log-entry">
-          <span class="oa-log-date">${e.date}</span>
-          <span class="oa-log-note">${e.note||'—'}</span>
-        </div>`).join('')}
-      </div>`:'';
+function isOASnoozed(item){
+  if(!item.snoozedUntil)return false;
+  return pd(item.snoozedUntil)>today();
+}
 
-  return`<div class="oa-card ${cls}" id="oa-${item.id}">
-    <div class="oa-head">
-      <span class="oa-asin">${item.asin}</span>
-      <span class="oa-status-pill ${pillCls}">${pillTxt}</span>
-      <a href="${sas}" target="_blank" class="oa-sas-link">SAS ↗</a>
-      ${item.link?`<a href="${item.link}" target="_blank" class="oa-sas-link" style="margin-left:4px">Source ↗</a>`:''}
+function calcOAStatus(item){
+  if(isOASnoozed(item))return{status:'snoozed',snoozedUntil:item.snoozedUntil};
+  if(!item.lastChecked)return{status:'never',daysSince:null};
+  const now=today(),last=pd(item.lastChecked);
+  const daysSince=diff(last,now);
+  const freq=parseInt(item.freq)||7;
+  if(daysSince>freq+3)return{status:'overdue',daysSince};
+  if(daysSince>=freq)return{status:'due',daysSince};
+  return{status:'ok',daysSince,daysUntil:freq-daysSince};
+}
+
+function snoozeOA(id,days,e){
+  if(e){e.stopPropagation();}
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  item.snoozedUntil=addD(today(),days).toISOString().split('T')[0];
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  renderOA();toast(`${item.asin} snoozed ${days}d 💤`,'info');
+}
+
+function snoozeOAFromModal(days){
+  const id=parseInt(gv('oa-check-id'));
+  snoozeOA(id,days,null);
+  closeM('oaCheckModal');
+}
+
+function openOADetail(id){
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  window._oaDetailId=id;
+  const c=calcOAStatus(item);
+  document.getElementById('oad-asin-title').textContent=item.asin;
+  const statusBg={overdue:'var(--red)',due:'var(--amber)',ok:'var(--green)',never:'var(--border2)',snoozed:'var(--purple)'};
+  const statusTxt={
+    overdue:`Overdue — ${c.daysSince} days since last check`,
+    due:`⏰ Due — ${c.daysSince} days since last check`,
+    ok:`OK — check again in ${c.daysUntil} day${c.daysUntil!==1?'s':''}`,
+    never:'Not checked yet — press Log Check to record your first check',
+    snoozed:`Snoozed until ${fmtLong(pd(item.snoozedUntil))}`
+  };
+  const bar=document.getElementById('oad-status-bar');
+  bar.style.background=statusBg[c.status]||'var(--border2)';
+  if(c.status==='never')bar.style.color='var(--muted)';
+  bar.textContent=statusTxt[c.status]||'';
+  document.getElementById('oad-fields').innerHTML=`
+    <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
+    <div class="oa-field"><div class="oa-field-lbl">Current COG</div><div class="oa-field-val current">${item.current?'£'+item.current.toFixed(2):'Not set'}</div></div>
+    <div class="oa-field"><div class="oa-field-lbl">Frequency</div><div class="oa-field-val">Every ${item.freq||7}d</div></div>`;
+  document.getElementById('oad-note-row').innerHTML=item.notes
+    ?`<div class="oa-note-row">${item.notes}</div>`:'';
+  document.getElementById('oad-link-row').innerHTML=item.link
+    ?`<a href="${item.link}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:6px 12px;border:1.5px solid rgba(45,110,223,.35);border-radius:7px;background:rgba(45,110,223,.1)">Open OA Source ↗</a>`:'';
+  const log=item.checkLog&&item.checkLog.length>0
+    ?item.checkLog.slice(-8).reverse().map(e=>`<div class="oa-log-entry">
+        <span class="oa-log-date">${e.date}</span>
+        <span class="oa-log-note">${e.note||'—'}</span>
+      </div>`).join('')
+    :`<div style="font-size:12px;color:var(--muted);font-style:italic">No checks logged yet.</div>`;
+  document.getElementById('oad-log').innerHTML=log;
+  openM('oaDetailModal');
+}
+
+function buildOATile(item){
+  const c=calcOAStatus(item);
+  const cls=`oa-tile oa-${c.status}`;
+  let statusTxt='',meta='';
+  if(c.status==='overdue'){statusTxt=`${c.daysSince}d overdue`;meta=`Every ${item.freq||7}d`;}
+  else if(c.status==='due'){statusTxt=`⏰ Due now`;meta=`${c.daysSince}d since last check`;}
+  else if(c.status==='ok'){statusTxt=`Check in ${c.daysUntil}d`;meta=`Last: ${fmtShort(item.lastChecked)||'—'}`;}
+  else if(c.status==='snoozed'){statusTxt=`Until ${fmt(pd(item.snoozedUntil))}`;meta=`Every ${item.freq||7}d`;}
+  else{statusTxt='Not checked';meta=`Every ${item.freq||7}d`;}
+
+  const priceRow=item.current
+    ?`<div class="oa-tile-meta">£${item.current?.toFixed(2)} → £${item.target?.toFixed(2)} target</div>`
+    :`<div class="oa-tile-meta">Target: £${item.target?.toFixed(2)||'—'}</div>`;
+  const noteHtml=item.notes?`<div class="oa-tile-note">${item.notes}</div>`:'';
+
+  return`<div class="${cls}" id="oa-${item.id}" onclick="openOADetail(${item.id})">
+    <div class="oa-tile-asin">${item.asin}</div>
+    <div class="oa-tile-status">${statusTxt}</div>
+    ${priceRow}
+    ${noteHtml}
+    <div class="oa-tbtns" onclick="event.stopPropagation()">
+      <button class="oa-tbtn" onclick="openOACheck(${item.id})">✓ Check</button>
+      ${item.link?`<button class="oa-tbtn" onclick="window.open('${item.link}','_blank')">Source</button>`:''}
+      <button class="oa-tbtn" onclick="snoozeOA(${item.id},7,event)" title="Snooze 7 days">7d</button>
+      <button class="oa-tbtn" onclick="openOAEdit(${item.id})">Edit</button>
     </div>
-    <div class="oa-fields">
-      <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
-      <div class="oa-field"><div class="oa-field-lbl">Current COG</div><div class="oa-field-val current">${item.current?'£'+item.current.toFixed(2):'Not set'}</div></div>
-      <div class="oa-field"><div class="oa-field-lbl">Check Frequency</div><div class="oa-field-val">Every ${item.freq} days</div></div>
-    </div>
-    ${item.notes?`<div class="oa-note-row">📝 ${item.notes}</div>`:''}
-    <div class="oa-check-row">
-      <span class="oa-last-checked">${lastChk}</span>
-      <div class="oa-acts">
-        <button class="oa-btn check" onclick="openOACheck(${item.id})">✅ Checked</button>
-        <button class="oa-btn edit-b" onclick="openOAEdit(${item.id})">Edit</button>
-        <button class="oa-btn del" onclick="delOA(${item.id})">Remove</button>
-      </div>
-    </div>
-    ${logHtml}
   </div>`;
 }
 
 function renderOA(){
   const list=document.getElementById('oa-list');
   if(!list)return;
-  // Sort: overdue first, then due, then ok
-  const sorted=[...oaItems].sort((a,b)=>{
-    const order={overdue:0,due:1,ok:2,never:3};
-    return(order[calcOAStatus(a).status]||2)-(order[calcOAStatus(b).status]||2);
-  });
-  list.innerHTML=sorted.map(buildOACard).join('')||emp('No OA Replen items yet.');
-  document.getElementById('cnt-oa').textContent=oaItems.length;
-  document.getElementById('nb-oa').textContent=oaItems.length;
+  // Sort: overdue first, then due, then never, then snoozed, then ok
+  const order={overdue:0,due:1,never:2,ok:3,snoozed:4};
+  const sorted=[...oaItems].sort((a,b)=>
+    (order[calcOAStatus(a).status]??3)-(order[calcOAStatus(b).status]??3));
+  list.innerHTML=sorted.map(buildOATile).join('')||emp('No OA Replen items yet. Add one above.');
+
+  // Badge = due + overdue count
+  const dueCount=oaItems.filter(i=>{const s=calcOAStatus(i).status;return s==='due'||s==='overdue';}).length;
+  const cntEl=document.getElementById('cnt-oa');
+  const nbEl=document.getElementById('nb-oa');
+  if(cntEl)cntEl.textContent=dueCount||oaItems.length;
+  if(nbEl)nbEl.textContent=dueCount||oaItems.length;
 
   // Overview section
   const ovList=document.getElementById('ov-oa-list');
@@ -2487,10 +2623,9 @@ function renderOA(){
       ?emp('No OA items due for checking.')
       :dueItems.map(item=>{
           const c=calcOAStatus(item);
-          const cls=c.status;
-          return`<div class="oa-ov-card ${cls}" onclick="go('oareplen');setTimeout(()=>document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'}),120)">
+          return`<div class="oa-ov-card ${c.status}" onclick="go('oareplen');setTimeout(()=>{document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
             <span class="oa-ov-asin">${item.asin}</span>
-            <span class="oa-ov-days ${cls}">${c.status==='overdue'?`⚠️ ${c.daysSince}d overdue`:`⏰ ${c.daysSince}d since check`}</span>
+            <span class="oa-ov-days ${c.status}">${c.status==='overdue'?`${c.daysSince}d overdue`:`⏰ ${c.daysSince}d since check`}</span>
             <span class="oa-ov-note">${item.notes||'No notes'}</span>
             <span class="oa-ov-arr">→</span>
           </div>`;
@@ -2523,11 +2658,18 @@ function calcSnsStatus(acc){
   const d=snsData[acc];
   if(!d||!d.editDay)return{status:'no-data',daysLeft:null};
   const now=today(),editD=pd(d.editDay),delivD=pd(d.deliveryDay);
+  const reviewD=d.reviewDate?pd(d.reviewDate):null;
   const daysToEdit=diff(now,editD);
-  const dayAfterEdit=addD(editD,1);
-  // Day after last edit = review day
-  const isReviewDay=(diff(now,dayAfterEdit)===0);
-  if(isReviewDay)return{status:'review-day',daysLeft:0,editD,delivD};
+  // Review date check — this is when you actually want to action it
+  if(reviewD){
+    const daysToReview=diff(now,reviewD);
+    if(daysToReview===0)return{status:'review-day',daysLeft:0,editD,delivD,reviewD};
+    if(daysToReview<0&&daysToEdit>=0)return{status:'review-day',daysLeft:daysToReview,editD,delivD,reviewD};
+  } else {
+    // fallback: day after edit = review
+    const dayAfterEdit=addD(editD,1);
+    if(diff(now,dayAfterEdit)===0)return{status:'review-day',daysLeft:0,editD,delivD};
+  }
   if(daysToEdit<0)return{status:'needs',daysLeft:daysToEdit,editD,delivD};
   if(daysToEdit===0)return{status:'edit-today',daysLeft:0,editD,delivD};
   if(daysToEdit<=3)return{status:'soon',daysLeft:daysToEdit,editD,delivD};
@@ -2552,25 +2694,25 @@ function renderSns(){
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Dates</button>`;
       needsCount++;alertAccounts.push({acc,type:'no-data'});
     } else if(c.status==='needs'){
-      statusHtml=`<span class="sns-status needs">⚠️ Needs Next Dates</span>`;
+      statusHtml=`<span class="sns-status needs">Needs Next Dates</span>`;
       daysHtml=`<span style="color:var(--red);font-weight:700">Passed</span>`;
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
       needsCount++;alertAccounts.push({acc,type:'needs'});
     } else if(c.status==='edit-today'){
-      statusHtml=`<span class="sns-status edit-today">🔴 Edit Today</span>`;
+      statusHtml=`<span class="sns-status edit-today">Edit Today</span>`;
       daysHtml=`<span style="color:var(--red);font-weight:700">Today</span>`;
       actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
     } else if(c.status==='review-day'){
-      statusHtml=`<span class="sns-status review">📋 Review Day</span>`;
+      statusHtml=`<span class="sns-status review">Review Day</span>`;
       daysHtml=`<span style="color:#c4b5fd;font-weight:700">Check &amp; Cancel</span>`;
       actionHtml=`<button class="sns-act-btn edit-btn" style="background:var(--purple)" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
       reviewAccounts.push(acc);
     } else if(c.status==='soon'){
-      statusHtml=`<span class="sns-status soon">⚡ Edit Soon</span>`;
+      statusHtml=`<span class="sns-status soon">Edit Soon</span>`;
       daysHtml=`<span style="color:#f5c056;font-weight:700">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
       actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
     } else {
-      statusHtml=`<span class="sns-status active">✅ Active</span>`;
+      statusHtml=`<span class="sns-status active">Active</span>`;
       daysHtml=`<span style="color:var(--green);font-weight:600">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
       actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
     }
@@ -2578,8 +2720,8 @@ function renderSns(){
     return`<tr>
       <td><span class="sns-acc">${acc}</span></td>
       <td><span class="sns-date">${d.editDay?fmtLong(pd(d.editDay)):'—'}</span></td>
+      <td><span class="sns-date" style="color:${d.reviewDate?'var(--amber)':'var(--muted)'}">${d.reviewDate?fmtLong(pd(d.reviewDate)):'Not set'}</span></td>
       <td><span class="sns-date">${d.deliveryDay?fmtLong(pd(d.deliveryDay)):'—'}</span></td>
-      <td>${daysHtml}</td>
       <td>${statusHtml}</td>
       <td>${actionHtml}</td>
     </tr>`;
@@ -2674,7 +2816,7 @@ function snsCheckAndDismiss(){
 function openSnsEdit(acc, isNextCycle){
   sv('sns-edit-acc',acc);
   document.getElementById('sns-edit-title').textContent=isNextCycle?`${acc} — Enter Next Cycle`:`${acc} — Edit Dates`;
-  sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-notes','');
+  sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-review','');sv('sns-new-notes','');
   se('e-sns-edit',0);se('e-sns-del',0);
   openM('snsEditModal');
 }
@@ -2699,7 +2841,8 @@ function saveSnsNextCycle(){
   }
 
   // Set new active
-  snsData[acc]={editDay:newEdit,deliveryDay:newDel};
+  const newReview=gv('sns-new-review');
+  snsData[acc]={editDay:newEdit,deliveryDay:newDel,reviewDate:newReview||null};
   saveSns();
   closeM('snsEditModal');
   window._snsPopupDismissed=false; // re-evaluate popup
@@ -2713,8 +2856,7 @@ const sv=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
 const se=(id,show)=>{const e=document.getElementById(id);if(e)e.style.display=show?'block':'none';};
 
 window.addEventListener('click',e=>{
-  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal',
-   'snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal'].forEach(id=>{
+  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal','oaDetailModal'].forEach(id=>{
     if(e.target===document.getElementById(id))closeM(id);
   });
 });
@@ -2724,10 +2866,20 @@ window.addEventListener('click',e=>{
 // ═══════════════════════════════════
 function updateDate(){
   const el=document.getElementById('hdrDate');
-  if(el)el.textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'long'});
+  if(el)el.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+}
+
+function toggleSidebar(){
+  const layout=document.getElementById('appLayout');
+  layout.classList.toggle('collapsed');
+  localStorage.setItem('a2a_sidebar_collapsed',layout.classList.contains('collapsed')?'1':'0');
 }
 
 (function(){
+  // Restore sidebar state
+  if(localStorage.getItem('a2a_sidebar_collapsed')==='1'){
+    document.getElementById('appLayout')?.classList.add('collapsed');
+  }
   updateDate();
   // Auto-update date at midnight without needing a refresh
   const now=new Date();
