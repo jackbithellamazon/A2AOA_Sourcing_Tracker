@@ -630,6 +630,417 @@ header{
 .sns-review-popup-bg.open{display:flex;animation:fu .2s;}
 .sns-review-popup{background:var(--surface);border:2px solid var(--purple);border-radius:14px;padding:28px;
   max-width:440px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+
+/* ═══════════════════════════════════════════════════════════
+   REDESIGN LAYER — Action Center, Notifications, refined tiles
+   ═══════════════════════════════════════════════════════════ */
+
+/* — Refined surface palette for a more serious feel — */
+:root{
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow-md:0 4px 16px rgba(0,0,0,.35);
+}
+
+/* — HEADER right cluster + notification bell — */
+.hdr-r{gap:8px;}
+.bell-wrap{position:relative;}
+.bell-btn{position:relative;background:var(--card);border:1.5px solid var(--border);color:var(--text2);
+  cursor:pointer;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.bell-btn:hover{background:var(--card2);color:var(--text);border-color:var(--border2);}
+.bell-btn.has-alerts{color:var(--amber);border-color:rgba(255,184,48,.4);}
+.bell-count{position:absolute;top:-6px;right:-6px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;
+  background:var(--red);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--surface);}
+.bell-count.zero{display:none;}
+
+.notif-panel{display:none;position:absolute;top:calc(100% + 10px);right:0;width:380px;max-width:92vw;max-height:72vh;
+  overflow:hidden;background:var(--surface);border:1.5px solid var(--border2);border-radius:13px;
+  box-shadow:0 24px 60px rgba(0,0,0,.7);z-index:400;flex-direction:column;}
+.notif-panel.open{display:flex;animation:fu .15s;}
+.notif-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+.notif-hd-t{font-size:13px;font-weight:700;color:var(--text);}
+.notif-clear{background:none;border:none;color:var(--blue);font-family:var(--dm);font-size:11.5px;font-weight:600;cursor:pointer;padding:4px 6px;border-radius:5px;}
+.notif-clear:hover{background:var(--card);}
+.notif-body{overflow-y:auto;padding:8px;}
+.notif-group-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;padding:8px 8px 5px;}
+.notif-item{display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:9px;cursor:pointer;transition:background .13s;margin-bottom:2px;}
+.notif-item:hover{background:var(--card);}
+.notif-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.notif-tx{flex:1;min-width:0;}
+.notif-it-title{font-size:12.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px;}
+.notif-it-chip{font-size:8.5px;font-weight:700;letter-spacing:.4px;padding:1px 6px;border-radius:4px;text-transform:uppercase;flex-shrink:0;}
+.notif-it-sub{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4;}
+.notif-empty{text-align:center;padding:34px 18px;color:var(--muted);font-size:12.5px;}
+.notif-empty svg{margin:0 auto 10px;display:block;color:var(--green);}
+
+/* — colour utility map (chips/dots/borders) — */
+.cv-red{--cv:var(--red);} .cv-amber{--cv:var(--amber);} .cv-green{--cv:var(--green);}
+.cv-teal{--cv:var(--teal);} .cv-purple{--cv:var(--purple);} .cv-blue{--cv:var(--blue);} .cv-grey{--cv:var(--text2);}
+
+/* ── ACTION CENTER (Overview) ── */
+.ac-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.ac-title{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
+.ac-date{font-size:12px;color:var(--text2);margin-top:3px;}
+.ac-summary{text-align:right;font-size:12.5px;color:var(--text2);max-width:320px;}
+.ac-summary b{color:var(--text);}
+.ac-summary.clear b{color:var(--green);}
+
+.ac-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;}
+.ac-stat{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 13px;cursor:pointer;
+  transition:all .15s;border-left:3px solid var(--cv,var(--border2));text-align:left;}
+.ac-stat:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.ac-stat.active{border-color:var(--cv);box-shadow:0 0 0 1px var(--cv);}
+.ac-stat-num{font-size:25px;font-weight:700;line-height:1;color:var(--text);}
+.ac-stat-num.dim{color:var(--muted);}
+.ac-stat-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text2);margin-top:6px;}
+.ac-stat .ac-stat-lbl{color:var(--cv);opacity:.95;}
+
+.aq{display:flex;flex-direction:column;gap:7px;}
+.aq-row{display:flex;align-items:center;gap:13px;background:var(--surface);border:1.5px solid var(--border);
+  border-left:3px solid var(--cv,var(--border2));border-radius:10px;padding:12px 14px;transition:all .15s;}
+.aq-row:hover{border-color:var(--border2);border-left-color:var(--cv);box-shadow:var(--shadow-sm);}
+.aq-chip{font-size:9px;font-weight:700;letter-spacing:.5px;padding:4px 8px;border-radius:5px;text-transform:uppercase;
+  white-space:nowrap;flex-shrink:0;width:96px;text-align:center;
+  background:color-mix(in srgb,var(--cv) 16%,transparent);color:var(--cv);border:1px solid color-mix(in srgb,var(--cv) 32%,transparent);}
+.aq-main{flex:1;min-width:0;cursor:pointer;}
+.aq-asin{font-family:var(--mono);font-size:13.5px;font-weight:500;color:var(--text);}
+.aq-sub{font-size:11.5px;color:var(--text2);margin-top:2px;line-height:1.4;}
+.aq-acts{display:flex;gap:5px;align-items:center;flex-shrink:0;}
+.aq-link{padding:6px 9px;font-size:10px;font-weight:700;letter-spacing:.3px;border:1.5px solid var(--border2);
+  background:var(--card);color:var(--text2);border-radius:6px;cursor:pointer;font-family:var(--dm);transition:all .13s;}
+.aq-link:hover{background:var(--card2);color:var(--text);border-color:var(--blue);}
+.aq-btn-primary{padding:7px 13px;font-size:11px;font-weight:700;border:none;border-radius:6px;cursor:pointer;
+  font-family:var(--dm);transition:all .13s;color:#06121a;
+  background:var(--cv);box-shadow:0 2px 8px color-mix(in srgb,var(--cv) 35%,transparent);}
+.aq-btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+
+.ac-clear{text-align:center;padding:54px 24px;background:var(--surface);border:1.5px solid var(--border);border-radius:13px;}
+.ac-clear svg{color:var(--green);margin-bottom:14px;}
+.ac-clear-t{font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.ac-clear-s{font-size:12.5px;color:var(--text2);}
+
+/* ── REFINED TILES (override loud gradients) ── */
+.tile{background:var(--card)!important;border:1.5px solid var(--border)!important;
+  border-left:3px solid var(--tcol,var(--border2))!important;color:var(--text)!important;
+  box-shadow:var(--shadow-sm)!important;border-radius:10px;padding:12px 12px 11px 13px;}
+.tile:hover{border-color:var(--border2)!important;border-left-color:var(--tcol)!important;
+  transform:translateY(-2px);box-shadow:var(--shadow-md)!important;}
+.t-green {--tcol:var(--green);}
+.t-red   {--tcol:var(--red);}
+.t-amber {--tcol:var(--amber);}
+.t-teal  {--tcol:var(--teal);}
+.t-orange{--tcol:var(--orange);}
+.t-blue  {--tcol:var(--blue);}
+.t-purple{--tcol:var(--purple);}
+.t-neu   {--tcol:var(--border2);}
+.tile .tile-asin{color:var(--text2)!important;text-shadow:none!important;}
+.tile .tile-status{color:var(--tcol)!important;text-shadow:none!important;font-size:12px;letter-spacing:.2px;}
+.tile .tile-meta{color:var(--text2)!important;opacity:1!important;text-shadow:none!important;}
+.tile .tile-note{color:var(--muted)!important;opacity:1!important;text-shadow:none!important;}
+.tile .tile-updated{color:var(--muted)!important;}
+.tile .tile-src{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
+.tile .tile-comp{background:var(--bg)!important;color:var(--text2)!important;}
+.tile .tile-snooze-badge{background:var(--bg)!important;color:var(--muted)!important;border:1px solid var(--border2);}
+.tile .tbtn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
+.tile .tbtn:hover{background:var(--card2)!important;color:var(--text)!important;}
+.tile .tbtn.buy{background:color-mix(in srgb,var(--tcol) 18%,transparent)!important;color:var(--tcol)!important;border-color:color-mix(in srgb,var(--tcol) 35%,transparent);}
+.tile .tbtn.buy:hover{background:var(--tcol)!important;color:#06121a!important;}
+
+/* competition indicator */
+.tile-comp.comp-low{color:var(--green)!important;border-color:color-mix(in srgb,var(--green) 35%,transparent)!important;}
+.tile-comp.comp-med{color:var(--amber)!important;border-color:color-mix(in srgb,var(--amber) 35%,transparent)!important;}
+.tile-comp.comp-high{color:var(--red)!important;border-color:color-mix(in srgb,var(--red) 35%,transparent)!important;}
+
+/* ── REFINED OA TILES (match the calmer language) ── */
+.oa-tile{background:var(--card)!important;border:1.5px solid var(--border)!important;
+  border-left:3px solid var(--ocol,var(--border2))!important;color:var(--text)!important;box-shadow:var(--shadow-sm)!important;}
+.oa-tile:hover{border-color:var(--border2)!important;border-left-color:var(--ocol)!important;}
+.oa-tile.oa-overdue{--ocol:var(--red);}
+.oa-tile.oa-due{--ocol:var(--amber);}
+.oa-tile.oa-ok{--ocol:var(--green);}
+.oa-tile.oa-snoozed{--ocol:var(--purple);}
+.oa-tile.oa-never{--ocol:var(--border2);}
+.oa-tile .oa-tile-asin{color:var(--text)!important;text-shadow:none!important;}
+.oa-tile .oa-tile-status{color:var(--ocol)!important;text-shadow:none!important;}
+.oa-tile .oa-tile-meta{color:var(--text2)!important;opacity:1!important;text-shadow:none!important;}
+.oa-tile .oa-tile-note{color:var(--muted)!important;}
+.oa-tile .oa-tbtn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
+.oa-tile .oa-tbtn:hover{background:var(--card2)!important;color:var(--text)!important;}
+
+/* ── SEGMENT FILTER TABS (Sourcing) ── */
+.seg{display:flex;gap:5px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:5px;margin-bottom:18px;width:fit-content;}
+.seg-btn{padding:7px 16px;border:none;background:none;color:var(--text2);font-family:var(--dm);font-size:12px;font-weight:600;
+  cursor:pointer;border-radius:7px;transition:all .13s;display:flex;align-items:center;gap:7px;}
+.seg-btn:hover{color:var(--text);background:var(--card);}
+.seg-btn.active{background:var(--card2);color:var(--text);}
+.seg-btn .seg-n{font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--bg);color:var(--text2);}
+.seg-btn.active .seg-n{background:var(--blue);color:#fff;}
+
+/* ── PURPOSE BANNER (explains what each parking-lot page is for) ── */
+.purpose{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1.5px solid var(--border);
+  border-left:3px solid var(--blue);border-radius:10px;padding:12px 15px;margin-bottom:18px;}
+.purpose svg{color:var(--blue);flex-shrink:0;margin-top:1px;}
+.purpose-t{font-size:12.5px;font-weight:700;color:var(--text);}
+.purpose-s{font-size:11.5px;color:var(--text2);margin-top:2px;line-height:1.45;}
+
+/* page titles a touch larger/cleaner */
+.pg-title{font-size:18px;letter-spacing:-.3px;margin-bottom:18px;}
+
+/* toast cleaner */
+.toast{border-radius:9px;font-weight:600;}
+
+@media(max-width:960px){
+  .ac-stats{grid-template-columns:repeat(3,1fr);}
+  .notif-panel{width:340px;}
+}
+@media(max-width:600px){
+  .ac-stats{grid-template-columns:repeat(2,1fr);}
+  .ac-head{flex-direction:column;}
+  .ac-summary{text-align:left;}
+  .aq-row{flex-wrap:wrap;}
+  .aq-chip{width:auto;}
+  .aq-acts{width:100%;justify-content:flex-end;}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REDESIGN LAYER 2 — richer Action Center + OA Replen guidance
+   ═══════════════════════════════════════════════════════════ */
+:root{--text3:#aeb8d6;}
+
+/* — Action Center two-column — */
+.ac-grid{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start;}
+.ac-main{min-width:0;}
+.aq-panel{background:var(--surface);border:1.5px solid var(--border);border-radius:13px;overflow:hidden;}
+.aq-panel-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 17px;border-bottom:1px solid var(--border);}
+.aq-panel-t{font-size:14px;font-weight:700;color:var(--text);}
+.aq-panel-s{font-size:11.5px;color:var(--text3);margin-top:3px;}
+.aq-panel-pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+  background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red);border:1px solid color-mix(in srgb,var(--red) 32%,transparent);}
+.aq-panel-pill.clear{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);border-color:color-mix(in srgb,var(--green) 32%,transparent);}
+#ac-queue{padding:10px;gap:5px;}
+.aq-band{display:flex;align-items:center;gap:9px;padding:12px 8px 6px;}
+.aq-band:first-child{padding-top:5px;}
+.aq-band-dot{width:9px;height:9px;border-radius:50%;background:var(--cv);box-shadow:0 0 8px var(--cv);flex-shrink:0;}
+.aq-band-t{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--cv);text-transform:uppercase;}
+.aq-band-n{font-size:11px;font-weight:700;color:var(--text2);background:var(--bg);border:1px solid var(--border2);border-radius:9px;padding:1px 8px;}
+#ac-queue .aq-row{border-radius:9px;}
+.aq-sub{color:var(--text3);}
+
+/* — Aside panels — */
+.ac-aside{display:flex;flex-direction:column;gap:14px;}
+.side-panel{background:var(--surface);border:1.5px solid var(--border);border-radius:13px;overflow:hidden;}
+.side-panel.accent-red{border-top:3px solid var(--red);}
+.side-panel.accent-green{border-top:3px solid var(--green);}
+.side-panel.accent-teal{border-top:3px solid var(--teal);}
+.side-hd{padding:13px 15px 11px;border-bottom:1px solid var(--border);}
+.side-hd-t{font-size:11px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--text);display:flex;align-items:center;gap:8px;}
+.side-hd-t svg{flex-shrink:0;}
+.side-hd-s{font-size:10.5px;color:var(--text3);margin-top:4px;}
+.side-body{padding:6px 14px 12px;}
+.sched-3{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:8px 0 4px;}
+.sched-col{padding:6px 4px;border-right:1px solid var(--border);}
+.sched-col:last-child{border-right:none;}
+.sched-col-lbl{font-size:8.5px;font-weight:800;letter-spacing:.7px;color:var(--text3);text-transform:uppercase;margin-bottom:6px;}
+.sched-col-n{font-size:24px;font-weight:800;line-height:1;color:var(--text);}
+.sched-col.over .sched-col-n{color:var(--red);}
+.sched-col.today .sched-col-n{color:var(--amber);}
+.sched-col.over.zero .sched-col-n,.sched-col.today.zero .sched-col-n{color:var(--muted);}
+.sched-row{display:flex;align-items:center;gap:9px;padding:8px 2px;border-top:1px solid var(--border);cursor:pointer;}
+.sched-row:hover{background:var(--card);}
+.sched-row-asin{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sched-row-date{font-size:11px;font-weight:600;color:var(--text3);white-space:nowrap;}
+.opp-row{display:flex;align-items:center;gap:11px;padding:9px 2px;border-top:1px solid var(--border);cursor:pointer;}
+.opp-row:first-child{border-top:none;}
+.opp-row:hover{background:var(--card);}
+.opp-badge{width:36px;height:36px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;
+  background:color-mix(in srgb,var(--cv) 16%,transparent);border:1px solid color-mix(in srgb,var(--cv) 30%,transparent);}
+.opp-badge-n{font-size:15px;font-weight:800;color:var(--cv);line-height:1;}
+.opp-badge-u{font-size:7.5px;font-weight:700;color:var(--cv);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.opp-tx{flex:1;min-width:0;}
+.opp-asin{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.opp-sub{font-size:10.5px;color:var(--text3);margin-top:1px;}
+.glance-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-top:1px solid var(--border);}
+.glance-row:first-child{border-top:none;}
+.glance-lbl{font-size:12px;color:var(--text3);}
+.glance-n{font-size:15px;font-weight:700;color:var(--text);}
+.side-empty{font-size:11.5px;color:var(--muted);text-align:center;padding:12px 6px;}
+
+@media(max-width:1100px){.ac-grid{grid-template-columns:1fr;}.ac-aside{flex-direction:row;flex-wrap:wrap;}.side-panel{flex:1;min-width:280px;}}
+@media(max-width:680px){.ac-aside{flex-direction:column;}}
+
+/* — OA Replen: summary, alert, sections, contrast — */
+.oa-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:2px;}
+.oa-sum{background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:14px 15px;cursor:pointer;
+  border-left:3px solid var(--cv,var(--border2));transition:all .15s;}
+.oa-sum:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--cv);}
+.oa-sum-n{font-size:32px;font-weight:800;line-height:1;color:var(--cv,var(--text));}
+.oa-sum-n.dim{color:var(--muted);}
+.oa-sum-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-top:8px;}
+.oa-alert{display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--red) 13%,transparent);
+  border:1.5px solid color-mix(in srgb,var(--red) 42%,transparent);border-radius:11px;padding:13px 16px;margin:16px 0 4px;}
+.oa-alert svg{color:var(--red);flex-shrink:0;}
+.oa-alert-t{font-size:13.5px;font-weight:700;color:#fff;}
+.oa-alert-s{font-size:11.5px;color:var(--text3);margin-top:2px;}
+.oa-sec{display:flex;align-items:center;gap:10px;margin:24px 0 12px;padding-bottom:9px;border-bottom:1.5px solid var(--border);}
+.oa-sec-dot{width:9px;height:9px;border-radius:50%;background:var(--cv);box-shadow:0 0 8px var(--cv);flex-shrink:0;}
+.oa-sec-t{font-size:12.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--cv);}
+.oa-sec-n{font-size:11px;font-weight:700;color:var(--text2);background:var(--bg);border:1px solid var(--border2);border-radius:9px;padding:1px 8px;}
+
+.oa-tile .oa-tile-asin{font-size:14.5px!important;font-weight:700!important;color:#fff!important;letter-spacing:.2px;}
+.oa-tile .oa-tile-status{font-size:13px!important;font-weight:800!important;letter-spacing:.4px;color:var(--ocol)!important;}
+.oa-tile .oa-tile-meta{font-size:11.5px!important;color:var(--text3)!important;opacity:1!important;}
+.oa-tile .oa-tile-note{color:var(--text2)!important;font-size:10.5px!important;}
+.oa-tile.oa-overdue{border-left-width:4px!important;background:color-mix(in srgb,var(--red) 9%,var(--card))!important;}
+.oa-tile.oa-due{background:color-mix(in srgb,var(--amber) 8%,var(--card))!important;}
+.oa-tile .oa-tbtn{font-size:9.5px!important;padding:6px 3px!important;color:var(--text3)!important;}
+.oa-tile .oa-tbtn:hover{color:#fff!important;}
+
+/* ═══════════════════════════════════════════════════════════
+   REDESIGN LAYER 3 — consistent ops UI across EVERY page
+   ═══════════════════════════════════════════════════════════ */
+:root{ --text2:#9aa4c4; --muted:#6b7699; }   /* brighter mid-tones = readability */
+
+.side-hd-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+#notifBody .notif-item{padding:9px 9px;}
+
+/* Page titles — accent bar */
+.pg-title{display:flex;align-items:center;gap:11px;}
+.pg-title::before{content:'';width:4px;height:19px;border-radius:3px;background:var(--blue);flex-shrink:0;}
+
+/* Section headers — colored dot + bolder (Sourcing, Inbox, Watchlist, Rebuy) */
+.sec{border-bottom:1px solid var(--border);margin-top:26px;padding-bottom:10px;gap:10px;align-items:center;}
+.sec.nt{margin-top:6px;}
+.sec::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--blue);
+  box-shadow:0 0 8px color-mix(in srgb,var(--blue) 70%,transparent);flex-shrink:0;}
+.sec-t{font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--text);}
+.sec-pill{background:var(--bg);border:1px solid var(--border2);color:var(--text2);font-weight:700;}
+#sec-ready::before{background:var(--green);box-shadow:0 0 8px color-mix(in srgb,var(--green) 70%,transparent);}
+#sec-ltd::before{background:var(--teal);box-shadow:0 0 8px color-mix(in srgb,var(--teal) 70%,transparent);}
+#sec-watching::before{background:var(--amber);box-shadow:0 0 8px color-mix(in srgb,var(--amber) 70%,transparent);}
+
+/* Forms read like panels */
+.fc{border-radius:12px;border-left:3px solid var(--blue);}
+.fc-title{font-size:13px;font-weight:700;}
+.fl{font-size:10px;letter-spacing:.7px;color:var(--text2);}
+.fi,.fs,.fta{font-size:13.5px;border-color:var(--border2);}
+.fi:hover,.fs:hover,.fta:hover{border-color:var(--muted);}
+.seg-btn{font-size:12.5px;}
+
+/* Sub & Save — summary strip + table polish */
+.sns-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
+.sns-sum{background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:14px 16px;border-left:3px solid var(--cv,var(--border2));}
+.sns-sum-n{font-size:28px;font-weight:800;line-height:1;color:var(--cv,var(--text));}
+.sns-sum-n.dim{color:var(--muted);}
+.sns-sum-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-top:8px;}
+.sns-table-wrap{border-radius:12px;}
+.sns-table th{font-size:10px;color:var(--text2);}
+.sns-table td{font-size:13px;padding:13px 14px;}
+.sns-acc{font-size:14px;color:#fff;font-weight:700;}
+.sns-date{color:var(--text3);}
+.sns-table tr:hover td{background:rgba(255,255,255,.025);}
+
+/* Rebuy cards */
+.rc{border-radius:12px;border-left:3px solid var(--border2);}
+.rc:hover{border-left-color:var(--blue);}
+.rc-asin{font-size:15px;color:#fff;font-weight:700;}
+.acc{font-size:11px;border-radius:8px;padding:8px 3px;color:var(--text2);}
+.acc.ready{box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 50%,transparent);}
+
+/* Inbox / Watchlist cards */
+.inbox-card,.wl-card{border-radius:11px;border-left:3px solid var(--border2);transition:all .15s;}
+.inbox-card:hover,.wl-card:hover{border-left-color:var(--blue);transform:translateX(2px);}
+.inbox-asin,.wl-asin{font-size:14px;color:#fff;font-weight:700;}
+.inbox-note,.wl-note{color:var(--text3);}
+.inbox-market,.wl-market,.wl-src{color:var(--text2);}
+
+/* Notes cards */
+.note-card{border-radius:12px;border-left:3px solid var(--border2);}
+.note-card:hover{border-left-color:var(--blue);}
+.note-title-input{font-size:13.5px;}
+.note-textarea{color:var(--text3);}
+
+.empty{color:var(--text2);border-color:var(--border2);}
+
+/* ═══ BUY-TIMING ENGINE — strategy bar, plan box, timeline ═══ */
+.strat-bar{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center;
+  background:var(--surface);border:1.5px solid var(--border);border-left:3px solid var(--blue);border-radius:11px;padding:13px 16px;margin-bottom:18px;}
+.strat-bar-grp{display:flex;align-items:center;gap:11px;flex-wrap:wrap;}
+.strat-bar-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);}
+.strat-bar-unit{font-size:12px;color:var(--text3);}
+.lt-input{width:60px!important;text-align:center;padding:7px!important;}
+
+.strat-toggle{display:inline-flex;background:var(--bg);border:1.5px solid var(--border2);border-radius:9px;padding:3px;gap:3px;}
+.strat-btn{padding:7px 13px;border:none;background:none;color:var(--text2);font-family:var(--dm);font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;transition:all .13s;white-space:nowrap;}
+.strat-btn:hover{color:var(--text);}
+.strat-btn.active{background:var(--green);color:#06121a;box-shadow:0 2px 8px color-mix(in srgb,var(--green) 35%,transparent);}
+.strat-btn.speed.active{background:var(--teal);box-shadow:0 2px 8px color-mix(in srgb,var(--teal) 35%,transparent);}
+
+.plan-box{background:var(--card);border:1.5px solid var(--border2);border-radius:11px;padding:15px;margin-bottom:14px;}
+.plan-hd{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:12px;}
+.plan-box .strat-toggle{display:flex;width:100%;margin-bottom:14px;}
+.plan-box .strat-btn{flex:1;text-align:center;}
+
+.tl{display:flex;align-items:flex-start;justify-content:space-between;margin:6px 0 4px;}
+.tl-node{display:flex;flex-direction:column;align-items:center;text-align:center;flex:0 0 auto;width:52px;}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--cv);box-shadow:0 0 8px color-mix(in srgb,var(--cv) 70%,transparent);margin-bottom:6px;}
+.tl-node.tl-hl .tl-dot{width:16px;height:16px;outline:2px solid var(--cv);outline-offset:2px;}
+.tl-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--cv);}
+.tl-date{font-size:10.5px;color:var(--text3);margin-top:2px;}
+.tl-node.tl-hl .tl-lbl{font-size:10.5px;}
+.tl-line{flex:1;height:2px;background:var(--border2);margin-top:5px;border-radius:2px;min-width:6px;}
+
+.plan-advice{font-size:12.5px;font-weight:600;line-height:1.5;border-radius:9px;padding:11px 13px;margin-top:12px;}
+.plan-advice.ok{background:color-mix(in srgb,var(--green) 12%,transparent);border:1px solid color-mix(in srgb,var(--green) 35%,transparent);color:#bdf5dd;}
+.plan-advice.warn{background:color-mix(in srgb,var(--amber) 12%,transparent);border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);color:#ffe2ad;}
+.plan-advice.bad{background:color-mix(in srgb,var(--red) 12%,transparent);border:1px solid color-mix(in srgb,var(--red) 38%,transparent);color:#ffc2cc;}
+
+.plan-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.plan-stat{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;text-align:center;}
+.plan-stat span{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);margin-bottom:4px;}
+.plan-stat b{font-size:13px;color:var(--text);font-weight:700;}
+
+@media(max-width:600px){.tl-node{width:44px;}.tl-date{font-size:9.5px;}.strat-bar{flex-direction:column;align-items:flex-start;}}
+
+/* ═══ SOURCING — toolbar (view/sort) + compact table ═══ */
+.src-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+.src-toolbar .seg{margin-bottom:0;}
+.src-ctrls{display:flex;align-items:center;gap:8px;}
+.src-sort{background:var(--surface);border:1.5px solid var(--border);color:var(--text2);font-family:var(--dm);
+  font-size:12px;font-weight:600;border-radius:9px;padding:8px 11px;cursor:pointer;}
+.src-sort:hover{border-color:var(--border2);color:var(--text);}
+.view-toggle{display:inline-flex;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:3px;gap:2px;}
+.vt-btn{width:32px;height:30px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--text2);cursor:pointer;border-radius:6px;transition:all .13s;}
+.vt-btn:hover{color:var(--text);background:var(--card);}
+.vt-btn.active{background:var(--card2);color:var(--text);}
+
+.ltbl-wrap{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;}
+.ltbl{width:100%;border-collapse:collapse;font-size:13px;}
+.ltbl thead th{text-align:left;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--text2);
+  padding:11px 12px;background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap;}
+.ltbl-row{border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.ltbl-row:last-child{border-bottom:none;}
+.ltbl-row:hover{background:var(--card);}
+.ltbl td{padding:11px 12px;color:var(--text3);white-space:nowrap;vertical-align:middle;}
+.ltbl-row td:first-child{width:6px;padding-right:0;}
+.ltbl-dot{display:block;width:9px;height:9px;border-radius:50%;background:var(--cv);box-shadow:0 0 7px color-mix(in srgb,var(--cv) 70%,transparent);}
+.ltbl-asin{font-family:var(--mono);font-weight:600;color:#fff;}
+.ltbl-src{display:inline-block;margin-left:8px;font-family:var(--dm);font-size:9.5px;font-weight:700;color:var(--text2);background:var(--bg);border:1px solid var(--border2);border-radius:5px;padding:1px 6px;vertical-align:middle;}
+.ltbl-strat{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.3px;}
+.ltbl-strat.validation{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green);}
+.ltbl-strat.speed{background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal);}
+.ltbl-buy{font-size:10.5px;font-weight:800;letter-spacing:.4px;color:var(--cv);}
+.ltbl-cd{font-weight:700;color:var(--text);}
+.ltbl-comp{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid;}
+.ltbl-comp.comp-low{color:var(--green);border-color:color-mix(in srgb,var(--green) 35%,transparent);}
+.ltbl-comp.comp-med{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 35%,transparent);}
+.ltbl-comp.comp-high{color:var(--red);border-color:color-mix(in srgb,var(--red) 35%,transparent);}
+.ltbl-dim{color:var(--muted);}
+.ltbl-act{text-align:right;}
+.ltbl-btn{font-family:var(--dm);font-size:10px;font-weight:700;padding:6px 9px;border:1px solid var(--border2);background:var(--bg);color:var(--text2);border-radius:6px;cursor:pointer;margin-left:4px;transition:all .12s;}
+.ltbl-btn:hover{color:var(--text);border-color:var(--blue);}
+.ltbl-btn.buy{color:var(--green);border-color:color-mix(in srgb,var(--green) 35%,transparent);}
+.ltbl-btn.buy:hover{background:var(--green);color:#06121a;}
+@media(max-width:760px){.src-toolbar{flex-direction:column;align-items:stretch;}.src-ctrls{justify-content:space-between;}}
 </style>
 </head>
 <body>
@@ -694,38 +1105,51 @@ header{
 
   <main class="main">
 
-    <!-- ══════════════ OVERVIEW ══════════════ -->
+    <!-- ══════════════ ACTION CENTER (Overview) ══════════════ -->
     <div id="overview" class="tc active">
-      <div class="pg-title">Today's Actions</div>
-      <div class="kpi-row">
-        <div class="kpi green"  onclick="go('sourcing');ss('sec-ready')"><div class="kpi-num" id="kpi-action">0</div><div class="kpi-lbl">Buy Today</div></div>
-        <div class="kpi teal"   onclick="go('sourcing');ss('sec-ltd')"><div class="kpi-num" id="kpi-ltdopen">0</div><div class="kpi-lbl">Buy Window</div></div>
-        <div class="kpi purple" onclick="go('sns')"><div class="kpi-num" id="kpi-sns-review">0</div><div class="kpi-lbl">S&amp;S Review</div></div>
-        <div class="kpi red"    onclick="go('oareplen')"><div class="kpi-num" id="kpi-oa-due">0</div><div class="kpi-lbl">OA Due</div></div>
-        <div class="kpi blue"   onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-watching">0</div><div class="kpi-lbl">Watching</div></div>
+      <div class="ac-head">
+        <div>
+          <div class="ac-title">Action Center</div>
+          <div class="ac-date" id="ac-date"></div>
+        </div>
+        <div class="ac-summary" id="ac-summary"></div>
       </div>
-
-      <div class="sec nt"><span class="sec-t">Ready to Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
-      <div class="tg" id="ov-priority"></div>
-
-      <div class="sec"><span class="sec-t">Buy Window Open</span><span class="sec-pill" id="ov-l-cnt">0</span></div>
-      <div class="tg" id="ov-ltd"></div>
-
-      <!-- S&S OVERVIEW -->
-      <div class="sec" id="ov-sns-sec"><span class="sec-t">Sub &amp; Save — Action Required</span><span class="sec-pill" id="ov-sns-cnt">0</span></div>
-      <div id="ov-sns-alerts"></div>
-
-      <!-- OA REPLEN OVERVIEW -->
-      <div class="sec" id="ov-oa-sec"><span class="sec-t">OA Replen — Due</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
-      <div id="ov-oa-list"></div>
-
-      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">Rebuys Ready</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
-      <div class="tg" id="ov-rebuy"></div>
+      <div class="ac-stats" id="ac-stats"></div>
+      <div class="ac-grid">
+        <div class="ac-main">
+          <div class="aq-panel">
+            <div class="aq-panel-hd">
+              <div>
+                <div class="aq-panel-t">Action Queue — work top to bottom</div>
+                <div class="aq-panel-s">Everything here needs you. Clear the red first.</div>
+              </div>
+              <span class="aq-panel-pill" id="aq-pill">0 to action</span>
+            </div>
+            <div class="aq" id="ac-queue"></div>
+          </div>
+        </div>
+        <aside class="ac-aside" id="ac-aside"></aside>
+      </div>
     </div>
 
     <!-- ══════════════ SOURCING ══════════════ -->
     <div id="sourcing" class="tc">
       <div class="pg-title">Sourcing</div>
+
+      <div class="strat-bar">
+        <div class="strat-bar-grp">
+          <span class="strat-bar-lbl">Default buy strategy</span>
+          <div class="strat-toggle" id="global-strat">
+            <button class="strat-btn" data-s="validation" onclick="setGlobalStrategy('validation')">Prioritise Validation</button>
+            <button class="strat-btn speed" data-s="speed" onclick="setGlobalStrategy('speed')">Prioritise Speed</button>
+          </div>
+        </div>
+        <div class="strat-bar-grp">
+          <span class="strat-bar-lbl">Buy → live on Amazon</span>
+          <input class="fi lt-input" id="lt-input" type="number" min="1" max="60" onchange="setLeadTime(this.value)">
+          <span class="strat-bar-unit">days lead time</span>
+        </div>
+      </div>
 
       <div class="fc" id="src-fc">
         <div class="fc-hd" onclick="toggleFC('src-fc')">
@@ -779,7 +1203,11 @@ header{
           <div class="g4">
             <div class="fg">
               <label class="fl">Date Dropped (Keepa)</label>
-              <input class="fi" id="s-date" type="date">
+              <input class="fi dm" id="s-date" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="previewBW()">
+            </div>
+            <div class="fg">
+              <label class="fl">Date Found</label>
+              <input class="fi dm" id="s-found" placeholder="dd/mm" maxlength="5" inputmode="numeric">
             </div>
             <div class="fg">
               <label class="fl">COG (£)</label>
@@ -789,9 +1217,11 @@ header{
               <label class="fl">Competitors (FBA)</label>
               <input class="fi" id="s-comp" type="number" placeholder="0" min="0">
             </div>
+          </div>
+          <div class="g4">
             <div class="fg">
-              <label class="fl">LTD End Date</label>
-              <input class="fi" id="s-end" type="date" oninput="previewBW()">
+              <label class="fl">LTD End Date (leave blank for 7DD)</label>
+              <input class="fi dm" id="s-end" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="previewBW()">
             </div>
           </div>
           <div class="fg" id="oa-row" style="display:none">
@@ -811,23 +1241,55 @@ header{
         </div>
       </div>
 
+      <div class="src-toolbar">
+        <div class="seg" id="src-seg">
+          <button class="seg-btn active" data-seg="all" onclick="setSrcFilter('all')">All <span class="seg-n" id="seg-n-all">0</span></button>
+          <button class="seg-btn" data-seg="ready" onclick="setSrcFilter('ready')">Ready to Buy <span class="seg-n" id="seg-n-ready">0</span></button>
+          <button class="seg-btn" data-seg="ltd" onclick="setSrcFilter('ltd')">LTD <span class="seg-n" id="seg-n-ltd">0</span></button>
+          <button class="seg-btn" data-seg="watching" onclick="setSrcFilter('watching')">Watching <span class="seg-n" id="seg-n-watching">0</span></button>
+        </div>
+        <div class="src-ctrls">
+          <select class="src-sort" id="src-sort" onchange="setSrcSort(this.value)">
+            <option value="buy">Sort: Buy date</option>
+            <option value="countdown">Sort: Countdown</option>
+            <option value="comp">Sort: Competition</option>
+            <option value="cog">Sort: COG</option>
+            <option value="added">Sort: Newest</option>
+          </select>
+          <div class="view-toggle" id="view-toggle">
+            <button class="vt-btn active" data-v="cards" onclick="setSrcView('cards')" title="Card view">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </button>
+            <button class="vt-btn" data-v="table" onclick="setSrcView('table')" title="Table view">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="bulk-bar" id="bulk-bar">
         <span class="bulk-count" id="bulk-count">0 selected</span>
         <button class="bulk-btn bb-buy" onclick="bulkBought()">Mark Bought</button>
         <button class="bulk-btn bb-snooze" onclick="bulkSnooze()">Snooze 3d</button>
-        <button class="bulk-btn bb-del" onclick="bulkDelete()">🗑️ Delete</button>
+        <button class="bulk-btn bb-del" onclick="bulkDelete()">Delete</button>
         <button class="bulk-sel-all" onclick="bulkSelectAll()">Select All</button>
         <button class="bulk-btn bb-cancel" onclick="clearBulk()">Cancel</button>
       </div>
 
-      <div class="sec nt" id="sec-ready"><span class="sec-t">Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
-      <div class="tg" id="ready-grid"></div>
+      <div class="src-group" data-group="ready">
+        <div class="sec nt" id="sec-ready"><span class="sec-t">Ready to Buy</span><span class="sec-pill" id="cnt-ready">0</span></div>
+        <div id="ready-grid"></div>
+      </div>
 
-      <div class="sec" id="sec-ltd"><span class="sec-t">LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
-      <div class="tg" id="ltd-grid"></div>
+      <div class="src-group" data-group="ltd">
+        <div class="sec" id="sec-ltd"><span class="sec-t">LTD Deals</span><span class="sec-pill" id="cnt-ltd">0</span></div>
+        <div id="ltd-grid"></div>
+      </div>
 
-      <div class="sec" id="sec-watching"><span class="sec-t">Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
-      <div class="tg" id="watch-grid"></div>
+      <div class="src-group" data-group="watching">
+        <div class="sec" id="sec-watching"><span class="sec-t">Watching — 7-Day Countdown</span><span class="sec-pill" id="cnt-watch">0</span></div>
+        <div id="watch-grid"></div>
+      </div>
     </div>
 
     <!-- ══════════════ REBUY ══════════════ -->
@@ -863,14 +1325,14 @@ header{
             </div>
           </div>
           <div class="g3">
-            <div class="fg"><label class="fl">UK1 Date</label><input class="fi" id="r-uk1" type="date"></div>
-            <div class="fg"><label class="fl">UK2 Date</label><input class="fi" id="r-uk2" type="date"></div>
-            <div class="fg"><label class="fl">UK3 Date</label><input class="fi" id="r-uk3" type="date"></div>
+            <div class="fg"><label class="fl">UK1 Date</label><input class="fi dm" id="r-uk1" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+            <div class="fg"><label class="fl">UK2 Date</label><input class="fi dm" id="r-uk2" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+            <div class="fg"><label class="fl">UK3 Date</label><input class="fi dm" id="r-uk3" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
           </div>
           <div class="g3">
-            <div class="fg"><label class="fl">EU1 Date</label><input class="fi" id="r-eu1" type="date"></div>
-            <div class="fg"><label class="fl">EU2 Date</label><input class="fi" id="r-eu2" type="date"></div>
-            <div class="fg"><label class="fl">EU3 Date</label><input class="fi" id="r-eu3" type="date"></div>
+            <div class="fg"><label class="fl">EU1 Date</label><input class="fi dm" id="r-eu1" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+            <div class="fg"><label class="fl">EU2 Date</label><input class="fi dm" id="r-eu2" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+            <div class="fg"><label class="fl">EU3 Date</label><input class="fi dm" id="r-eu3" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
           </div>
           <button class="badd" onclick="addRebuy()">Add to Rebuy Queue</button>
         </div>
@@ -882,6 +1344,13 @@ header{
     <!-- ══════════════ INBOX ══════════════ -->
     <div id="inbox" class="tc">
       <div class="pg-title">Inbox</div>
+      <div class="purpose">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+        <div>
+          <div class="purpose-t">Triage pile — capture now, decide later</div>
+          <div class="purpose-s">Drop anything interesting here in one tap while sourcing. When you're ready to act, Promote it to a Sourcing lead with a drop date. Nothing here is tracked or alerts you — clear it regularly.</div>
+        </div>
+      </div>
       <div class="fc">
         <div class="fc-hd" style="cursor:default">
           <div class="fc-title">Quick Save</div>
@@ -921,6 +1390,13 @@ header{
     <!-- ══════════════ WATCHLIST ══════════════ -->
     <div id="watchlist" class="tc">
       <div class="pg-title">Watchlist</div>
+      <div class="purpose">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div>
+          <div class="purpose-t">Keeping an eye on — not ready to act</div>
+          <div class="purpose-s">Products worth remembering but not tracking yet: needs more data, price isn't right, or timing's off. Write down what would make you pull the trigger. When that happens, send it to the Inbox to promote.</div>
+        </div>
+      </div>
       <div class="fc" id="wl-fc">
         <div class="fc-hd" onclick="toggleFC('wl-fc')">
           <div class="fc-title">Add to Watchlist</div>
@@ -981,6 +1457,16 @@ header{
     <div id="sns" class="tc">
       <div class="pg-title">Subscribe &amp; Save</div>
 
+      <div class="purpose">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <div>
+          <div class="purpose-t">Action-first view</div>
+          <div class="purpose-s">Accounts needing attention sort to the top. Review windows and last-add days surface on the Action Center and in notifications — you only need to look when something's due.</div>
+        </div>
+      </div>
+
+      <div class="sns-summary" id="sns-summary"></div>
+
       <div class="sns-table-wrap">
         <table class="sns-table" id="sns-main-table">
           <thead>
@@ -996,33 +1482,23 @@ header{
           <tbody id="sns-tbody"></tbody>
         </table>
       </div>
-
-      <div class="sec" style="margin-top:28px"><span class="sec-t">Cycle History</span><span class="sec-pill" id="cnt-sns-hist">0</span></div>
-      <div class="sns-table-wrap">
-        <table class="sns-hist-table">
-          <thead>
-            <tr>
-              <th>Account</th>
-              <th>Last Edit Day</th>
-              <th>Delivery Day</th>
-              <th>Cycle</th>
-              <th>Date Recorded</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody id="sns-hist-tbody"></tbody>
-        </table>
-      </div>
     </div>
 
     <!-- ══════════════ NOTES ══════════════ -->
     <div id="notes" class="tc">
       <div class="pg-title">Notes</div>
+      <div class="purpose">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div>
+          <div class="purpose-t">Operational scratchpad</div>
+          <div class="purpose-s">For standing rules and reminders that don't belong to one ASIN — supplier quirks, account limits, recurring promo calendars, things to remember next cycle. Export anytime to back up or share.</div>
+        </div>
+      </div>
       <div class="notes-toolbar">
         <input class="notes-new-title" id="notes-new-title" placeholder="Note title…" maxlength="60"
           onkeydown="if(event.key==='Enter')addNote()">
         <button class="notes-add-btn" onclick="addNote()">+ New Note</button>
-        <button class="notes-export-btn" onclick="openExport()">📤 Export All</button>
+        <button class="notes-export-btn" onclick="openExport()">Export All</button>
       </div>
       <div class="notes-grid" id="notes-grid"></div>
     </div>
@@ -1079,8 +1555,9 @@ header{
         </div>
       </div>
 
-      <div class="sec nt"><span class="sec-t">Watching for Price Drop</span><span class="sec-pill" id="cnt-oa">0</span></div>
-      <div class="oa-grid" id="oa-list"></div>
+      <div class="oa-summary" id="oa-summary"></div>
+      <div id="oa-alert-slot"></div>
+      <div id="oa-sections"></div>
     </div>
 
   </main>
@@ -1125,7 +1602,7 @@ header{
           <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
         </select>
       </div>
-      <div class="fg"><label class="fl">LTD End Date</label><input class="fi" id="em-end" type="date"></div>
+      <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
     </div>
     <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
@@ -1222,12 +1699,12 @@ header{
       </div>
     </div>
     <div class="g2">
-      <div class="fg"><label class="fl">Date Dropped *</label><input class="fi" id="pm-date" type="date"></div>
+      <div class="fg"><label class="fl">Date Dropped *</label><input class="fi dm" id="pm-date" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
       <div class="fg"><label class="fl">COG (£)</label><input class="fi" id="pm-cog" type="number" step="0.01" min="0"></div>
     </div>
     <div class="g2">
       <div class="fg"><label class="fl">Competitors (FBA)</label><input class="fi" id="pm-comp" type="number" min="0"></div>
-      <div class="fg"><label class="fl">LTD End Date</label><input class="fi" id="pm-end" type="date"></div>
+      <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="pm-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
     </div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="pm-notes"></textarea></div>
     <div class="mbtns">
@@ -1237,24 +1714,11 @@ header{
   </div>
 </div>
 
-<!-- NOTES EXPORT MODAL -->
-<div class="mbg" id="exportModal">
-  <div class="modal" style="max-width:580px">
-    <div class="mhd">
-      <span class="mt">📤 Export All Notes</span>
-      <button class="mx" onclick="closeM('exportModal')">×</button>
-    </div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">All your notes compiled into one block. Select all and copy, or use the button below.</p>
-    <textarea class="export-textarea" id="export-text" readonly></textarea>
-    <button class="export-copy-btn" onclick="copyExport()">Copy to Clipboard</button>
-  </div>
-</div>
-
 <!-- DAY 8 DECISION MODAL -->
 <div class="mbg" id="day8Modal">
   <div class="modal" style="max-width:460px">
     <div class="mhd">
-      <span class="mt">⏰ Day 8 — Time to Decide</span>
+      <span class="mt">Day 8 — Decision Required</span>
       <button class="mx" onclick="_day8SessionShown.add(parseInt(document.getElementById('day8-lead-id').value));closeM('day8Modal')" title="Dismiss for now — will reappear next session">×</button>
     </div>
     <div id="day8-asin-display" style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--text);margin-bottom:6px"></div>
@@ -1265,7 +1729,7 @@ header{
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
       <button class="mbtn ok" style="font-size:13px;padding:13px" onclick="day8Buy()">Buy It — Mark as Bought</button>
       <button style="width:100%;padding:11px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="day8Snooze()">Not Sure Yet — Snooze 3 Days</button>
-      <button style="width:100%;padding:11px;background:var(--card2);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="toggleDay8Reject()">❌ Not Buying — Give Reason</button>
+      <button style="width:100%;padding:11px;background:var(--card2);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s" onclick="toggleDay8Reject()">Not Buying — Give Reason</button>
     </div>
 
     <!-- Reject reason panel (hidden by default) -->
@@ -1292,7 +1756,7 @@ header{
       <!-- LTD end date input — shown only when ltdConvert selected -->
       <div id="day8-ltd-row" style="display:none;margin-bottom:12px">
         <label class="fl">LTD End Date *</label>
-        <input class="fi" id="day8-ltd-end" type="date" placeholder="When does the deal end?">
+        <input class="fi dm" id="day8-ltd-end" placeholder="dd/mm" maxlength="5" inputmode="numeric">
       </div>
       <input class="fi" id="day8-other-text" placeholder="Any notes (optional)…" style="margin-bottom:12px">
       <button class="mbtn danger" style="width:100%" onclick="day8Reject()">Confirm — Remove from Active Leads</button>
@@ -1361,12 +1825,12 @@ header{
     <div class="g2">
       <div class="fg">
         <label class="fl">Last Day to Add *</label>
-        <input class="fi" id="sns-new-edit" type="date">
+        <input class="fi dm" id="sns-new-edit" placeholder="dd/mm" maxlength="5" inputmode="numeric">
         <div class="ferr" id="e-sns-edit">Required</div>
       </div>
       <div class="fg">
         <label class="fl">Delivery Day *</label>
-        <input class="fi" id="sns-new-delivery" type="date">
+        <input class="fi dm" id="sns-new-delivery" placeholder="dd/mm" maxlength="5" inputmode="numeric">
         <div class="ferr" id="e-sns-del">Required</div>
       </div>
     </div>
@@ -1388,14 +1852,14 @@ header{
 <div class="mbg" id="exportModal">
   <div class="modal" style="max-width:600px">
     <div class="mhd">
-      <span class="mt">📤 Export All Notes</span>
+      <span class="mt">Export All Notes</span>
       <button class="mx" onclick="closeM('exportModal')">×</button>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:14px">All your notes in one block — select all and copy, or download as a .txt file.</p>
     <textarea class="export-textarea" id="export-textarea" readonly onclick="this.select()"></textarea>
     <div class="mbtns">
       <button class="mbtn ok" onclick="copyExport()">Copy All</button>
-      <button class="mbtn cancel" style="flex:0.5" onclick="downloadExport()">⬇️ Download .txt</button>
+      <button class="mbtn cancel" style="flex:0.5" onclick="downloadExport()">Download .txt</button>
       <button class="mbtn cancel" style="flex:0.4" onclick="closeM('exportModal')">Close</button>
     </div>
   </div>
@@ -1418,8 +1882,8 @@ header{
     </div>
     <div class="mbtns">
       <button class="mbtn ok" style="background:var(--green)" onclick="closeM('oaDetailModal');openOACheck(window._oaDetailId)">Log Check</button>
-      <button class="mbtn cancel" onclick="closeM('oaDetailModal');openOAEdit(window._oaDetailId)">✏️ Edit</button>
-      <button class="mbtn danger" style="flex:0.5" onclick="closeM('oaDetailModal');delOA(window._oaDetailId)">🗑️</button>
+      <button class="mbtn cancel" onclick="closeM('oaDetailModal');openOAEdit(window._oaDetailId)">Edit</button>
+      <button class="mbtn danger" style="flex:0.5" onclick="closeM('oaDetailModal');delOA(window._oaDetailId)">Delete</button>
     </div>
   </div>
 </div>
@@ -1524,6 +1988,105 @@ const amzUrl=(asin,mkt)=>`https://www.${mkt||'amazon.co.uk'}/dp/${asin}`;
 const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term%5D=${asin}`;
 
 // ═══════════════════════════════════
+// SETTINGS — buy-timing model
+// ═══════════════════════════════════
+const SETK='a2a_settings_v5';
+let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1},ld(SETK)||{});
+function saveSettings(){sv2(SETK,settings);}
+
+// ── Day/Month date entry (no year). Internal storage stays ISO yyyy-mm-dd ──
+function dmToISO(str,kind){            // kind: 'future' (end dates) | 'past' (drop/found)
+  if(!str)return'';
+  const m=String(str).match(/^\s*(\d{1,2})\D?(\d{1,2})\s*$/);
+  if(!m)return'';
+  const d=+m[1],mo=+m[2];
+  if(d<1||d>31||mo<1||mo>12)return'';
+  const y=new Date().getFullYear(); const tnow=today();
+  let dt=new Date(y,mo-1,d);
+  if(kind==='future'){ if(dt<tnow)dt=new Date(y+1,mo-1,d); }
+  else { if(diff(tnow,dt)>200)dt=new Date(y-1,mo-1,d); }   // far future ⇒ it was last year
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+}
+const isoToDM=iso=>{const p=pd(iso);return p?`${String(p.getDate()).padStart(2,'0')}/${String(p.getMonth()+1).padStart(2,'0')}`:'';};
+function maskDM(el){
+  let v=el.value.replace(/[^\d]/g,'').slice(0,4);
+  if(v.length>=3)v=v.slice(0,2)+'/'+v.slice(2);
+  el.value=v;
+}
+document.addEventListener('input',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('dm'))maskDM(t);});
+
+// ═══════════════════════════════════
+// BUY-TIMING ENGINE  (when do I buy?)
+// ═══════════════════════════════════
+const leadStrategy=l=>l.strategy||settings.strategy||'validation';
+
+function calcBuyPlan(l){
+  const now=today();
+  const drop=pd(l.dateDropped);
+  const found=pd(l.dateFound)||drop;
+  const end=l.endDate?pd(l.endDate):null;
+  const isLTD=!!end, strat=leadStrategy(l);
+  if(!drop)return{status:'unknown',isLTD,strategy:strat,drop:null,found,end};
+  const validationDay=addD(drop,7);          // day 8 — competition cleared
+  const latestBuy=end;                        // LTD: deal live until end date
+  let recBuy = strat==='speed' ? now : validationDay;
+  if(recBuy<now)recBuy=now;                   // already past the ideal point ⇒ buy now
+  if(latestBuy&&recBuy>latestBuy)recBuy=latestBuy;
+  if(recBuy<found)recBuy=found;
+  const estDelivery=addD(recBuy,settings.deliveryDays||1);
+  const estLive=addD(recBuy,settings.leadToLive||8);
+  const daysToBuy=diff(now,recBuy);
+  const validationAtBuy=Math.max(0,diff(drop,recBuy));
+  const valShort=Math.max(0,7-validationAtBuy);
+  let status;
+  if(isLTD&&end<now)status='expired';
+  else if(daysToBuy>0)status='wait';
+  else status = (isLTD&&diff(now,end)<=2) ? 'closing' : 'buy';
+  return{status,isLTD,strategy:strat,drop,found,end,validationDay,latestBuy,
+    recBuy,estDelivery,estLive,daysToBuy,validationAtBuy,valShort};
+}
+
+function buyTimelineHtml(p){
+  if(!p||!p.drop)return'';
+  const ms=[
+    {lbl:'Drop',d:p.drop,c:'grey'},
+    {lbl:'Found',d:p.found,c:'grey'},
+    {lbl:'Day 8',d:p.validationDay,c:'amber'},
+    {lbl:'Buy',d:p.recBuy,c:p.strategy==='speed'?'teal':'green',hl:true},
+    {lbl:'Live',d:p.estLive,c:'blue'},
+  ];
+  if(p.end)ms.push({lbl:'Ends',d:p.end,c:'red'});
+  ms.sort((a,b)=>a.d-b.d);
+  return `<div class="tl">${ms.map((m,i)=>
+    `${i>0?'<div class="tl-line"></div>':''}<div class="tl-node ${COLW[m.c]} ${m.hl?'tl-hl':''}">
+      <div class="tl-dot"></div><div class="tl-lbl">${m.lbl}</div><div class="tl-date">${fmt(m.d)}</div>
+    </div>`).join('')}</div>`;
+}
+
+function buyPlanAdvice(p){
+  if(!p||!p.drop)return{cls:'warn',txt:'Add a drop date to calculate buy timing.'};
+  const live=`live ~${fmt(p.estLive)}`;
+  if(p.status==='expired')return{cls:'bad',txt:`Deal ended ${fmt(p.end)} — no longer at the deal price.`};
+  if(p.status==='wait'){
+    if(p.strategy==='validation'){
+      if(p.isLTD&&diff(p.validationDay,p.end)<2)
+        return{cls:'warn',txt:`Tight window: deal ends ${fmt(p.end)}, right around day 8 (${fmt(p.validationDay)}). Buy by ${fmt(p.recBuy)} — ${live}.`};
+      return{cls:'warn',txt:`Validation pick: wait to ${fmt(p.recBuy)} (day 8) for sales proof, then buy. Est. ${live}. Buying now instead would be live ~${fmt(addD(today(),settings.leadToLive||8))}.`};
+    }
+    return{cls:'ok',txt:`Speed pick: buy now for the earliest live date (${live}). Validation would wait to ${fmt(p.validationDay)} — you'd trade ${p.daysToBuy} sales day${p.daysToBuy!==1?'s':''} for proof.`};
+  }
+  if(p.status==='closing')return{cls:'bad',txt:`Buy now — deal closes ${fmt(p.end)} (${diff(today(),p.end)}d left). Est. ${live}.`};
+  if(p.strategy==='speed'&&p.valShort>0)
+    return{cls:'ok',txt:`Buy now — ${live}. Speed pick: ${p.valShort} day${p.valShort!==1?'s':''} less validation than the 7-day ideal.`};
+  return{cls:'ok',txt:`Buy now — validation window cleared. Est. ${live}.`};
+}
+
+// strategy + settings controls
+function setGlobalStrategy(s){settings.strategy=s;saveSettings();render();}
+function setLeadTime(v){const n=parseInt(v);if(n>=1&&n<=60){settings.leadToLive=n;saveSettings();render();}}
+function setLeadStrategy(id,s){const l=leads.find(x=>x.id===id);if(!l)return;l.strategy=s;l.updatedAt=todayStr();sv2(SK,leads);render();openLead(id);}
+
+// ═══════════════════════════════════
 // LEAD CALC
 // ═══════════════════════════════════
 function calcLead(l){
@@ -1554,7 +2117,7 @@ function bwHtml(l,c){
   const wd=diff(readyDate,buyBy);
   let cls='warn',advice='';
   if(c.status==='buywindow'){cls='ok';advice=`Buy now — window closes ${fmt(buyBy)} (${c.daysLeft} day${c.daysLeft!==1?'s':''} left)`;}
-  else if(c.status==='waiting'){cls='warn';advice=`⏳ Wait until ${fmt(readyDate)} then buy before ${fmt(buyBy)}`;}
+  else if(c.status==='waiting'){cls='warn';advice=`Wait until ${fmt(readyDate)} then buy before ${fmt(buyBy)}`;}
   else{cls='bad';advice=`Tight window — manual decision required`;}
   return`<div class="bwb ${cls}" style="margin-bottom:12px">
     <div class="bwb-row"><span class="bwb-lbl">Deal ends</span><span class="bwb-val">${fmtLong(endD)}</span></div>
@@ -1576,10 +2139,17 @@ function toggleOA(){
   document.getElementById('oa-row').style.display=gv('s-type')==='OA'?'':'none';
 }
 function previewBW(){
-  const end=gv('s-end'),date=gv('s-date'),box=document.getElementById('bw-preview');
-  if(!end||!date){box.style.display='none';return;}
-  const fl={dateDropped:date,endDate:end},c=calcLead(fl),h=bwHtml(fl,c);
-  box.innerHTML=h;box.style.display=h?'block':'none';
+  const box=document.getElementById('bw-preview');
+  const drop=dmToISO(gv('s-date'),'past');
+  if(!drop){box.style.display='none';return;}
+  const fl={dateDropped:drop,dateFound:dmToISO(gv('s-found'),'past')||drop,endDate:dmToISO(gv('s-end'),'future')||null};
+  const p=calcBuyPlan(fl),adv=buyPlanAdvice(p);
+  box.innerHTML=`<div class="plan-box" style="margin:0">
+      <div class="plan-hd">Buy timing preview · ${settings.strategy==='speed'?'Speed':'Validation'} (default)</div>
+      ${buyTimelineHtml(p)}
+      <div class="plan-advice ${adv.cls}">${adv.txt}</div>
+    </div>`;
+  box.style.display='block';
 }
 function toggleFC(id){document.getElementById(id).classList.toggle('coll');}
 
@@ -1642,7 +2212,7 @@ function day8Buy(){
   _day8SessionShown.add(id);
   closeM('day8Modal');
   render();
-  toast(`${l?.asin} marked as bought ✓`,'ok');
+  toast(`${l?.asin} marked as bought`,'ok');
   // Check if more day 8 leads
   setTimeout(checkDay8Leads,400);
 }
@@ -1658,7 +2228,7 @@ function day8Snooze(){
   _day8SessionShown.add(id);
   closeM('day8Modal');
   render();
-  toast(`${l?.asin} snoozed for 3 days 💤`,'info');
+  toast(`${l?.asin} snoozed for 3 days`,'info');
 }
 
 function day8Reject(){
@@ -1668,15 +2238,15 @@ function day8Reject(){
   if(!reason){toast('Select a reason first','bad');return;}
 
   if(reason==='ltdConvert'){
-    const endDate=document.getElementById('day8-ltd-end').value;
-    if(!endDate){toast('Add the LTD end date','bad');return;}
+    const endDate=dmToISO(document.getElementById('day8-ltd-end').value,'future');
+    if(!endDate){toast('Add the LTD end date (dd/mm)','bad');return;}
     // Reclassify as LTD — stays in sourcing, LTD logic now applies
     l.endDate=endDate;l.updatedAt=todayStr();
     sv2(SK,leads);
     _day8SessionShown.add(id);
     closeM('day8Modal');
     render();
-    toast(`${l.asin} reclassified as LTD — buy window calculated ✓`,'ok');
+    toast(`${l.asin} reclassified as LTD — buy window calculated`,'ok');
     setTimeout(checkDay8Leads,400);
     return;
   }
@@ -1733,7 +2303,7 @@ function dupDeleteFrom(store,id){
       <button class="dup-del-btn" onclick="dupDeleteFrom('${loc.store}',${loc.id})">Delete from ${loc.label}</button>
     </div>`).join('');
   }
-  toast(`Removed from ${store} ✓`,'ok');
+  toast(`Removed from ${store}`,'ok');
 }
 
 function dupAddAnyway(){
@@ -1748,7 +2318,7 @@ function snoozeLead(id){
   const l=leads.find(x=>x.id===id);if(!l)return;
   const wakeDate=addD(today(),3).toISOString().split('T')[0];
   l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();
-  sv2(SK,leads);render();toast(`${l.asin} snoozed for 3 days 💤`,'info');
+  sv2(SK,leads);render();toast(`${l.asin} snoozed for 3 days`,'info');
 }
 
 function isSnoozed(l){
@@ -1793,7 +2363,7 @@ function bulkBought(){
   if(!bulkSelected.size)return;
   if(!confirm(`Mark ${bulkSelected.size} lead${bulkSelected.size!==1?'s':''} as bought?`))return;
   bulkSelected.forEach(id=>{const l=leads.find(x=>x.id===id);if(l)l.bought=true;});
-  sv2(SK,leads);bulkSelected.clear();render();toast(`${bulkSelected.size||'All selected'} marked as bought ✓`,'ok');
+  sv2(SK,leads);bulkSelected.clear();render();toast(`${bulkSelected.size||'All selected'} marked as bought`,'ok');
 }
 
 function bulkSnooze(){
@@ -1804,7 +2374,7 @@ function bulkSnooze(){
     if(l){l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();}
   });
   sv2(SK,leads);const n=bulkSelected.size;bulkSelected.clear();render();
-  toast(`${n} lead${n!==1?'s':''} snoozed for 3 days 💤`,'info');
+  toast(`${n} lead${n!==1?'s':''} snoozed for 3 days`,'info');
 }
 
 function bulkDelete(){
@@ -1831,7 +2401,8 @@ const fmtShort=d=>{
 // ═══════════════════════════════════
 function addLead(){
   const asin=gv('s-asin').trim().toUpperCase(),market=gv('s-market'),type=gv('s-type'),
-    dateD=gv('s-date'),cog=gv('s-cog'),comp=gv('s-comp'),end=gv('s-end'),
+    dateD=dmToISO(gv('s-date'),'past'),foundD=dmToISO(gv('s-found'),'past')||dateD,
+    cog=gv('s-cog'),comp=gv('s-comp'),end=dmToISO(gv('s-end'),'future'),
     src=gv('s-src'),oaLink=gv('s-oa').trim(),notes=gv('s-notes').trim();
   let ok=true;
   if(!asin||asin.length<5){se('e-asin',1);ok=false;}else se('e-asin',0);
@@ -1840,16 +2411,16 @@ function addLead(){
   if(!ok){toast('Fix the errors above','bad');return;}
 
   const doAdd=()=>{
-    leads.push({id:Date.now(),asin,market,type,dateDropped:dateD,cog:cog?parseFloat(cog):null,
+    leads.push({id:Date.now(),asin,market,type,dateDropped:dateD,dateFound:foundD,cog:cog?parseFloat(cog):null,
       comp:comp?parseInt(comp):null,src:src||null,endDate:end||null,oaLink:oaLink||null,
       notes,bought:false,snoozed:false,snoozeUntil:null,updatedAt:todayStr()});
     sv2(SK,leads);
-    ['s-asin','s-cog','s-comp','s-oa','s-notes'].forEach(i=>sv(i,''));
+    ['s-asin','s-cog','s-comp','s-oa','s-notes','s-found'].forEach(i=>sv(i,''));
     ['s-type','s-date','s-end','s-market','s-src'].forEach(i=>sv(i,''));
     document.getElementById('s-amzlink').value='';
     document.getElementById('bw-preview').style.display='none';
     document.getElementById('oa-row').style.display='none';
-    render();toast(`${asin} added ✓`,'ok');
+    render();toast(`${asin} added`,'ok');
   };
 
   const dups=findDups(asin);
@@ -1862,18 +2433,21 @@ function addLead(){
 // ═══════════════════════════════════
 function openLead(id){
   const l=leads.find(x=>x.id===id);if(!l)return;
-  const c=calcLead(l),amz=amzUrl(l.asin,l.market),sas=sasUrl(l.asin);
-  const statusMap={
-    watching:{bg:'var(--amber)',t:`⏳ ${c.daysLeft} Day${c.daysLeft!==1?'s':''} Left`,s:'Waiting for 7-day window to clear'},
-    ready:{bg:'var(--green)',t:'Ready to Buy',s:'Window is open — go buy this now'},
-    missed:{bg:'var(--red)',t:'Missed Window',s:'You were supposed to buy this yesterday'},
-    buywindow:{bg:'var(--teal)',t:'LTD Buy Window Open',s:`Buy before ${fmt(c.buyBy)} — ${c.daysLeft} day${c.daysLeft!==1?'s':''} left`},
-    waiting:{bg:'var(--blue)',t:`⏳ LTD — Wait ${c.daysLeft} More Day${c.daysLeft!==1?'s':''}`,s:`Window opens ${fmt(c.readyDate)}`},
-    review:{bg:'var(--orange)',t:'Needs Review',s:'Window too short to auto-calculate'},
-    expired:{bg:'var(--border2)',t:'❌ Expired',s:'This LTD deal has ended'},
+  const p=calcBuyPlan(l),amz=amzUrl(l.asin,l.market),sas=sasUrl(l.asin);
+  const stMap={
+    wait:{bg:p.strategy==='speed'?'var(--teal)':'var(--amber)',t:p.isLTD?`Buy on ${fmtLong(p.recBuy)}`:`Buy in ${p.daysToBuy} day${p.daysToBuy!==1?'s':''}`,s:`${p.strategy==='speed'?'Speed':'Validation'} plan · recommended buy ${fmt(p.recBuy)}`},
+    buy:{bg:'var(--green)',t:'Buy Now',s:`Recommended buy date reached · est. live ~${fmt(p.estLive)}`},
+    closing:{bg:'var(--red)',t:'Buy Now — Deal Closing',s:`Deal ends ${fmtLong(p.end)}`},
+    expired:{bg:'var(--border2)',t:'Expired',s:'This LTD deal has ended'},
+    unknown:{bg:'var(--blue)',t:'No drop date',s:'Add a drop date to plan timing'},
   };
-  const st=statusMap[c.status]||{bg:'var(--blue)',t:'Unknown',s:''};
+  const st=stMap[p.status]||stMap.unknown;
+  const adv=buyPlanAdvice(p);
   const compTxt=l.comp!=null?`${l.comp} FBA seller${l.comp!==1?'s':''}`:null;
+  const stratToggle=`<div class="strat-toggle">
+      <button class="strat-btn ${p.strategy==='validation'?'active':''}" onclick="setLeadStrategy(${l.id},'validation')">Prioritise Validation</button>
+      <button class="strat-btn speed ${p.strategy==='speed'?'active':''}" onclick="setLeadStrategy(${l.id},'speed')">Prioritise Speed</button>
+    </div>`;
   document.getElementById('lead-body').innerHTML=`
     <div class="ld-asin">${l.asin}</div>
     <span class="ld-badge ${l.type}">${l.type} · ${l.market}${l.src?' · '+l.src:''}</span>
@@ -1881,12 +2455,25 @@ function openLead(id){
       <div class="ld-st-title">${st.t}</div>
       <div class="ld-st-sub">${st.s}</div>
     </div>
-    ${bwHtml(l,c)}
+    ${p.drop?`
+    <div class="plan-box">
+      <div class="plan-hd">Buy timing</div>
+      ${stratToggle}
+      ${buyTimelineHtml(p)}
+      <div class="plan-advice ${adv.cls}">${adv.txt}</div>
+      <div class="plan-stats">
+        <div class="plan-stat"><span>Validation at buy</span><b>${p.validationAtBuy}/7 days</b></div>
+        <div class="plan-stat"><span>Est. delivery</span><b>${fmt(p.estDelivery)}</b></div>
+        <div class="plan-stat"><span>Est. live on Amazon</span><b>${fmt(p.estLive)}</b></div>
+      </div>
+    </div>`:''}
     <div class="ld-grid">
       <div class="ld-f"><div class="ld-fl">Date Dropped</div><div class="ld-fv">${fmtLong(pd(l.dateDropped))}</div></div>
+      <div class="ld-f"><div class="ld-fl">Date Found</div><div class="ld-fv">${l.dateFound?fmtLong(pd(l.dateFound)):'Same as drop'}</div></div>
       <div class="ld-f"><div class="ld-fl">COG</div><div class="ld-fv">${l.cog?'£'+l.cog.toFixed(2):'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">Competitors</div><div class="ld-fv">${compTxt||'Not set'}</div></div>
-      <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A'}</div></div>
+      <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A (7DD)'}</div></div>
+      <div class="ld-f"><div class="ld-fl">Recommended Buy</div><div class="ld-fv">${p.recBuy?fmtLong(p.recBuy):'—'}</div></div>
     </div>
     ${l.notes?`<div class="ld-notes">${l.notes}</div>`:''}
     <div class="ld-links">
@@ -1894,10 +2481,10 @@ function openLead(id){
       <a href="${sas}" target="_blank" class="ld-link">SAS</a>
       ${l.oaLink?`<a href="${l.oaLink}" target="_blank" class="ld-link">OA Source</a>`:''}
     </div>
-    ${c.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">I Bought This — Mark as Done</button>`:''}
+    ${p.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">I Bought This — Mark as Done</button>`:''}
     <div style="display:flex;gap:8px">
-      <button class="mbtn cancel" style="flex:1" onclick="closeM('leadModal');openEdit(${l.id})">✏️ Edit</button>
-      <button class="mbtn danger" style="flex:1" onclick="if(confirm('Delete?')){leads=leads.filter(x=>x.id!==${l.id});sv2(SK,leads);closeM('leadModal');render();toast('Deleted','info')}">🗑️ Delete</button>
+      <button class="mbtn cancel" style="flex:1" onclick="closeM('leadModal');openEdit(${l.id})">Edit</button>
+      <button class="mbtn danger" style="flex:1" onclick="if(confirm('Delete?')){leads=leads.filter(x=>x.id!==${l.id});sv2(SK,leads);closeM('leadModal');render();toast('Deleted','info')}">Delete</button>
     </div>`;
   openM('leadModal');
 }
@@ -1912,7 +2499,7 @@ function confirmSrcBought(){
   const l=leads.find(x=>x.id===srcBoughtId);
   if(l){l.bought=true;sv2(SK,leads);}
   closeM('sbModal');closeM('leadModal');render();
-  toast(`${l?.asin} marked as bought ✓`,'ok');
+  toast(`${l?.asin} marked as bought`,'ok');
 }
 
 // ═══════════════════════════════════
@@ -1923,7 +2510,7 @@ function openEdit(id){
   editId=id;
   sv('em-id',id);sv('em-asin',l.asin);sv('em-market',l.market||'amazon.co.uk');
   sv('em-type',l.type||'A2A');sv('em-cog',l.cog||'');sv('em-comp',l.comp!=null?l.comp:'');
-  sv('em-src',l.src||'');sv('em-end',l.endDate||'');sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
+  sv('em-src',l.src||'');sv('em-end',isoToDM(l.endDate));sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
   openM('editModal');
 }
 function saveEdit(){
@@ -1931,9 +2518,9 @@ function saveEdit(){
   l.market=gv('em-market');l.type=gv('em-type');l.src=gv('em-src')||null;
   l.cog=gv('em-cog')?parseFloat(gv('em-cog')):null;
   l.comp=gv('em-comp')!==''?parseInt(gv('em-comp')):null;
-  l.endDate=gv('em-end')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
+  l.endDate=dmToISO(gv('em-end'),'future')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
   l.updatedAt=todayStr();
-  sv2(SK,leads);closeM('editModal');render();toast('Saved ✓','ok');
+  sv2(SK,leads);closeM('editModal');render();toast('Saved','ok');
 }
 
 // ═══════════════════════════════════
@@ -1946,7 +2533,7 @@ function quickCapture(){
     const item={id:Date.now(),asin,market:gv('qc-market'),src:gv('qc-src'),note:gv('qc-note').trim(),ts:Date.now()};
     inbox.unshift(item);sv2(IK,inbox);
     sv('qc-asin','');sv('qc-note','');
-    render();toast(`Saved to inbox ✓`,'ok');
+    render();toast(`Saved to inbox`,'ok');
   };
   const dups=findDups(asin);
   if(dups.length>0){showDupModal(asin,doAdd);return;}
@@ -1959,21 +2546,20 @@ function openPromote(id){
   const item=inbox.find(x=>x.id===id);if(!item)return;
   promoteId=id;
   sv('pm-id',id);sv('pm-asin',item.asin);sv('pm-market',item.market||'amazon.co.uk');
-  sv('pm-type','A2A');sv('pm-date','');sv('pm-cog','');sv('pm-comp','');sv('pm-end','');sv('pm-notes',item.note||'');
-  document.getElementById('pm-date').valueAsDate=new Date();
+  sv('pm-type','A2A');sv('pm-date',isoToDM(today().toISOString().split('T')[0]));sv('pm-cog','');sv('pm-comp','');sv('pm-end','');sv('pm-notes',item.note||'');
   openM('promoteModal');
 }
 function confirmPromote(){
-  const dateD=gv('pm-date');
+  const dateD=dmToISO(gv('pm-date'),'past');
   if(!dateD){toast('Enter the drop date','bad');return;}
   const item=inbox.find(x=>x.id===promoteId);
   leads.push({id:Date.now(),asin:gv('pm-asin'),market:gv('pm-market'),type:gv('pm-type'),
     dateDropped:dateD,cog:gv('pm-cog')?parseFloat(gv('pm-cog')):null,
     comp:gv('pm-comp')!==''?parseInt(gv('pm-comp')):null,
-    src:item?.src||null,endDate:gv('pm-end')||null,oaLink:null,notes:gv('pm-notes'),bought:false});
+    dateFound:dateD,src:item?.src||null,endDate:dmToISO(gv('pm-end'),'future')||null,oaLink:null,notes:gv('pm-notes'),bought:false});
   inbox=inbox.filter(x=>x.id!==promoteId);
   sv2(SK,leads);sv2(IK,inbox);
-  closeM('promoteModal');render();toast(`Moved to Sourcing ✓`,'ok');
+  closeM('promoteModal');render();toast(`Moved to Sourcing`,'ok');
 }
 
 // ═══════════════════════════════════
@@ -1987,7 +2573,7 @@ function addWatch(){
     watchlist.push({id:Date.now(),asin,market:gv('w-market'),type:gv('w-type'),src:gv('w-src')||null,notes:gv('w-notes').trim()});
     sv2(WK,watchlist);
     ['w-asin','w-notes'].forEach(i=>sv(i,''));sv('w-src','');
-    render();toast(`${asin} added to watchlist ✓`,'ok');
+    render();toast(`${asin} added to watchlist`,'ok');
   };
   const dups=findDups(asin);
   if(dups.length>0){showDupModal(asin,doAdd);return;}
@@ -2006,7 +2592,7 @@ function openWatchEdit(id){
 function saveWatchEdit(){
   const w=watchlist.find(x=>x.id===wEditId);if(!w)return;
   w.market=gv('we-market');w.type=gv('we-type');w.src=gv('we-src')||null;w.notes=gv('we-notes');
-  sv2(WK,watchlist);closeM('wEditModal');render();toast('Saved ✓','ok');
+  sv2(WK,watchlist);closeM('wEditModal');render();toast('Saved','ok');
 }
 
 function promoteWatch(id){
@@ -2015,7 +2601,7 @@ function promoteWatch(id){
   inbox.unshift({id:Date.now(),asin:w.asin,market:w.market,src:w.src,note:w.notes,ts:Date.now()});
   watchlist=watchlist.filter(x=>x.id!==id);
   sv2(IK,inbox);sv2(WK,watchlist);
-  render();go('inbox');toast(`${w.asin} moved to Inbox — add drop date to promote ✓`,'ok');
+  render();go('inbox');toast(`${w.asin} moved to Inbox — add drop date to promote`,'ok');
 }
 
 // ═══════════════════════════════════
@@ -2025,13 +2611,13 @@ function addRebuy(){
   const asin=gv('r-asin').trim().toUpperCase();
   if(!asin||asin.length<5){se('e-r-asin',1);toast('Valid ASIN required','bad');return;}
   se('e-r-asin',0);
-  const accounts={};['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>accounts[a]=gv(`r-${a}`)||null);
+  const accounts={};['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>accounts[a]=dmToISO(gv(`r-${a}`),'past')||null);
   if(!Object.values(accounts).some(Boolean)){toast('Enter at least one purchase date','bad');return;}
   if(rebuys.find(r=>r.asin===asin)){toast(`${asin} already in queue`,'bad');return;}
   rebuys.push({id:Date.now(),asin,market:gv('r-market'),notes:gv('r-notes').trim(),accounts});
   sv2(RK,rebuys);
   ['r-asin','r-notes','r-uk1','r-uk2','r-uk3','r-eu1','r-eu2','r-eu3'].forEach(i=>sv(i,''));
-  render();toast(`${asin} added to rebuy ✓`,'ok');
+  render();toast(`${asin} added to rebuy`,'ok');
 }
 function calcAcc(ds){
   if(!ds)return{type:'none'};
@@ -2047,7 +2633,7 @@ function markDelivered(id,acc){
   if(!r.delivered)r.delivered={};
   r.delivered[acc]=delivDate;
   sv2(RK,rebuys);render();
-  toast(`${acc.toUpperCase()} delivered today — rebuy countdown started ✓`,'ok');
+  toast(`${acc.toUpperCase()} delivered today — rebuy countdown started`,'ok');
 }
 function openRbBought(id){
   const r=rebuys.find(x=>x.id===id);if(!r)return;
@@ -2060,7 +2646,7 @@ function confirmRbBought(){
   if(!sel.length){toast('Select at least one account','bad');return;}
   const r=rebuys.find(x=>x.id===rbBoughtId);
   if(r){const ts=today().toISOString().split('T')[0];sel.forEach(a=>r.accounts[a]=ts);sv2(RK,rebuys);}
-  closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')} ✓`,'ok');
+  closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')}`,'ok');
 }
 
 // ═══════════════════════════════════
@@ -2068,19 +2654,23 @@ function confirmRbBought(){
 // ═══════════════════════════════════
 const TCLS={watching:'t-neu',ready:'t-green',missed:'t-red',buywindow:'t-teal',waiting:'t-blue',review:'t-orange'};
 
-function buildTile(l,c){
-  const cls=TCLS[c.status]||'t-neu';
+function buildTile(l){
+  const p=l._p||calcBuyPlan(l);
+  const cls = p.status==='closing' ? 't-red'
+    : (p.status==='buy'||p.status==='closing') ? (p.isLTD?'t-teal':'t-green')
+    : p.isLTD ? 't-blue' : 't-amber';
   const cog=l.cog?`£${l.cog.toFixed(2)}`:'';
-  const typeTag=`${l.type}${cog?' · '+cog:''}`;
+  const stratTag=p.strategy==='speed'?'Speed':'Validate';
   let st='',meta='';
-  if(c.status==='watching'){st=c.daysLeft===1?'1 DAY LEFT':`${c.daysLeft} DAYS LEFT`;meta=typeTag;}
-  else if(c.status==='ready'){st='READY TO BUY';meta=typeTag;}
-  else if(c.status==='missed'){st='MISSED';meta=typeTag;}
-  else if(c.status==='buywindow'){st='BUY NOW';meta=`${fmt(c.readyDate)}–${fmt(c.buyBy)}<span class="iw"><span class="idot">i</span><span class="itip">Buy by ${fmt(c.buyBy)} · Ends ${fmt(c.endDate)}</span></span>`;}
-  else if(c.status==='waiting'){st=`⏳ WAIT ${c.daysLeft}d`;meta=`LTD · Ends ${fmt(c.endDate)}<span class="iw"><span class="idot">i</span><span class="itip">Window opens ${fmt(c.readyDate)}</span></span>`;}
-  else if(c.status==='review'){st='REVIEW';meta=`LTD · Ends ${fmt(c.endDate)}`;}
+  if(p.status==='buy'||p.status==='closing'){
+    st = p.status==='closing' ? 'BUY — CLOSING' : 'BUY NOW';
+    meta = `${p.type||l.type} · ${stratTag} · live ~${fmt(p.estLive)}${cog?' · '+cog:''}`;
+  } else { // wait
+    st = p.isLTD ? `BUY ${fmt(p.recBuy)}` : `BUY IN ${p.daysToBuy}D`;
+    meta = `${stratTag} → ${fmt(p.recBuy)}${p.isLTD?` · ends ${fmt(p.end)}`:''}${cog?' · '+cog:''}`;
+  }
   const srcBadge=l.src?`<div class="tile-src">${l.src}</div>`:'';
-  const compBadge=l.comp!=null?`<div class="tile-comp">👥 ${l.comp}</div>`:'';
+  const compBadge=l.comp!=null?(()=>{const lvl=l.comp<=2?'low':l.comp<=5?'med':'high';const lbl=lvl==='low'?'Low comp':lvl==='med'?'Med comp':'High comp';return`<div class="tile-comp comp-${lvl}">${lbl} · ${l.comp} FBA</div>`;})():'';
   const noteHtml=l.notes?`<div class="tile-note">${l.notes.substring(0,48)}${l.notes.length>48?'…':''}</div>`:'';
   const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">Was snoozed</div>`:'';
   const updatedFmt=l.updatedAt?fmtShort(l.updatedAt):null;
@@ -2095,7 +2685,7 @@ function buildTile(l,c){
       <button class="tbtn" onclick="window.open('${sasUrl(l.asin)}','_blank')">SAS</button>
       <button class="tbtn" onclick="window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>
       <button class="tbtn buy" onclick="openSrcBought(${l.id})">Bought</button>
-      <button class="tbtn" onclick="snoozeLead(${l.id})" title="Snooze 3 days">💤</button>
+      <button class="tbtn" onclick="snoozeLead(${l.id})" title="Snooze 3 days">Snooze</button>
     </div>
   </div>`;
 }
@@ -2110,12 +2700,12 @@ function buildRC(r){
     if(!delivered){
       // Purchased but not delivered yet
       return`<div class="acc soon" style="cursor:pointer" onclick="markDelivered(${r.id},'${a}')" title="Click to mark delivered">
-        ${a.toUpperCase()}<br><span style="font-size:9px">📦 Awaiting</span>
+        ${a.toUpperCase()}<br><span style="font-size:9px">Awaiting</span>
       </div>`;
     }
     // Delivered — calc rebuy from delivery date
     const s=calcAcc(delivered);
-    if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()} ✓</div>`;
+    if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()}</div>`;
     return`<div class="acc soon">${a.toUpperCase()} +${s.days}d</div>`;
   }).join('');
   const noteHtml=r.notes?`<div class="rc-note">${r.notes}</div>`:'';
@@ -2173,24 +2763,27 @@ function render(){
     if(l.bought)return;
     if(l.rejectedAt)return;
     if(isSnoozed(l))return;
-    const c=calcLead(l);l._c=c;
-    if(l.endDate){
-      if(c.status==='expired'){expired.push(l);return;}
-      if(c.status==='buywindow')ltdOpen.push(l);
-      else if(c.status==='waiting')ltdWait.push(l);
-      else ltdRev.push(l);
-    }else{
-      if(c.status==='watching')watching.push(l);
-      else if(c.status==='ready'||c.status==='missed')readyBuy.push(l);
-    }
+    const p=calcBuyPlan(l);l._p=p;l._c=calcLead(l);
+    if(p.status==='expired'){expired.push(l);return;}
+    if(p.status==='wait'){ (p.isLTD?ltdWait:watching).push(l); }
+    else { (p.isLTD?ltdOpen:readyBuy).push(l); }   // buy / closing
   });
-  watching.sort((a,b)=>a._c.daysLeft-b._c.daysLeft);
+  const cmp=srcSorter;
+  watching.sort(cmp); ltdWait.sort(cmp); readyBuy.sort(cmp);
+  const ltd=[...ltdOpen,...ltdWait,...ltdRev]; ltd.sort(cmp);
 
-  // Sourcing
-  set('watch-grid',watching.map(l=>buildTile(l,l._c)).join('')||emp('No leads being watched.'));
-  set('ready-grid',readyBuy.map(l=>buildTile(l,l._c)).join('')||emp('Nothing ready yet.'));
-  const ltd=[...ltdOpen,...ltdWait,...ltdRev];
-  set('ltd-grid',ltd.map(l=>buildTile(l,l._c)).join('')||emp('No LTD deals.'));
+  // Sourcing — cards or table
+  const renderList=(arr,emptyMsg)=>{
+    if(!arr.length)return emp(emptyMsg);
+    if(_srcView==='table')
+      return `<div class="ltbl-wrap"><table class="ltbl"><thead><tr>
+        <th></th><th>ASIN</th><th>Type</th><th>Plan</th><th>Buy</th><th>When</th><th>Live ~</th><th>COG</th><th>Comp</th><th></th>
+        </tr></thead><tbody>${arr.map(buildLeadRow).join('')}</tbody></table></div>`;
+    return `<div class="tg">${arr.map(buildTile).join('')}</div>`;
+  };
+  set('ready-grid',renderList(readyBuy,'Nothing to buy today. 7DD leads land here on day 8 (Validation) or immediately (Speed).'));
+  set('ltd-grid',renderList(ltd,'No LTD deals. Add a deal with an end date and the app schedules the buy for you.'));
+  set('watch-grid',renderList(watching,'Nothing counting down. New 7DD leads wait here until their recommended buy date.'));
   setN('cnt-watch',watching.length);setN('cnt-ready',readyBuy.length);setN('cnt-ltd',ltd.length);
 
   // Rebuy
@@ -2205,32 +2798,369 @@ function render(){
   set('watch-list',watchlist.map(buildWLCard).join('')||emp('Nothing on the watchlist.'));
   setN('cnt-watch-list',watchlist.length);
 
-  // Overview
-  const rbRdy=rebuys.filter(r=>['uk1','uk2','uk3','eu1','eu2','eu3'].some(a=>calcAcc(r.accounts[a]).type==='ready'));
-  const actionTotal=readyBuy.length+ltdOpen.length+rbRdy.length;
-  setN('kpi-action',actionTotal);
-  setN('kpi-watching',watching.length);
-  setN('kpi-tomorrow',watching.filter(l=>l._c.daysLeft===1).length);
-  setN('kpi-ltdopen',ltdOpen.length);
+  // Sourcing filter counts
+  setN('seg-n-all',watching.length+readyBuy.length+ltd.length);
+  setN('seg-n-ready',readyBuy.length);
+  setN('seg-n-ltd',ltd.length);
+  setN('seg-n-watching',watching.length);
+  applySrcFilter();
 
-  const prio=[...readyBuy];
-  set('ov-priority',prio.map(l=>buildTile(l,l._c)).join('')||emp('Nothing priority right now.'));
-  setN('ov-p-cnt',prio.length);
-  set('ov-ltd',ltdOpen.map(l=>buildTile(l,l._c)).join('')||emp('No LTD buy windows open.'));
-  setN('ov-l-cnt',ltdOpen.length);
+  // Strategy + lead-time settings bar
+  document.querySelectorAll('#global-strat .strat-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===settings.strategy));
+  const lt=document.getElementById('lt-input');if(lt&&document.activeElement!==lt)lt.value=settings.leadToLive;
 
-  set('ov-rebuy',rbRdy.map(r=>`<button class="tile t-green" onclick="go('rebuy');setTimeout(()=>{document.getElementById('rebuy-${r.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
-    <div class="tile-asin">${r.asin}</div>
-    <div class="tile-status">Rebuy Ready</div>
-    <div class="tile-meta">Tap to go to rebuy</div>
-  </button>`).join('')||emp('No rebuys ready today.'));
-  setN('ov-r-cnt',rbRdy.length);
-
-  setN('nb-action',actionTotal);setN('nb-sourcing',leads.filter(l=>!l.bought).length);
+  // Nav badges
+  setN('nb-sourcing',leads.filter(l=>!l.bought&&!l.rejectedAt).length);
   setN('nb-rebuy',rebuys.length);setN('nb-inbox',inbox.length);setN('nb-watch',watchlist.length);
+
+  // Action Center + notifications — single source of truth
+  refreshActionCenter();
 
   const q=document.getElementById('searchInput').value;
   if(q)runSearch(q);
+}
+
+// ═══════════════════════════════════
+// ACTION CENTER ENGINE  (single source of truth)
+// ═══════════════════════════════════
+const COLW={red:'cv-red',amber:'cv-amber',green:'cv-green',teal:'cv-teal',purple:'cv-purple',blue:'cv-blue',grey:'cv-grey'};
+const scrollTo_=id=>setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'center'}),130);
+
+function leadLinks(l){
+  return `<button class="aq-link" onclick="event.stopPropagation();window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>`+
+         `<button class="aq-link" onclick="event.stopPropagation();window.open('${sasUrl(l.asin)}','_blank')">SAS</button>`+
+         (l.oaLink?`<button class="aq-link" onclick="event.stopPropagation();window.open('${l.oaLink}','_blank')">SRC</button>`:'');
+}
+function oaLinks(i){
+  return (i.link?`<button class="aq-link" onclick="event.stopPropagation();window.open('${i.link}','_blank')">SRC</button>`:'')+
+         `<button class="aq-link" onclick="event.stopPropagation();window.open('${sasUrl(i.asin)}','_blank')">SAS</button>`;
+}
+
+// Returns prioritised, typed action items. priority: lower = more urgent.
+function computeActions(){
+  const A=[];
+  // Sourcing — buy-timing driven
+  leads.forEach(l=>{
+    if(l.bought||l.rejectedAt||isSnoozed(l))return;
+    const p=calcBuyPlan(l);
+    if(p.status==='buy'||p.status==='closing'){
+      const stratTag=p.strategy==='speed'?'Speed':'Validate';
+      if(p.isLTD){
+        const closing=p.status==='closing';
+        A.push({key:'ltd-'+l.id,cat:'buy',priority:closing?2:3,color:closing?'red':'teal',
+          chip:closing?'LTD CLOSING':'LTD BUY',title:l.asin,
+          sub:`${closing?`Deal ends ${fmt(p.end)} · `:''}${stratTag} · live ~${fmt(p.estLive)}`,
+          jump:`go('sourcing');ss('sec-ltd')`,
+          primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},links:leadLinks(l)});
+      } else {
+        A.push({key:'rdy-'+l.id,cat:'buy',priority:4,color:'green',chip:'BUY TODAY',title:l.asin,
+          sub:`${stratTag} pick · live ~${fmt(p.estLive)}${p.valShort&&p.strategy==='speed'?` · ${p.valShort}d less validation`:''}`,
+          jump:`go('sourcing');ss('sec-ready')`,
+          primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},links:leadLinks(l)});
+      }
+    }
+  });
+  // OA Replen
+  oaItems.forEach(i=>{
+    const s=calcOAStatus(i);
+    if(s.status==='overdue'){
+      A.push({key:'oao-'+i.id,cat:'oa',priority:1,color:'red',chip:'OA OVERDUE',title:i.asin,
+        sub:`${s.daysSince}d overdue · target £${i.target?.toFixed(2)||'—'}`,
+        jump:`go('oareplen');scrollTo_('oa-${i.id}')`,
+        primary:{label:'Log Check',fn:`openOACheck(${i.id})`},links:oaLinks(i)});
+    } else if(s.status==='due'){
+      A.push({key:'oad-'+i.id,cat:'oa',priority:5,color:'amber',chip:'OA DUE',title:i.asin,
+        sub:`Due today · target £${i.target?.toFixed(2)||'—'}`,
+        jump:`go('oareplen');scrollTo_('oa-${i.id}')`,
+        primary:{label:'Log Check',fn:`openOACheck(${i.id})`},links:oaLinks(i)});
+    }
+  });
+  // Sub & Save
+  Object.keys(snsData).forEach(acc=>{
+    const d=snsData[acc]; if(!d||!d.editDay)return;
+    const s=calcSnsStatus(acc);
+    if(s.status==='edit-today'){
+      A.push({key:'snse-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S LAST DAY',title:acc,
+        sub:'Last day to add or amend items',jump:`go('sns')`,
+        primary:{label:'Open',fn:`go('sns')`},links:''});
+    } else if(s.status==='review'){
+      A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S REVIEW',title:acc,
+        sub:`Check prices & profitability · ${fmt(addD(pd(d.editDay),3))}–${fmt(addD(pd(d.editDay),4))}`,
+        jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
+    } else if(s.status==='needs'){
+      A.push({key:'snsn-'+acc,cat:'sns',priority:7,color:'blue',chip:'S&S SET CYCLE',title:acc,
+        sub:'Cycle complete — enter next cycle dates',jump:`openSnsEdit('${acc}',true)`,
+        primary:{label:'Set Dates',fn:`openSnsEdit('${acc}',true)`},links:''});
+    }
+  });
+  // Rebuy
+  rebuys.forEach(r=>{
+    const ready=['uk1','uk2','uk3','eu1','eu2','eu3'].filter(a=>calcAcc(r.accounts[a]).type==='ready');
+    if(ready.length){
+      A.push({key:'rb-'+r.id,cat:'rebuy',priority:8,color:'blue',chip:'REBUY',title:r.asin,
+        sub:`Can rebuy on ${ready.map(a=>a.toUpperCase()).join(', ')}`,
+        jump:`go('rebuy');scrollTo_('rebuy-${r.id}')`,
+        primary:{label:'Open',fn:`go('rebuy')`},links:''});
+    }
+  });
+  A.sort((a,b)=>a.priority-b.priority);
+  return A;
+}
+
+// Upcoming heads-ups (not yet actionable) — notifications only
+function computeUpcoming(){
+  const U=[];
+  leads.forEach(l=>{
+    if(l.bought||l.rejectedAt||isSnoozed(l))return;
+    const p=calcBuyPlan(l);
+    if(p.status==='wait'&&p.daysToBuy<=2)
+      U.push({key:'soon-buy-'+l.id,color:p.isLTD?'teal':'green',chip:'SOON',title:l.asin,
+        sub:`Buy ${fmt(p.recBuy)} (${p.daysToBuy} day${p.daysToBuy!==1?'s':''}) · live ~${fmt(p.estLive)}`,
+        jump:`go('sourcing');${p.isLTD?"ss('sec-ltd')":"ss('sec-watching')"}`});
+  });
+  oaItems.forEach(i=>{
+    const s=calcOAStatus(i);
+    if(s.status==='ok'&&(s.daysUntil||99)<=2)
+      U.push({key:'soon-oa-'+i.id,color:'amber',chip:'SOON',title:i.asin,sub:`OA check due in ${s.daysUntil} day${s.daysUntil!==1?'s':''}`,jump:`go('oareplen');scrollTo_('oa-${i.id}')`});
+  });
+  Object.keys(snsData).forEach(acc=>{
+    const d=snsData[acc]; if(!d||!d.editDay)return;
+    const s=calcSnsStatus(acc);
+    if(s.status==='soon') U.push({key:'soon-snse-'+acc,color:'blue',chip:'SOON',title:acc,sub:`Last day to add in ${s.daysToEdit} day${s.daysToEdit!==1?'s':''}`,jump:`go('sns')`});
+    else if(s.status==='between') U.push({key:'soon-snsr-'+acc,color:'purple',chip:'SOON',title:acc,sub:`Review window in ${s.daysToReviewStart} day${s.daysToReviewStart!==1?'s':''}`,jump:`go('sns')`});
+  });
+  return U;
+}
+
+let _acFilter='all';
+function setAcFilter(cat){_acFilter=(_acFilter===cat)?'all':cat;refreshActionCenter();}
+
+const AC_BANDS=[
+  {key:'overdue',title:'Overdue — act now',color:'red',lbl:'Overdue'},
+  {key:'buy',title:'Buy today',color:'green',lbl:'To Buy'},
+  {key:'checks',title:'OA checks due',color:'amber',lbl:'OA Due'},
+  {key:'sns',title:'Sub & Save',color:'purple',lbl:'Sub & Save'},
+  {key:'rebuy',title:'Rebuys ready',color:'blue',lbl:'Rebuys'},
+];
+function bandOf(a){
+  if(a.color==='red')return'overdue';
+  if(a.cat==='buy')return'buy';
+  if(a.cat==='oa')return'checks';
+  if(a.cat==='sns')return'sns';
+  return'rebuy';
+}
+function acRowHtml(a){
+  return `<div class="aq-row ${COLW[a.color]}">
+    <span class="aq-chip">${a.chip}</span>
+    <div class="aq-main" onclick="${a.jump}">
+      <div class="aq-asin">${a.title}</div>
+      <div class="aq-sub">${a.sub}</div>
+    </div>
+    <div class="aq-acts">${a.links||''}<button class="aq-btn-primary" onclick="${a.primary.fn}">${a.primary.label}</button></div>
+  </div>`;
+}
+const acClearHtml=()=>`<div class="ac-clear">
+  <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  <div class="ac-clear-t">You're all caught up</div>
+  <div class="ac-clear-s">No buys, checks, reviews or rebuys are due. New actions appear here automatically.</div></div>`;
+
+function refreshActionCenter(){
+  const A=computeActions();A.forEach(a=>a.band=bandOf(a));
+  const U=computeUpcoming();
+  const total=A.length;
+  const counts={};AC_BANDS.forEach(b=>counts[b.key]=A.filter(a=>a.band===b.key).length);
+
+  const dEl=document.getElementById('ac-date');
+  if(dEl)dEl.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const sumEl=document.getElementById('ac-summary');
+  if(sumEl){
+    if(total===0){sumEl.className='ac-summary clear';sumEl.innerHTML='<b>All clear.</b> Nothing needs action right now.';}
+    else{const od=counts.overdue;sumEl.className='ac-summary';
+      sumEl.innerHTML=`<b>${total} action${total!==1?'s':''}</b> need you today${od?` · <b style="color:var(--red)">${od} overdue</b>`:''}.`;}
+  }
+
+  // stat strip = bands
+  const statsEl=document.getElementById('ac-stats');
+  if(statsEl){
+    statsEl.innerHTML=AC_BANDS.map(b=>{
+      const n=counts[b.key],active=_acFilter===b.key?'active':'',dim=n===0?'dim':'';
+      return `<button class="ac-stat ${COLW[b.color]} ${active}" onclick="setAcFilter('${b.key}')">
+        <div class="ac-stat-num ${dim}">${n}</div><div class="ac-stat-lbl">${b.lbl}</div></button>`;
+    }).join('');
+  }
+
+  // queue pill
+  const pill=document.getElementById('aq-pill');
+  if(pill){pill.textContent=total===0?'all clear':`${total} to action`;pill.className='aq-panel-pill'+(total===0?' clear':'');}
+
+  // grouped queue
+  const qEl=document.getElementById('ac-queue');
+  if(qEl){
+    if(total===0){qEl.innerHTML=acClearHtml();}
+    else{
+      let html='';
+      AC_BANDS.forEach(b=>{
+        if(_acFilter!=='all'&&_acFilter!==b.key)return;
+        const items=A.filter(a=>a.band===b.key);
+        if(!items.length)return;
+        html+=`<div class="aq-band ${COLW[b.color]}"><span class="aq-band-dot"></span><span class="aq-band-t">${b.title}</span><span class="aq-band-n">${items.length}</span></div>`;
+        html+=items.map(acRowHtml).join('');
+      });
+      qEl.innerHTML=html||`<div class="ac-clear" style="padding:34px"><div class="ac-clear-t">Nothing in this filter</div><div class="ac-clear-s">Tap a card again to see everything.</div></div>`;
+    }
+  }
+
+  setN('nb-action',total);
+  buildAside();
+  renderNotif(A,U);
+}
+
+// ── Right-hand summary panels ──
+function buildAside(){
+  const aside=document.getElementById('ac-aside');
+  if(!aside)return;
+
+  // OA schedule
+  let over=0,due=0,next7=0; const upcoming=[];
+  oaItems.forEach(i=>{const s=calcOAStatus(i);
+    if(s.status==='overdue')over++;
+    else if(s.status==='due')due++;
+    else if(s.status==='ok'){if((s.daysUntil||99)<=7)next7++;upcoming.push({i,d:s.daysUntil});}});
+  upcoming.sort((a,b)=>a.d-b.d);
+  const schedRows=upcoming.slice(0,4).map(({i,d})=>{
+    const date=fmt(addD(pd(i.lastChecked),parseInt(i.freq)||7));
+    return `<div class="sched-row" onclick="go('oareplen');scrollTo_('oa-${i.id}')">
+      <span class="sched-row-asin">${i.asin}</span>
+      <span class="sched-row-date">${date} · ${d}d</span></div>`;
+  }).join('')||`<div class="side-empty">Nothing scheduled in range.</div>`;
+
+  // At a glance
+  const activeLeads=leads.filter(l=>!l.bought&&!l.rejectedAt).length;
+  const snsSet=Object.keys(snsData).filter(a=>snsData[a]&&snsData[a].editDay).length;
+
+  aside.innerHTML=`
+    <div class="side-panel accent-blue">
+      <div class="side-hd side-hd-row">
+        <div class="side-hd-t cv-blue"><svg width="14" height="14" fill="none" stroke="var(--cv)" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</div>
+        <button class="notif-clear" onclick="clearAllNotif()">Mark all read</button>
+      </div>
+      <div class="side-body" style="padding:6px"><div id="notifBody"></div></div>
+    </div>
+    <div class="side-panel accent-red">
+      <div class="side-hd">
+        <div class="side-hd-t cv-red"><svg width="14" height="14" fill="none" stroke="var(--cv)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>OA Review Schedule</div>
+        <div class="side-hd-s">When each item is next due a price check</div>
+      </div>
+      <div class="side-body">
+        <div class="sched-3">
+          <div class="sched-col over ${over===0?'zero':''}"><div class="sched-col-lbl">Overdue</div><div class="sched-col-n">${over}</div></div>
+          <div class="sched-col today ${due===0?'zero':''}"><div class="sched-col-lbl">Today</div><div class="sched-col-n">${due}</div></div>
+          <div class="sched-col next"><div class="sched-col-lbl">Next 7d</div><div class="sched-col-n">${next7}</div></div>
+        </div>
+        ${schedRows}
+      </div>
+    </div>
+    <div class="side-panel accent-teal">
+      <div class="side-hd"><div class="side-hd-t cv-teal"><svg width="14" height="14" fill="none" stroke="var(--cv)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>At a Glance</div></div>
+      <div class="side-body">
+        <div class="glance-row"><span class="glance-lbl">Active sourcing leads</span><span class="glance-n">${activeLeads}</span></div>
+        <div class="glance-row"><span class="glance-lbl">Monitoring (OA Replen)</span><span class="glance-n">${oaItems.length}</span></div>
+        <div class="glance-row"><span class="glance-lbl">Sub &amp; Save accounts set</span><span class="glance-n">${snsSet}/6</span></div>
+        <div class="glance-row"><span class="glance-lbl">Rebuy queue</span><span class="glance-n">${rebuys.length}</span></div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════
+let _notifDismissed=new Set();
+function toggleNotif(e){
+  e?.stopPropagation();
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+function clearAllNotif(){
+  computeActions().forEach(a=>_notifDismissed.add(a.key));
+  refreshActionCenter();
+}
+function renderNotif(A,U){
+  const active=A.filter(a=>!_notifDismissed.has(a.key));
+  const badge=document.getElementById('bellCount');
+  const bell=document.getElementById('bellBtn');
+  if(badge){badge.textContent=active.length;badge.classList.toggle('zero',active.length===0);}
+  if(bell)bell.classList.toggle('has-alerts',active.length>0);
+
+  const body=document.getElementById('notifBody');
+  if(!body)return;
+  if(active.length===0&&U.length===0){
+    body.innerHTML=`<div class="notif-empty">
+      <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      You're all caught up</div>`;
+    return;
+  }
+  let html='';
+  const itemHtml=(it,act)=>`<div class="notif-item ${COLW[it.color]}" onclick="document.getElementById('notifPanel').classList.remove('open');${it.jump}">
+    <span class="notif-dot" style="background:var(--cv)"></span>
+    <div class="notif-tx">
+      <div class="notif-it-title">${it.title}<span class="notif-it-chip" style="background:color-mix(in srgb,var(--cv) 16%,transparent);color:var(--cv)">${it.chip}</span></div>
+      <div class="notif-it-sub">${it.sub}</div>
+    </div></div>`;
+  if(active.length){html+=`<div class="notif-group-lbl">Needs action</div>`+active.map(a=>itemHtml(a)).join('');}
+  if(U.length){html+=`<div class="notif-group-lbl">Upcoming</div>`+U.map(u=>itemHtml(u)).join('');}
+  body.innerHTML=html;
+}
+
+// ═══════════════════════════════════
+// SOURCING FILTER
+// ═══════════════════════════════════
+let _srcFilter='all';
+function setSrcFilter(seg){
+  _srcFilter=seg;
+  document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===seg));
+  applySrcFilter();
+}
+function applySrcFilter(){
+  document.querySelectorAll('.src-group').forEach(g=>{
+    g.style.display=(_srcFilter==='all'||g.dataset.group===_srcFilter)?'':'none';
+  });
+}
+
+// ── View (cards/table) + sort ──
+let _srcView='cards', _srcSort='buy';
+function setSrcView(v){_srcView=v;document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));render();}
+function setSrcSort(s){_srcSort=s;render();}
+function srcSorter(a,b){
+  const pa=a._p||calcBuyPlan(a),pb=b._p||calcBuyPlan(b);
+  switch(_srcSort){
+    case 'countdown': return pa.daysToBuy-pb.daysToBuy;
+    case 'cog':       return (a.cog??1e9)-(b.cog??1e9);
+    case 'comp':      return (a.comp??1e9)-(b.comp??1e9);
+    case 'added':     return b.id-a.id;
+    default:          return (pa.recBuy-pb.recBuy)||(pa.estLive-pb.estLive); // buy date
+  }
+}
+function buildLeadRow(l){
+  const p=l._p||calcBuyPlan(l);
+  const color = p.status==='closing'?'red' : (p.status==='buy'?(p.isLTD?'teal':'green') : (p.isLTD?'blue':'amber'));
+  const when = (p.status==='buy'||p.status==='closing')
+    ? `<span class="ltbl-buy">${p.status==='closing'?'CLOSING':'BUY NOW'}</span>`
+    : `<span class="ltbl-cd">${p.isLTD?fmt(p.recBuy):p.daysToBuy+'d'}</span>`;
+  const compCell=l.comp!=null?(()=>{const lvl=l.comp<=2?'low':l.comp<=5?'med':'high';return`<span class="ltbl-comp comp-${lvl}">${l.comp}</span>`;})():'<span class="ltbl-dim">—</span>';
+  return `<tr class="ltbl-row cv-${color}" onclick="openLead(${l.id})">
+    <td><span class="ltbl-dot"></span></td>
+    <td class="ltbl-asin">${l.asin}${l.src?`<span class="ltbl-src">${l.src}</span>`:''}</td>
+    <td>${l.type}</td>
+    <td><span class="ltbl-strat ${p.strategy}">${p.strategy==='speed'?'Speed':'Validate'}</span></td>
+    <td>${fmt(p.recBuy)}</td>
+    <td>${when}</td>
+    <td class="ltbl-dim">${fmt(p.estLive)}</td>
+    <td>${l.cog?'£'+l.cog.toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
+    <td>${compCell}</td>
+    <td class="ltbl-act" onclick="event.stopPropagation()">
+      <button class="ltbl-btn" onclick="window.open('${sasUrl(l.asin)}','_blank')">SAS</button>
+      <button class="ltbl-btn buy" onclick="openSrcBought(${l.id})">Bought</button>
+    </td>
+  </tr>`;
 }
 
 // ═══════════════════════════════════
@@ -2365,7 +3295,7 @@ function renderNotes(){
         >${n.body.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
       <div class="note-footer">
         <span class="note-char-count" id="note-chars-${n.id}">${n.body.length} chars</span>
-        <span class="note-saved" id="note-saved-${n.id}">✓ Saved</span>
+        <span class="note-saved" id="note-saved-${n.id}">Saved</span>
       </div>
     </div>
   `).join('');
@@ -2391,8 +3321,8 @@ function copyExport(){
   const ta=document.getElementById('export-text')||document.getElementById('export-textarea');
   if(!ta)return;
   ta.select();
-  try{document.execCommand('copy');toast('Copied to clipboard ✓','ok');}
-  catch{navigator.clipboard?.writeText(ta.value).then(()=>toast('Copied ✓','ok'));}
+  try{document.execCommand('copy');toast('Copied to clipboard','ok');}
+  catch{navigator.clipboard?.writeText(ta.value).then(()=>toast('Copied','ok'));}
 }
 
 function downloadExport(){
@@ -2405,7 +3335,7 @@ function downloadExport(){
   a.download=`a2a-notes-${new Date().toLocaleDateString('en-GB').replace(/\//g,'-')}.txt`;
   a.click();
   URL.revokeObjectURL(url);
-  toast('Downloaded ✓','ok');
+  toast('Downloaded','ok');
 }
 
 // ═══════════════════════════════════
@@ -2450,7 +3380,7 @@ function addOA(){
   localStorage.setItem(OAK,JSON.stringify(oaItems));
   ['oa-asin','oa-target','oa-current','oa-link','oa-notes'].forEach(i=>sv(i,''));
   sv('oa-freq','7');
-  renderOA();toast(`${asin} added to OA Replen ✓`,'ok');
+  renderOA();toast(`${asin} added to OA Replen`,'ok');
 }
 
 function openOACheck(id){
@@ -2485,7 +3415,7 @@ function confirmOACheck(){
     oaItems=oaItems.filter(x=>x.id!==id);
     localStorage.setItem(OAK,JSON.stringify(oaItems));
     closeM('oaCheckModal');renderOA();
-    toast(`${item.asin} marked as bought — archived ✓`,'ok');
+    toast(`${item.asin} marked as bought — archived`,'ok');
   } else {
     item.checkLog.push({date:dateStr,note:note||'Checked — not buying yet'});
     // Snooze by frequency
@@ -2512,7 +3442,7 @@ function saveOAEdit(){
   item.freq=parseInt(gv('oae-freq'))||7;
   item.link=gv('oae-link').trim();item.notes=gv('oae-notes').trim();
   localStorage.setItem(OAK,JSON.stringify(oaItems));
-  closeM('oaEditModal');renderOA();toast('Saved ✓','ok');
+  closeM('oaEditModal');renderOA();toast('Saved','ok');
 }
 
 function delOA(id){
@@ -2562,18 +3492,19 @@ function openOADetail(id){
   window._oaDetailId=id;
   const c=calcOAStatus(item);
   document.getElementById('oad-asin-title').textContent=item.asin;
-  const statusBg={overdue:'var(--red)',due:'var(--amber)',ok:'var(--green)',never:'var(--border2)',snoozed:'var(--purple)'};
+  const statusBg={overdue:'var(--red)',due:'var(--amber)',ok:'var(--green)',never:'var(--green)',snoozed:'var(--purple)'};
   const nextChk=item.lastChecked?fmtLong(addD(pd(item.lastChecked),parseInt(item.freq)||7)):null;
+  const freq=parseInt(item.freq)||7;
   const statusTxt={
-    overdue:`${c.daysSince} days overdue — was due ${nextChk||'—'}`,
-    due:`Due today — last checked ${fmtLong(pd(item.lastChecked))}`,
-    ok:`Next check: ${nextChk||'—'} (in ${c.daysUntil} day${c.daysUntil!==1?'s':''})`,
-    never:`Not yet checked — log first check below`,
+    overdue:`${(c.daysSince||0)-freq} days overdue — review now (was due ${nextChk||'—'})`,
+    due:`Due for review today — last reviewed ${fmtLong(pd(item.lastChecked))}`,
+    ok:`Monitoring — next review ${nextChk||'—'} (in ${c.daysUntil} day${c.daysUntil!==1?'s':''})`,
+    never:`Monitoring — review due`,
     snoozed:`Snoozed until ${fmtLong(pd(item.snoozedUntil))} (${c.daysLeft}d remaining)`
   };
   const bar=document.getElementById('oad-status-bar');
   bar.style.background=statusBg[c.status]||'var(--border2)';
-  if(c.status==='never')bar.style.color='var(--muted)';
+  bar.style.color='#fff';
   bar.textContent=statusTxt[c.status]||'';
   document.getElementById('oad-fields').innerHTML=`
     <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
@@ -2596,104 +3527,107 @@ function openOADetail(id){
 function buildOATile(item){
   const c=calcOAStatus(item);
   const cls=`oa-tile oa-${c.status}`;
+  const freq=parseInt(item.freq)||7;
+  const nextCheckDate=item.lastChecked?fmt(addD(pd(item.lastChecked),freq)):'—';
 
-  let headline='', subline='', urgency='';
-  const nextCheckDate=item.lastChecked?fmt(addD(pd(item.lastChecked),parseInt(item.freq)||7)):'—';
-
+  let headline='', subline='';
   if(c.status==='overdue'){
-    headline=`${c.daysSince}d overdue`;
-    subline=`Was due ${nextCheckDate}`;
-    urgency='high';
+    headline=`OVERDUE · ${c.daysSince-freq}d`;
+    subline=`Was due ${nextCheckDate} — review now`;
   } else if(c.status==='due'){
-    headline=`Due today`;
-    subline=`${c.daysSince}d since last check`;
-    urgency='high';
+    headline=`REVIEW TODAY`;
+    subline=`Last reviewed ${fmt(pd(item.lastChecked))}`;
   } else if(c.status==='snoozed'){
-    headline=`Check ${fmt(pd(item.snoozedUntil))}`;
-    subline=`Snoozed — ${c.daysLeft}d remaining`;
-    urgency='low';
+    headline=`SNOOZED`;
+    subline=`Next review ${fmt(pd(item.snoozedUntil))} · ${c.daysLeft}d`;
   } else {
-    // ok
-    headline=`Check ${nextCheckDate}`;
-    subline=`${c.daysUntil}d from now`;
-    urgency='none';
+    headline=`MONITORING`;
+    subline=`Review ${nextCheckDate} · in ${c.daysUntil}d`;
   }
 
   const priceHtml=item.current
     ?`<div class="oa-tile-meta">£${item.current.toFixed(2)} now · £${item.target?.toFixed(2)||'?'} target</div>`
-    :`<div class="oa-tile-meta">Target: £${item.target?.toFixed(2)||'—'}</div>`;
+    :`<div class="oa-tile-meta">Target £${item.target?.toFixed(2)||'—'}</div>`;
   const noteHtml=item.notes?`<div class="oa-tile-note">${item.notes}</div>`:'';
 
   return`<div class="${cls}" id="oa-${item.id}" onclick="openOADetail(${item.id})">
     <div class="oa-tile-asin">${item.asin}</div>
     <div class="oa-tile-status">${headline}</div>
-    <div class="oa-tile-meta" style="opacity:.85">${subline}</div>
+    <div class="oa-tile-meta">${subline}</div>
     ${priceHtml}
     ${noteHtml}
     <div class="oa-tbtns" onclick="event.stopPropagation()">
-      <button class="oa-tbtn" onclick="openOACheck(${item.id})">Check</button>
+      <button class="oa-tbtn buy" onclick="openOACheck(${item.id})">Check</button>
       ${item.link?`<button class="oa-tbtn" onclick="window.open('${item.link}','_blank')">Source</button>`:''}
-      <button class="oa-tbtn" onclick="snoozeOA(${item.id},item.freq||7,event)">Snooze</button>
+      <button class="oa-tbtn" onclick="snoozeOA(${item.id},${freq},event)" title="Push next review out by ${freq} days">Snooze ${freq}d</button>
       <button class="oa-tbtn" onclick="openOAEdit(${item.id})">Edit</button>
     </div>
   </div>`;
 }
 
 function renderOA(){
-  const list=document.getElementById('oa-list');
-  if(!list)return;
-  // Sort: overdue first (most overdue first), then due, then ok (soonest first), snoozed last
-  const statusOrder={overdue:0,due:1,ok:2,snoozed:3,never:2};
-  const sorted=[...oaItems].sort((a,b)=>{
-    const ca=calcOAStatus(a), cb=calcOAStatus(b);
-    const oa=statusOrder[ca.status]??2, ob=statusOrder[cb.status]??2;
-    if(oa!==ob)return oa-ob;
-    // Within same status: overdue = most overdue first; ok = soonest check first
-    if(ca.status==='overdue')return (cb.daysSince||0)-(ca.daysSince||0);
-    if(ca.status==='ok')return (ca.daysUntil||0)-(cb.daysUntil||0);
-    return 0;
-  });
-  list.innerHTML=sorted.map(buildOATile).join('')||emp('No OA Replen items yet. Add one above.');
+  const wrap=document.getElementById('oa-sections');
+  // group
+  const g={overdue:[],due:[],soon:[],monitor:[]};
+  oaItems.forEach(i=>{const s=calcOAStatus(i);
+    if(s.status==='overdue')g.overdue.push(i);
+    else if(s.status==='due')g.due.push(i);
+    else if(s.status==='ok'&&(s.daysUntil||99)<=3)g.soon.push(i);
+    else g.monitor.push(i);});
+  const dOver=i=>{const s=calcOAStatus(i);return (s.daysSince||0)-(parseInt(i.freq)||7);};
+  g.overdue.sort((a,b)=>dOver(b)-dOver(a));
+  g.soon.sort((a,b)=>(calcOAStatus(a).daysUntil||0)-(calcOAStatus(b).daysUntil||0));
+  g.monitor.sort((a,b)=>{const sa=calcOAStatus(a),sb=calcOAStatus(b);
+    const va=sa.status==='snoozed'?(sa.daysLeft||0):(sa.daysUntil||0);
+    const vb=sb.status==='snoozed'?(sb.daysLeft||0):(sb.daysUntil||0);return va-vb;});
 
-  // Badge = due + overdue count
-  const dueCount=oaItems.filter(i=>{const s=calcOAStatus(i).status;return s==='due'||s==='overdue';}).length;
-  const cntEl=document.getElementById('cnt-oa');
-  const nbEl=document.getElementById('nb-oa');
-  if(cntEl)cntEl.textContent=dueCount||oaItems.length;
-  if(nbEl)nbEl.textContent=dueCount||oaItems.length;
-  document.getElementById('kpi-oa-due')?.textContent;
-
-  // Overview — overdue + due + coming within 2 days
-  const ovList=document.getElementById('ov-oa-list');
-  const ovCnt=document.getElementById('ov-oa-cnt');
-  const actionItems=sorted.filter(i=>{
-    const s=calcOAStatus(i);
-    return s.status==='overdue'||s.status==='due'||(s.status==='ok'&&(s.daysUntil||99)<=2);
-  });
-  if(ovCnt)ovCnt.textContent=actionItems.length;
-  const kpiOaDue=document.getElementById('kpi-oa-due');
-  if(kpiOaDue)kpiOaDue.textContent=actionItems.length;
-  const oaSecEl=document.getElementById('ov-oa-sec');
-  if(oaSecEl)oaSecEl.style.display=actionItems.length?'flex':'none';
-  if(ovList){
-    ovList.innerHTML=actionItems.length===0
-      ?`<div class="empty">No OA Replen checks due.</div>`
-      :actionItems.map(item=>{
-          const cs=calcOAStatus(item);
-          const borderCol=cs.status==='overdue'?'var(--red)':cs.status==='due'?'var(--amber)':'var(--border2)';
-          const label=cs.status==='overdue'
-            ?`<span style="color:var(--red);font-weight:700;font-size:11px;flex-shrink:0">${cs.daysSince}d overdue</span>`
-            :cs.status==='due'
-            ?`<span style="color:var(--amber);font-weight:700;font-size:11px;flex-shrink:0">Due today</span>`
-            :`<span style="color:var(--text2);font-size:11px;flex-shrink:0">Due in ${cs.daysUntil}d</span>`;
-          return`<div class="oa-ov-card" style="border-color:${borderCol};cursor:pointer" onclick="go('oareplen');setTimeout(()=>{document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
-            <span class="oa-ov-asin">${item.asin}</span>
-            ${label}
-            <span class="oa-ov-note">${item.notes||'—'}</span>
-            <button class="oa-tbtn" style="flex:0;padding:4px 10px;font-size:10px;border-radius:5px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);cursor:pointer;white-space:nowrap" onclick="event.stopPropagation();openOACheck(${item.id})">Log Check</button>
-          </div>`;
-        }).join('');
+  // summary cards
+  const sumEl=document.getElementById('oa-summary');
+  if(sumEl){
+    const cards=[
+      {cv:'cv-red',n:g.overdue.length,lbl:'Overdue',sec:'oa-grp-overdue'},
+      {cv:'cv-amber',n:g.due.length,lbl:'Due Today',sec:'oa-grp-due'},
+      {cv:'cv-blue',n:g.soon.length,lbl:'Due Soon',sec:'oa-grp-soon'},
+      {cv:'cv-green',n:g.monitor.length,lbl:'Monitoring',sec:'oa-grp-monitor'},
+    ];
+    sumEl.innerHTML=cards.map(c=>`<div class="oa-sum ${c.cv}" onclick="scrollTo_('${c.sec}')">
+      <div class="oa-sum-n ${c.n===0?'dim':''}">${c.n}</div><div class="oa-sum-lbl">${c.lbl}</div></div>`).join('');
   }
+
+  // overdue alert
+  const alertEl=document.getElementById('oa-alert-slot');
+  if(alertEl){
+    if(g.overdue.length){
+      const worst=Math.max(...g.overdue.map(dOver));
+      alertEl.innerHTML=`<div class="oa-alert">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div>
+          <div class="oa-alert-t">${g.overdue.length} item${g.overdue.length!==1?'s':''} overdue — review now</div>
+          <div class="oa-alert-s">Most overdue is ${worst} day${worst!==1?'s':''} past its review date. These should already have been checked.</div>
+        </div></div>`;
+    } else alertEl.innerHTML='';
+  }
+
+  // sections
+  const sec=(id,title,cv,arr)=>arr.length
+    ?`<div class="oa-sec ${cv}" id="${id}"><span class="oa-sec-dot"></span><span class="oa-sec-t">${title}</span><span class="oa-sec-n">${arr.length}</span></div><div class="oa-grid">${arr.map(buildOATile).join('')}</div>`
+    :'';
+  if(wrap){
+    const html=[
+      sec('oa-grp-overdue','Overdue — review now','cv-red',g.overdue),
+      sec('oa-grp-due','Due for review today','cv-amber',g.due),
+      sec('oa-grp-soon','Due soon','cv-blue',g.soon),
+      sec('oa-grp-monitor','Monitoring','cv-green',g.monitor),
+    ].join('');
+    wrap.innerHTML=html||emp('No OA Replen items yet. Add one above — its first check is logged automatically.');
+  }
+
+  // badges
+  const dueCount=g.overdue.length+g.due.length;
+  setN('cnt-oa',dueCount||oaItems.length);
+  setN('nb-oa',dueCount||oaItems.length);
+
+  if(typeof refreshActionCenter==='function')refreshActionCenter();
 }
 
 // ═══════════════════════════════════
@@ -2745,12 +3679,16 @@ function calcSnsStatus(acc){
 
 function renderSns(){
   const tbody=document.getElementById('sns-tbody');
-  const histTbody=document.getElementById('sns-hist-tbody');
   if(!tbody)return;
 
   let needsCount=0, alertAccounts=[], reviewAccounts=[];
 
-  tbody.innerHTML=SNS_ACCOUNTS.map(acc=>{
+  // Sort action-needed accounts to the top
+  const SNS_ORDER={'edit-today':0,'needs':1,'no-data':1,'review':2,'between':3,'soon':4,'active':5};
+  const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>
+    (SNS_ORDER[calcSnsStatus(a).status]??5)-(SNS_ORDER[calcSnsStatus(b).status]??5));
+
+  tbody.innerHTML=sortedAccs.map(acc=>{
     const c=calcSnsStatus(acc);
     const d=snsData[acc]||{};
     let statusHtml='',actionHtml='';
@@ -2793,96 +3731,30 @@ function renderSns(){
     </tr>`;
   }).join('');
 
-  // History
-  if(histTbody){
-    histTbody.innerHTML=snsHist.length===0
-      ?`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No history yet</td></tr>`
-      :snsHist.slice().reverse().map(h=>`<tr>
-        <td><span class="sns-acc">${h.acc}</span></td>
-        <td>${h.editDay?fmtLong(pd(h.editDay)):'—'}</td>
-        <td>${h.deliveryDay?fmtLong(pd(h.deliveryDay)):'—'}</td>
-        <td>${h.cycle||'—'}</td>
-        <td>${h.recorded?fmtLong(pd(h.recorded)):'—'}</td>
-        <td style="color:var(--muted);font-style:italic">${h.notes||'—'}</td>
-      </tr>`).join('');
-    document.getElementById('cnt-sns-hist').textContent=snsHist.length;
+
+  // Summary strip (action-first)
+  let snsNeeds=0,snsReview=0,snsActive=0;
+  SNS_ACCOUNTS.forEach(acc=>{const st=calcSnsStatus(acc).status;
+    if(st==='no-data'||st==='needs')snsNeeds++;
+    else if(st==='review')snsReview++;
+    else snsActive++;});
+  const snsSumEl=document.getElementById('sns-summary');
+  if(snsSumEl){
+    const cards=[
+      {cv:'cv-red',n:snsNeeds,lbl:'Needs Dates'},
+      {cv:'cv-purple',n:snsReview,lbl:'Review Now'},
+      {cv:'cv-green',n:snsActive,lbl:'Active'},
+    ];
+    snsSumEl.innerHTML=cards.map(c=>`<div class="sns-sum ${c.cv}">
+      <div class="sns-sum-n ${c.n===0?'dim':''}">${c.n}</div><div class="sns-sum-lbl">${c.lbl}</div></div>`).join('');
   }
 
   // Nav badge
   const nbSns=document.getElementById('nb-sns');
   if(nbSns)nbSns.textContent=needsCount;
 
-  // Overview S&S alerts — rebuilt for new workflow
-  const ovDiv=document.getElementById('ov-sns-alerts');
-  let snsActionCount=0;
-  if(ovDiv){
-    const rows=Object.keys(snsData).map(acc=>{
-      const s=calcSnsStatus(acc);
-      const d=snsData[acc]||{};
-      if(!d.editDay)return null;
-      const reviewStartFmt=fmt(addD(pd(d.editDay),3));
-      const reviewEndFmt=fmt(addD(pd(d.editDay),4));
-      if(s.status==='review'){
-        snsActionCount++;
-        return`<div class="oa-ov-card" onclick="go('sns')" style="border-color:var(--purple);background:rgba(162,89,255,.05)">
-          <span class="oa-ov-asin" style="color:var(--purple);font-family:var(--mono)">${acc}</span>
-          <span class="sns-status review" style="flex-shrink:0">Review Window</span>
-          <span class="oa-ov-note">Check prices &amp; profitability — ${reviewStartFmt}–${reviewEndFmt}</span>
-          <span class="oa-ov-arr" style="color:var(--purple)">→</span>
-        </div>`;
-      }
-      if(s.status==='edit-today'){
-        snsActionCount++;
-        return`<div class="oa-ov-card overdue" onclick="go('sns')">
-          <span class="oa-ov-asin" style="font-family:var(--mono)">${acc}</span>
-          <span class="sns-status edit-today" style="flex-shrink:0">Last Day to Add</span>
-          <span class="oa-ov-note">Today is the last day to add or amend items</span>
-          <span class="oa-ov-arr">→</span>
-        </div>`;
-      }
-      if(s.status==='needs'){
-        snsActionCount++;
-        return`<div class="oa-ov-card" onclick="go('sns')" style="border-color:var(--red)">
-          <span class="oa-ov-asin" style="font-family:var(--mono)">${acc}</span>
-          <span class="sns-status needs" style="flex-shrink:0">Set Next Cycle</span>
-          <span class="oa-ov-note">Cycle complete — enter next cycle dates</span>
-          <span class="oa-ov-arr">→</span>
-        </div>`;
-      }
-      return null;
-    }).filter(Boolean);
-
-    document.getElementById('kpi-sns-review').textContent=snsActionCount;
-    const snsSecEl=document.getElementById('ov-sns-sec');
-    if(snsSecEl)snsSecEl.style.display=rows.length?'flex':'none';
-    const snsCountEl=document.getElementById('ov-sns-cnt');
-    if(snsCountEl)snsCountEl.textContent=rows.length;
-    ovDiv.innerHTML=rows.length?rows.join(''):`<div class="empty">No S&amp;S actions required right now.</div>`;
-  }
-
-  // Persistent needs-dates popup
-  if(alertAccounts.length>0){
-    const list=document.getElementById('sns-needs-list');
-    if(list){
-      list.innerHTML=alertAccounts.map(a=>`<div class="sns-popup-acc-row">
-        <span class="sns-popup-acc-name">${a.acc}</span>
-        <span class="sns-popup-acc-type">${a.type==='no-data'?'No Data':'Needs Next Dates'}</span>
-        <button class="sns-act-btn edit-btn" style="margin-left:auto;font-size:10px" onclick="closeM('snsNeedsPopup');openSnsEdit('${a.acc}',true)">Enter Dates →</button>
-      </div>`).join('');
-    }
-    // Only show popup if not already dismissed this session
-    if(!window._snsPopupDismissed){
-      document.getElementById('snsNeedsPopup').classList.add('open');
-    }
-  }
-
-  // Review reminder popup — show once per session on review day
-  if(reviewAccounts.length>0&&!window._snsReviewShown){
-    window._snsReviewShown=true;
-    const msg=document.getElementById('sns-review-msg');
-    if(msg)msg.innerHTML=`<strong style="color:var(--text)">${reviewAccounts.join(', ')}</strong> — review window is open.<br><br>Check prices, profitability and competition. Decide what goes on the purchase sheet. Cancel anything that no longer makes sense.`;
-    document.getElementById('snsReviewPopup').classList.add('open');
-  }
+  // Action surfacing is handled by the Action Center + notifications.
+  refreshActionCenter();
 }
 
 function snsCheckAndDismiss(){
@@ -2894,7 +3766,7 @@ function snsCheckAndDismiss(){
   if(stillNeeds.length===0){
     window._snsPopupDismissed=true;
     document.getElementById('snsNeedsPopup').classList.remove('open');
-    toast('All Sub & Save dates are up to date ✓','ok');
+    toast('All Sub & Save dates are up to date','ok');
   } else {
     toast(`Still needs dates: ${stillNeeds.join(', ')}`, 'bad');
   }
@@ -2910,8 +3782,8 @@ function openSnsEdit(acc, isNextCycle){
 
 function saveSnsNextCycle(){
   const acc=gv('sns-edit-acc');
-  const newEdit=gv('sns-new-edit');
-  const newDel=gv('sns-new-delivery');
+  const newEdit=dmToISO(gv('sns-new-edit'),'future');
+  const newDel=dmToISO(gv('sns-new-delivery'),'future');
   const notes=gv('sns-new-notes');
   let ok=true;
   if(!newEdit){se('e-sns-edit',1);ok=false;}else se('e-sns-edit',0);
@@ -2934,7 +3806,7 @@ function saveSnsNextCycle(){
   window._snsPopupDismissed=false; // re-evaluate popup
   renderSns();
   render();
-  toast(`${acc} updated — previous cycle archived ✓`,'ok');
+  toast(`${acc} updated — previous cycle archived`,'ok');
 }
 
 const gv=id=>document.getElementById(id)?.value||'';
@@ -2945,6 +3817,9 @@ window.addEventListener('click',e=>{
   ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal','oaDetailModal'].forEach(id=>{
     if(e.target===document.getElementById(id))closeM(id);
   });
+  // Close notification panel when clicking outside it
+  const np=document.getElementById('notifPanel'), bw=document.querySelector('.bell-wrap');
+  if(np&&np.classList.contains('open')&&bw&&!bw.contains(e.target))np.classList.remove('open');
 });
 
 // ═══════════════════════════════════
@@ -2975,7 +3850,6 @@ function toggleSidebar(){
   renderNotes();
   renderSns();
   renderOA();
-  setTimeout(checkDay8Leads,600);
 })();
 </script>
 </body>
