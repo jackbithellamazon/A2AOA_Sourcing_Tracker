@@ -108,6 +108,7 @@ header{
 .kpi.blue{background:linear-gradient(135deg,var(--blue),var(--blue-d));}
 .kpi.amber{background:linear-gradient(135deg,var(--amber),var(--amber-d));}
 .kpi.teal{background:linear-gradient(135deg,var(--teal),var(--teal-d));}
+.kpi.purple{background:linear-gradient(135deg,var(--purple),var(--purple-d));}
 .kpi-num{font-size:30px;font-weight:700;line-height:1;margin-bottom:4px;}
 .kpi-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;opacity:.9;}
 
@@ -570,6 +571,7 @@ header{
 .sns-status.edit-today{background:rgba(255,69,96,.18);color:var(--red);animation:pulse 1.5s infinite;}
 .sns-status.needs{background:rgba(255,69,96,.2);color:var(--red);font-weight:700;}
 .sns-status.review{background:rgba(162,89,255,.15);color:var(--purple);}
+.sns-status.between{background:rgba(91,142,255,.1);color:var(--blue);}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
 .sns-act-btn{padding:5px 12px;border-radius:6px;border:none;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
@@ -696,27 +698,29 @@ header{
     <div id="overview" class="tc active">
       <div class="pg-title">Today's Actions</div>
       <div class="kpi-row">
-        <div class="kpi green" onclick="go('sourcing');ss('sec-ready')"><div class="kpi-num" id="kpi-action">0</div><div class="kpi-lbl">Action Today</div></div>
-        <div class="kpi blue"  onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-watching">0</div><div class="kpi-lbl">Watching</div></div>
-        <div class="kpi amber" onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-tomorrow">0</div><div class="kpi-lbl">Ready Tomorrow</div></div>
-        <div class="kpi teal"  onclick="go('sourcing');ss('sec-ltd')"><div class="kpi-num" id="kpi-ltdopen">0</div><div class="kpi-lbl">Buy Window Open</div></div>
+        <div class="kpi green"  onclick="go('sourcing');ss('sec-ready')"><div class="kpi-num" id="kpi-action">0</div><div class="kpi-lbl">Buy Today</div></div>
+        <div class="kpi teal"   onclick="go('sourcing');ss('sec-ltd')"><div class="kpi-num" id="kpi-ltdopen">0</div><div class="kpi-lbl">Buy Window</div></div>
+        <div class="kpi purple" onclick="go('sns')"><div class="kpi-num" id="kpi-sns-review">0</div><div class="kpi-lbl">S&amp;S Review</div></div>
+        <div class="kpi red"    onclick="go('oareplen')"><div class="kpi-num" id="kpi-oa-due">0</div><div class="kpi-lbl">OA Due</div></div>
+        <div class="kpi blue"   onclick="go('sourcing');ss('sec-watching')"><div class="kpi-num" id="kpi-watching">0</div><div class="kpi-lbl">Watching</div></div>
       </div>
 
-      <div class="sec nt"><span class="sec-t">Today's Priority — Click to Review & Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
+      <div class="sec nt"><span class="sec-t">Ready to Buy</span><span class="sec-pill" id="ov-p-cnt">0</span></div>
       <div class="tg" id="ov-priority"></div>
 
       <div class="sec"><span class="sec-t">Buy Window Open</span><span class="sec-pill" id="ov-l-cnt">0</span></div>
       <div class="tg" id="ov-ltd"></div>
 
-      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">Rebuys Ready</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
-      <div class="tg" id="ov-rebuy"></div>
-
-      <!-- S&S OVERVIEW ALERTS -->
+      <!-- S&S OVERVIEW -->
+      <div class="sec" id="ov-sns-sec"><span class="sec-t">Sub &amp; Save — Action Required</span><span class="sec-pill" id="ov-sns-cnt">0</span></div>
       <div id="ov-sns-alerts"></div>
 
       <!-- OA REPLEN OVERVIEW -->
-      <div class="sec" id="ov-oa-sec"><span class="sec-t">OA Replen — Due Today</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
+      <div class="sec" id="ov-oa-sec"><span class="sec-t">OA Replen — Due</span><span class="sec-pill" id="ov-oa-cnt">0</span></div>
       <div id="ov-oa-list"></div>
+
+      <div class="sec" id="ov-rebuy-sec"><span class="sec-t">Rebuys Ready</span><span class="sec-pill" id="ov-r-cnt">0</span></div>
+      <div class="tg" id="ov-rebuy"></div>
     </div>
 
     <!-- ══════════════ SOURCING ══════════════ -->
@@ -982,11 +986,11 @@ header{
           <thead>
             <tr>
               <th>Account</th>
-              <th>Edit Day</th>
-              <th>Review Date</th>
+              <th>Last Day to Add</th>
+              <th>Review Window</th>
               <th>Delivery</th>
               <th>Status</th>
-              <th>Action</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="sns-tbody"></tbody>
@@ -1354,9 +1358,9 @@ header{
     </div>
     <input type="hidden" id="sns-edit-acc">
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Current cycle will be archived to history. Enter the new dates below.</p>
-    <div class="g3">
+    <div class="g2">
       <div class="fg">
-        <label class="fl">Last Edit Day *</label>
+        <label class="fl">Last Day to Add *</label>
         <input class="fi" id="sns-new-edit" type="date">
         <div class="ferr" id="e-sns-edit">Required</div>
       </div>
@@ -1365,10 +1369,9 @@ header{
         <input class="fi" id="sns-new-delivery" type="date">
         <div class="ferr" id="e-sns-del">Required</div>
       </div>
-      <div class="fg">
-        <label class="fl">Review Date</label>
-        <input class="fi" id="sns-new-review" type="date">
-      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:12px;color:var(--muted)">
+      Review window auto-calculated: Last Day to Add +3 to +4 days
     </div>
     <div class="fg">
       <label class="fl">Notes (optional)</label>
@@ -2409,7 +2412,23 @@ function downloadExport(){
 // OA REPLEN
 // ═══════════════════════════════════
 const OAK='a2a_oa_v5';
-const loadOA=()=>{try{return JSON.parse(localStorage.getItem(OAK))||[];}catch{return[];}};
+const loadOA=()=>{
+  try{
+    const items=JSON.parse(localStorage.getItem(OAK))||[];
+    // Migrate: any item with no lastChecked gets today as first check
+    let changed=false;
+    items.forEach(item=>{
+      if(!item.lastChecked){
+        item.lastChecked=today().toISOString().split('T')[0];
+        item.checkLog=item.checkLog||[];
+        if(item.checkLog.length===0)item.checkLog.push({date:todayStr(),note:'Added — initial check'});
+        changed=true;
+      }
+    });
+    if(changed)localStorage.setItem(OAK,JSON.stringify(items));
+    return items;
+  }catch{return[];}
+};
 let oaItems=loadOA();
 
 function addOA(){
@@ -2509,14 +2528,19 @@ function isOASnoozed(item){
 }
 
 function calcOAStatus(item){
-  if(isOASnoozed(item))return{status:'snoozed',snoozedUntil:item.snoozedUntil};
-  if(!item.lastChecked)return{status:'never',daysSince:null};
+  if(isOASnoozed(item)){
+    const daysLeft=diff(today(),pd(item.snoozedUntil));
+    return{status:'snoozed',snoozedUntil:item.snoozedUntil,daysLeft};
+  }
+  // Treat no lastChecked as due now (migration handles it, but fallback)
+  if(!item.lastChecked)return{status:'due',daysSince:0};
   const now=today(),last=pd(item.lastChecked);
   const daysSince=diff(last,now);
   const freq=parseInt(item.freq)||7;
-  if(daysSince>freq+3)return{status:'overdue',daysSince};
-  if(daysSince>=freq)return{status:'due',daysSince};
-  return{status:'ok',daysSince,daysUntil:freq-daysSince};
+  const daysUntil=freq-daysSince;
+  if(daysSince>freq)return{status:'overdue',daysSince,daysUntil};
+  if(daysSince>=freq)return{status:'due',daysSince,daysUntil:0};
+  return{status:'ok',daysSince,daysUntil};
 }
 
 function snoozeOA(id,days,e){
@@ -2524,7 +2548,7 @@ function snoozeOA(id,days,e){
   const item=oaItems.find(x=>x.id===id);if(!item)return;
   item.snoozedUntil=addD(today(),days).toISOString().split('T')[0];
   localStorage.setItem(OAK,JSON.stringify(oaItems));
-  renderOA();toast(`${item.asin} snoozed ${days}d 💤`,'info');
+  renderOA();toast(`${item.asin} — next check in ${days}d`,'info');
 }
 
 function snoozeOAFromModal(days){
@@ -2539,12 +2563,13 @@ function openOADetail(id){
   const c=calcOAStatus(item);
   document.getElementById('oad-asin-title').textContent=item.asin;
   const statusBg={overdue:'var(--red)',due:'var(--amber)',ok:'var(--green)',never:'var(--border2)',snoozed:'var(--purple)'};
+  const nextChk=item.lastChecked?fmtLong(addD(pd(item.lastChecked),parseInt(item.freq)||7)):null;
   const statusTxt={
-    overdue:`Overdue — ${c.daysSince} days since last check`,
-    due:`⏰ Due — ${c.daysSince} days since last check`,
-    ok:`OK — check again in ${c.daysUntil} day${c.daysUntil!==1?'s':''}`,
-    never:'Not checked yet — press Log Check to record your first check',
-    snoozed:`Snoozed until ${fmtLong(pd(item.snoozedUntil))}`
+    overdue:`${c.daysSince} days overdue — was due ${nextChk||'—'}`,
+    due:`Due today — last checked ${fmtLong(pd(item.lastChecked))}`,
+    ok:`Next check: ${nextChk||'—'} (in ${c.daysUntil} day${c.daysUntil!==1?'s':''})`,
+    never:`Not yet checked — log first check below`,
+    snoozed:`Snoozed until ${fmtLong(pd(item.snoozedUntil))} (${c.daysLeft}d remaining)`
   };
   const bar=document.getElementById('oad-status-bar');
   bar.style.background=statusBg[c.status]||'var(--border2)';
@@ -2571,27 +2596,44 @@ function openOADetail(id){
 function buildOATile(item){
   const c=calcOAStatus(item);
   const cls=`oa-tile oa-${c.status}`;
-  let statusTxt='',meta='';
-  if(c.status==='overdue'){statusTxt=`${c.daysSince}d overdue`;meta=`Every ${item.freq||7}d`;}
-  else if(c.status==='due'){statusTxt=`⏰ Due now`;meta=`${c.daysSince}d since last check`;}
-  else if(c.status==='ok'){statusTxt=`Check in ${c.daysUntil}d`;meta=`Last: ${fmtShort(item.lastChecked)||'—'}`;}
-  else if(c.status==='snoozed'){statusTxt=`Until ${fmt(pd(item.snoozedUntil))}`;meta=`Every ${item.freq||7}d`;}
-  else{statusTxt='Not checked';meta=`Every ${item.freq||7}d`;}
 
-  const priceRow=item.current
-    ?`<div class="oa-tile-meta">£${item.current?.toFixed(2)} → £${item.target?.toFixed(2)} target</div>`
+  let headline='', subline='', urgency='';
+  const nextCheckDate=item.lastChecked?fmt(addD(pd(item.lastChecked),parseInt(item.freq)||7)):'—';
+
+  if(c.status==='overdue'){
+    headline=`${c.daysSince}d overdue`;
+    subline=`Was due ${nextCheckDate}`;
+    urgency='high';
+  } else if(c.status==='due'){
+    headline=`Due today`;
+    subline=`${c.daysSince}d since last check`;
+    urgency='high';
+  } else if(c.status==='snoozed'){
+    headline=`Check ${fmt(pd(item.snoozedUntil))}`;
+    subline=`Snoozed — ${c.daysLeft}d remaining`;
+    urgency='low';
+  } else {
+    // ok
+    headline=`Check ${nextCheckDate}`;
+    subline=`${c.daysUntil}d from now`;
+    urgency='none';
+  }
+
+  const priceHtml=item.current
+    ?`<div class="oa-tile-meta">£${item.current.toFixed(2)} now · £${item.target?.toFixed(2)||'?'} target</div>`
     :`<div class="oa-tile-meta">Target: £${item.target?.toFixed(2)||'—'}</div>`;
   const noteHtml=item.notes?`<div class="oa-tile-note">${item.notes}</div>`:'';
 
   return`<div class="${cls}" id="oa-${item.id}" onclick="openOADetail(${item.id})">
     <div class="oa-tile-asin">${item.asin}</div>
-    <div class="oa-tile-status">${statusTxt}</div>
-    ${priceRow}
+    <div class="oa-tile-status">${headline}</div>
+    <div class="oa-tile-meta" style="opacity:.85">${subline}</div>
+    ${priceHtml}
     ${noteHtml}
     <div class="oa-tbtns" onclick="event.stopPropagation()">
-      <button class="oa-tbtn" onclick="openOACheck(${item.id})">✓ Check</button>
+      <button class="oa-tbtn" onclick="openOACheck(${item.id})">Check</button>
       ${item.link?`<button class="oa-tbtn" onclick="window.open('${item.link}','_blank')">Source</button>`:''}
-      <button class="oa-tbtn" onclick="snoozeOA(${item.id},7,event)" title="Snooze 7 days">7d</button>
+      <button class="oa-tbtn" onclick="snoozeOA(${item.id},item.freq||7,event)">Snooze</button>
       <button class="oa-tbtn" onclick="openOAEdit(${item.id})">Edit</button>
     </div>
   </div>`;
@@ -2600,10 +2642,17 @@ function buildOATile(item){
 function renderOA(){
   const list=document.getElementById('oa-list');
   if(!list)return;
-  // Sort: overdue first, then due, then never, then snoozed, then ok
-  const order={overdue:0,due:1,never:2,ok:3,snoozed:4};
-  const sorted=[...oaItems].sort((a,b)=>
-    (order[calcOAStatus(a).status]??3)-(order[calcOAStatus(b).status]??3));
+  // Sort: overdue first (most overdue first), then due, then ok (soonest first), snoozed last
+  const statusOrder={overdue:0,due:1,ok:2,snoozed:3,never:2};
+  const sorted=[...oaItems].sort((a,b)=>{
+    const ca=calcOAStatus(a), cb=calcOAStatus(b);
+    const oa=statusOrder[ca.status]??2, ob=statusOrder[cb.status]??2;
+    if(oa!==ob)return oa-ob;
+    // Within same status: overdue = most overdue first; ok = soonest check first
+    if(ca.status==='overdue')return (cb.daysSince||0)-(ca.daysSince||0);
+    if(ca.status==='ok')return (ca.daysUntil||0)-(cb.daysUntil||0);
+    return 0;
+  });
   list.innerHTML=sorted.map(buildOATile).join('')||emp('No OA Replen items yet. Add one above.');
 
   // Badge = due + overdue count
@@ -2612,22 +2661,36 @@ function renderOA(){
   const nbEl=document.getElementById('nb-oa');
   if(cntEl)cntEl.textContent=dueCount||oaItems.length;
   if(nbEl)nbEl.textContent=dueCount||oaItems.length;
+  document.getElementById('kpi-oa-due')?.textContent;
 
-  // Overview section
+  // Overview — overdue + due + coming within 2 days
   const ovList=document.getElementById('ov-oa-list');
   const ovCnt=document.getElementById('ov-oa-cnt');
-  const dueItems=sorted.filter(i=>{const s=calcOAStatus(i).status;return s==='due'||s==='overdue';});
-  if(ovCnt)ovCnt.textContent=dueItems.length;
+  const actionItems=sorted.filter(i=>{
+    const s=calcOAStatus(i);
+    return s.status==='overdue'||s.status==='due'||(s.status==='ok'&&(s.daysUntil||99)<=2);
+  });
+  if(ovCnt)ovCnt.textContent=actionItems.length;
+  const kpiOaDue=document.getElementById('kpi-oa-due');
+  if(kpiOaDue)kpiOaDue.textContent=actionItems.length;
+  const oaSecEl=document.getElementById('ov-oa-sec');
+  if(oaSecEl)oaSecEl.style.display=actionItems.length?'flex':'none';
   if(ovList){
-    ovList.innerHTML=dueItems.length===0
-      ?emp('No OA items due for checking.')
-      :dueItems.map(item=>{
-          const c=calcOAStatus(item);
-          return`<div class="oa-ov-card ${c.status}" onclick="go('oareplen');setTimeout(()=>{document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
+    ovList.innerHTML=actionItems.length===0
+      ?`<div class="empty">No OA Replen checks due.</div>`
+      :actionItems.map(item=>{
+          const cs=calcOAStatus(item);
+          const borderCol=cs.status==='overdue'?'var(--red)':cs.status==='due'?'var(--amber)':'var(--border2)';
+          const label=cs.status==='overdue'
+            ?`<span style="color:var(--red);font-weight:700;font-size:11px;flex-shrink:0">${cs.daysSince}d overdue</span>`
+            :cs.status==='due'
+            ?`<span style="color:var(--amber);font-weight:700;font-size:11px;flex-shrink:0">Due today</span>`
+            :`<span style="color:var(--text2);font-size:11px;flex-shrink:0">Due in ${cs.daysUntil}d</span>`;
+          return`<div class="oa-ov-card" style="border-color:${borderCol};cursor:pointer" onclick="go('oareplen');setTimeout(()=>{document.getElementById('oa-${item.id}')?.scrollIntoView({behavior:'smooth',block:'center'})},120)">
             <span class="oa-ov-asin">${item.asin}</span>
-            <span class="oa-ov-days ${c.status}">${c.status==='overdue'?`${c.daysSince}d overdue`:`⏰ ${c.daysSince}d since check`}</span>
-            <span class="oa-ov-note">${item.notes||'No notes'}</span>
-            <span class="oa-ov-arr">→</span>
+            ${label}
+            <span class="oa-ov-note">${item.notes||'—'}</span>
+            <button class="oa-tbtn" style="flex:0;padding:4px 10px;font-size:10px;border-radius:5px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);cursor:pointer;white-space:nowrap" onclick="event.stopPropagation();openOACheck(${item.id})">Log Check</button>
           </div>`;
         }).join('');
   }
@@ -2656,24 +2719,28 @@ function saveSns(){sv2(SNSK,snsData);sv2(SNSHK,snsHist);}
 
 function calcSnsStatus(acc){
   const d=snsData[acc];
-  if(!d||!d.editDay)return{status:'no-data',daysLeft:null};
+  if(!d||!d.editDay)return{status:'no-data'};
   const now=today(),editD=pd(d.editDay),delivD=pd(d.deliveryDay);
-  const reviewD=d.reviewDate?pd(d.reviewDate):null;
+  // Review window = editDay +3 to editDay +4 (fixed)
+  const reviewStart=addD(editD,3);
+  const reviewEnd=addD(editD,4);
   const daysToEdit=diff(now,editD);
-  // Review date check — this is when you actually want to action it
-  if(reviewD){
-    const daysToReview=diff(now,reviewD);
-    if(daysToReview===0)return{status:'review-day',daysLeft:0,editD,delivD,reviewD};
-    if(daysToReview<0&&daysToEdit>=0)return{status:'review-day',daysLeft:daysToReview,editD,delivD,reviewD};
-  } else {
-    // fallback: day after edit = review
-    const dayAfterEdit=addD(editD,1);
-    if(diff(now,dayAfterEdit)===0)return{status:'review-day',daysLeft:0,editD,delivD};
-  }
-  if(daysToEdit<0)return{status:'needs',daysLeft:daysToEdit,editD,delivD};
-  if(daysToEdit===0)return{status:'edit-today',daysLeft:0,editD,delivD};
-  if(daysToEdit<=3)return{status:'soon',daysLeft:daysToEdit,editD,delivD};
-  return{status:'active',daysLeft:daysToEdit,editD,delivD};
+  const daysToReviewStart=diff(now,reviewStart);
+  const daysToDelivery=diff(now,delivD);
+  // Past delivery — needs next cycle dates
+  if(daysToDelivery<-1)return{status:'needs',editD,delivD,reviewStart,reviewEnd};
+  // In review window (editDay+3 or editDay+4)
+  if(daysToReviewStart<=0 && diff(now,reviewEnd)>=0)
+    return{status:'review',daysToEdit,editD,delivD,reviewStart,reviewEnd};
+  // Edit day
+  if(daysToEdit===0)return{status:'edit-today',editD,delivD,reviewStart,reviewEnd};
+  // Edit day passed, not in review window yet
+  if(daysToEdit<0 && daysToReviewStart>0)
+    return{status:'between',daysToEdit,daysToReviewStart,editD,delivD,reviewStart,reviewEnd};
+  // Edit day coming up soon (within 3 days)
+  if(daysToEdit<=3)return{status:'soon',daysToEdit,editD,delivD,reviewStart,reviewEnd};
+  // Active — normal state
+  return{status:'active',daysToEdit,editD,delivD,reviewStart,reviewEnd};
 }
 
 function renderSns(){
@@ -2686,41 +2753,40 @@ function renderSns(){
   tbody.innerHTML=SNS_ACCOUNTS.map(acc=>{
     const c=calcSnsStatus(acc);
     const d=snsData[acc]||{};
-    let statusHtml='',daysHtml='',actionHtml='';
+    let statusHtml='',actionHtml='';
 
     if(c.status==='no-data'){
-      statusHtml=`<span class="sns-status needs">No Data</span>`;
-      daysHtml=`<span style="color:var(--muted)">—</span>`;
-      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Dates</button>`;
+      statusHtml=`<span class="sns-status needs">No Dates Set</span>`;
+      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Set Dates</button>`;
       needsCount++;alertAccounts.push({acc,type:'no-data'});
     } else if(c.status==='needs'){
-      statusHtml=`<span class="sns-status needs">Needs Next Dates</span>`;
-      daysHtml=`<span style="color:var(--red);font-weight:700">Passed</span>`;
+      statusHtml=`<span class="sns-status needs">Set Next Cycle</span>`;
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
       needsCount++;alertAccounts.push({acc,type:'needs'});
     } else if(c.status==='edit-today'){
-      statusHtml=`<span class="sns-status edit-today">Edit Today</span>`;
-      daysHtml=`<span style="color:var(--red);font-weight:700">Today</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
-    } else if(c.status==='review-day'){
-      statusHtml=`<span class="sns-status review">Review Day</span>`;
-      daysHtml=`<span style="color:#c4b5fd;font-weight:700">Check &amp; Cancel</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" style="background:var(--purple)" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
+      statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
+    } else if(c.status==='review'){
+      statusHtml=`<span class="sns-status review">Review Window</span>`;
+      actionHtml=`<button class="sns-act-btn next-btn" style="background:rgba(162,89,255,.25);color:var(--purple)" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
       reviewAccounts.push(acc);
+    } else if(c.status==='between'){
+      statusHtml=`<span class="sns-status between">Review in ${c.daysToReviewStart}d</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
     } else if(c.status==='soon'){
-      statusHtml=`<span class="sns-status soon">Edit Soon</span>`;
-      daysHtml=`<span style="color:#f5c056;font-weight:700">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+      statusHtml=`<span class="sns-status soon">Add in ${c.daysToEdit}d</span>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
     } else {
       statusHtml=`<span class="sns-status active">Active</span>`;
-      daysHtml=`<span style="color:var(--green);font-weight:600">${c.daysLeft} day${c.daysLeft!==1?'s':''}</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
     }
 
+    const reviewStartFmt=d.editDay?fmt(addD(pd(d.editDay),3)):'—';
+    const reviewEndFmt=d.editDay?fmt(addD(pd(d.editDay),4)):'—';
     return`<tr>
       <td><span class="sns-acc">${acc}</span></td>
       <td><span class="sns-date">${d.editDay?fmtLong(pd(d.editDay)):'—'}</span></td>
-      <td><span class="sns-date" style="color:${d.reviewDate?'var(--amber)':'var(--muted)'}">${d.reviewDate?fmtLong(pd(d.reviewDate)):'Not set'}</span></td>
+      <td><span class="sns-date" style="color:var(--amber)">${d.editDay?reviewStartFmt+' – '+reviewEndFmt:'—'}</span></td>
       <td><span class="sns-date">${d.deliveryDay?fmtLong(pd(d.deliveryDay)):'—'}</span></td>
       <td>${statusHtml}</td>
       <td>${actionHtml}</td>
@@ -2746,31 +2812,52 @@ function renderSns(){
   const nbSns=document.getElementById('nb-sns');
   if(nbSns)nbSns.textContent=needsCount;
 
-  // Overview S&S alerts
+  // Overview S&S alerts — rebuilt for new workflow
   const ovDiv=document.getElementById('ov-sns-alerts');
+  let snsActionCount=0;
   if(ovDiv){
-    let alertHtml='';
-    if(alertAccounts.length>0){
-      alertHtml+=`<div class="sns-alert-banner" onclick="go('sns')">
-        <div class="sns-alert-icon">⚠️</div>
-        <div class="sns-alert-text">
-          <div class="sns-alert-title">Subscribe &amp; Save — ${needsCount} account${needsCount!==1?'s':''} need${needsCount===1?'s':''} next cycle dates</div>
-          <div class="sns-alert-sub">${alertAccounts.map(a=>a.acc).join(', ')} — click to update</div>
-        </div>
-        <div class="sns-alert-arrow">→</div>
-      </div>`;
-    }
-    if(reviewAccounts.length>0){
-      alertHtml+=`<div class="sns-alert-banner amber" onclick="document.getElementById('snsReviewPopup').classList.add('open')">
-        <div class="sns-alert-icon">📋</div>
-        <div class="sns-alert-text">
-          <div class="sns-alert-title">Sub &amp; Save Review Day — ${reviewAccounts.join(', ')}</div>
-          <div class="sns-alert-sub">Last edit was yesterday — check prices, cancel if needed. Dispatches tomorrow.</div>
-        </div>
-        <div class="sns-alert-arrow">→</div>
-      </div>`;
-    }
-    ovDiv.innerHTML=alertHtml;
+    const rows=Object.keys(snsData).map(acc=>{
+      const s=calcSnsStatus(acc);
+      const d=snsData[acc]||{};
+      if(!d.editDay)return null;
+      const reviewStartFmt=fmt(addD(pd(d.editDay),3));
+      const reviewEndFmt=fmt(addD(pd(d.editDay),4));
+      if(s.status==='review'){
+        snsActionCount++;
+        return`<div class="oa-ov-card" onclick="go('sns')" style="border-color:var(--purple);background:rgba(162,89,255,.05)">
+          <span class="oa-ov-asin" style="color:var(--purple);font-family:var(--mono)">${acc}</span>
+          <span class="sns-status review" style="flex-shrink:0">Review Window</span>
+          <span class="oa-ov-note">Check prices &amp; profitability — ${reviewStartFmt}–${reviewEndFmt}</span>
+          <span class="oa-ov-arr" style="color:var(--purple)">→</span>
+        </div>`;
+      }
+      if(s.status==='edit-today'){
+        snsActionCount++;
+        return`<div class="oa-ov-card overdue" onclick="go('sns')">
+          <span class="oa-ov-asin" style="font-family:var(--mono)">${acc}</span>
+          <span class="sns-status edit-today" style="flex-shrink:0">Last Day to Add</span>
+          <span class="oa-ov-note">Today is the last day to add or amend items</span>
+          <span class="oa-ov-arr">→</span>
+        </div>`;
+      }
+      if(s.status==='needs'){
+        snsActionCount++;
+        return`<div class="oa-ov-card" onclick="go('sns')" style="border-color:var(--red)">
+          <span class="oa-ov-asin" style="font-family:var(--mono)">${acc}</span>
+          <span class="sns-status needs" style="flex-shrink:0">Set Next Cycle</span>
+          <span class="oa-ov-note">Cycle complete — enter next cycle dates</span>
+          <span class="oa-ov-arr">→</span>
+        </div>`;
+      }
+      return null;
+    }).filter(Boolean);
+
+    document.getElementById('kpi-sns-review').textContent=snsActionCount;
+    const snsSecEl=document.getElementById('ov-sns-sec');
+    if(snsSecEl)snsSecEl.style.display=rows.length?'flex':'none';
+    const snsCountEl=document.getElementById('ov-sns-cnt');
+    if(snsCountEl)snsCountEl.textContent=rows.length;
+    ovDiv.innerHTML=rows.length?rows.join(''):`<div class="empty">No S&amp;S actions required right now.</div>`;
   }
 
   // Persistent needs-dates popup
@@ -2793,7 +2880,7 @@ function renderSns(){
   if(reviewAccounts.length>0&&!window._snsReviewShown){
     window._snsReviewShown=true;
     const msg=document.getElementById('sns-review-msg');
-    if(msg)msg.innerHTML=`<strong style="color:var(--text)">${reviewAccounts.join(', ')}</strong> had their last edit day yesterday. Money goes out <strong style="color:#c4b5fd">today</strong>. Dispatches <strong style="color:var(--red)">tomorrow</strong>.<br><br>This is your final window to cancel anything you're not happy with.`;
+    if(msg)msg.innerHTML=`<strong style="color:var(--text)">${reviewAccounts.join(', ')}</strong> — review window is open.<br><br>Check prices, profitability and competition. Decide what goes on the purchase sheet. Cancel anything that no longer makes sense.`;
     document.getElementById('snsReviewPopup').classList.add('open');
   }
 }
@@ -2841,8 +2928,7 @@ function saveSnsNextCycle(){
   }
 
   // Set new active
-  const newReview=gv('sns-new-review');
-  snsData[acc]={editDay:newEdit,deliveryDay:newDel,reviewDate:newReview||null};
+  snsData[acc]={editDay:newEdit,deliveryDay:newDel};
   saveSns();
   closeM('snsEditModal');
   window._snsPopupDismissed=false; // re-evaluate popup
