@@ -1041,6 +1041,28 @@ header{
 .ltbl-btn.buy{color:var(--green);border-color:color-mix(in srgb,var(--green) 35%,transparent);}
 .ltbl-btn.buy:hover{background:var(--green);color:#06121a;}
 @media(max-width:760px){.src-toolbar{flex-direction:column;align-items:stretch;}.src-ctrls{justify-content:space-between;}}
+
+/* ═══ S&S readability + per-account lead-time editor ═══ */
+.sns-next{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.4;max-width:340px;}
+.sns-row-act td{background:color-mix(in srgb,var(--red) 6%,transparent);}
+tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
+.sns-act-btn.edit-btn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2)!important;animation:none!important;font-weight:600;}
+.sns-act-btn.edit-btn:hover{color:var(--text)!important;border-color:var(--blue)!important;}
+
+.lt-edit-btn{background:var(--bg);border:1.5px solid var(--border2);color:var(--text2);font-family:var(--dm);
+  font-size:11.5px;font-weight:600;border-radius:8px;padding:7px 11px;cursor:pointer;transition:all .13s;}
+.lt-edit-btn:hover{color:var(--text);border-color:var(--blue);}
+.lt-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.lt-row:last-child{border-bottom:none;}
+.lt-acc{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;width:60px;}
+.lt-acc-input{width:70px!important;text-align:center;padding:7px!important;}
+.lt-unit{font-size:12px;color:var(--text3);}
+
+/* sharper ASIN legibility on Action Center + notifications */
+.aq-asin{font-weight:600!important;color:#fff!important;font-size:14px!important;letter-spacing:.3px;}
+.notif-it-title{color:#fff!important;}
+.sched-row-asin{color:#fff!important;font-weight:600!important;}
+.ltbl-buy{letter-spacing:.4px;}
 </style>
 </head>
 <body>
@@ -1147,7 +1169,8 @@ header{
         <div class="strat-bar-grp">
           <span class="strat-bar-lbl">Buy → live on Amazon</span>
           <input class="fi lt-input" id="lt-input" type="number" min="1" max="60" onchange="setLeadTime(this.value)">
-          <span class="strat-bar-unit">days lead time</span>
+          <span class="strat-bar-unit">days default</span>
+          <button class="lt-edit-btn" onclick="openLeadTimes()">Per-account…</button>
         </div>
       </div>
 
@@ -1197,6 +1220,14 @@ header{
                 <option value="VAA">VAA</option>
                 <option value="VAS">VAS</option>
                 <option value="Discord Group">Discord Group</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Send-to Account</label>
+              <select class="fs" id="s-account">
+                <option value="">-- Default lead time --</option>
+                <option value="EU01">EU01</option><option value="EU02">EU02</option><option value="EU03">EU03</option>
+                <option value="Biz1">Biz1</option><option value="Biz2">Biz2</option><option value="Biz3">Biz3</option>
               </select>
             </div>
           </div>
@@ -1460,8 +1491,8 @@ header{
       <div class="purpose">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <div>
-          <div class="purpose-t">Action-first view</div>
-          <div class="purpose-s">Accounts needing attention sort to the top. Review windows and last-add days surface on the Action Center and in notifications — you only need to look when something's due.</div>
+          <div class="purpose-t">Set the dates once — they roll forward every month</div>
+          <div class="purpose-s">Your monthly cycle dates are fixed, so you enter them once per account and the app advances them automatically each month. Accounts needing attention sort to the top; review windows and last-add days surface on the Action Center. You only ever come here to act on a review, or to correct a date.</div>
         </div>
       </div>
 
@@ -1603,6 +1634,13 @@ header{
         </select>
       </div>
       <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+    </div>
+    <div class="fg"><label class="fl">Send-to Account (lead-time)</label>
+      <select class="fs" id="em-account">
+        <option value="">-- Default lead time --</option>
+        <option value="EU01">EU01</option><option value="EU02">EU02</option><option value="EU03">EU03</option>
+        <option value="Biz1">Biz1</option><option value="Biz2">Biz2</option><option value="Biz3">Biz3</option>
+      </select>
     </div>
     <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
@@ -1955,6 +1993,19 @@ header{
 
 <div class="toast" id="toast"></div>
 
+<!-- PER-ACCOUNT LEAD TIME MODAL -->
+<div class="mbg" id="ltModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mhd">
+      <span class="mt">Buy → Live, per account</span>
+      <button class="mx" onclick="closeM('ltModal')">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.5">Days from purchase to live on Amazon for each account (delivery + prep + send-in). Blank = use the default. A lead's est. live date uses its send-to account's time.</p>
+    <div id="lt-rows"></div>
+    <button class="mbtn save" style="width:100%;margin-top:8px" onclick="closeM('ltModal')">Done</button>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════
 // STORAGE
@@ -1991,7 +2042,8 @@ const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term
 // SETTINGS — buy-timing model
 // ═══════════════════════════════════
 const SETK='a2a_settings_v5';
-let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1},ld(SETK)||{});
+let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{}},ld(SETK)||{});
+if(!settings.leadTimes)settings.leadTimes={};
 function saveSettings(){sv2(SETK,settings);}
 
 // ── Day/Month date entry (no year). Internal storage stays ISO yyyy-mm-dd ──
@@ -2034,7 +2086,8 @@ function calcBuyPlan(l){
   if(latestBuy&&recBuy>latestBuy)recBuy=latestBuy;
   if(recBuy<found)recBuy=found;
   const estDelivery=addD(recBuy,settings.deliveryDays||1);
-  const estLive=addD(recBuy,settings.leadToLive||8);
+  const lt=(l.account&&settings.leadTimes&&settings.leadTimes[l.account])||settings.leadToLive||8;
+  const estLive=addD(recBuy,lt);
   const daysToBuy=diff(now,recBuy);
   const validationAtBuy=Math.max(0,diff(drop,recBuy));
   const valShort=Math.max(0,7-validationAtBuy);
@@ -2085,6 +2138,23 @@ function buyPlanAdvice(p){
 function setGlobalStrategy(s){settings.strategy=s;saveSettings();render();}
 function setLeadTime(v){const n=parseInt(v);if(n>=1&&n<=60){settings.leadToLive=n;saveSettings();render();}}
 function setLeadStrategy(id,s){const l=leads.find(x=>x.id===id);if(!l)return;l.strategy=s;l.updatedAt=todayStr();sv2(SK,leads);render();openLead(id);}
+function openLeadTimes(){
+  const accs=['EU01','EU02','EU03','Biz1','Biz2','Biz3'];
+  document.getElementById('lt-rows').innerHTML=accs.map(a=>`
+    <div class="lt-row">
+      <span class="lt-acc">${a}</span>
+      <input class="fi lt-acc-input" type="number" min="1" max="60" placeholder="${settings.leadToLive}"
+        value="${settings.leadTimes[a]||''}" onchange="setAccountLeadTime('${a}',this.value)">
+      <span class="lt-unit">days</span>
+    </div>`).join('');
+  openM('ltModal');
+}
+function setAccountLeadTime(acc,v){
+  const n=parseInt(v);
+  if(!v||isNaN(n)){delete settings.leadTimes[acc];}
+  else if(n>=1&&n<=60){settings.leadTimes[acc]=n;}
+  saveSettings();render();
+}
 
 // ═══════════════════════════════════
 // LEAD CALC
@@ -2412,11 +2482,11 @@ function addLead(){
 
   const doAdd=()=>{
     leads.push({id:Date.now(),asin,market,type,dateDropped:dateD,dateFound:foundD,cog:cog?parseFloat(cog):null,
-      comp:comp?parseInt(comp):null,src:src||null,endDate:end||null,oaLink:oaLink||null,
+      comp:comp?parseInt(comp):null,src:src||null,account:gv('s-account')||null,endDate:end||null,oaLink:oaLink||null,
       notes,bought:false,snoozed:false,snoozeUntil:null,updatedAt:todayStr()});
     sv2(SK,leads);
     ['s-asin','s-cog','s-comp','s-oa','s-notes','s-found'].forEach(i=>sv(i,''));
-    ['s-type','s-date','s-end','s-market','s-src'].forEach(i=>sv(i,''));
+    ['s-type','s-date','s-end','s-market','s-src','s-account'].forEach(i=>sv(i,''));
     document.getElementById('s-amzlink').value='';
     document.getElementById('bw-preview').style.display='none';
     document.getElementById('oa-row').style.display='none';
@@ -2473,6 +2543,7 @@ function openLead(id){
       <div class="ld-f"><div class="ld-fl">COG</div><div class="ld-fv">${l.cog?'£'+l.cog.toFixed(2):'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">Competitors</div><div class="ld-fv">${compTxt||'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A (7DD)'}</div></div>
+      <div class="ld-f"><div class="ld-fl">Send-to Account</div><div class="ld-fv">${l.account?`${l.account} (${(settings.leadTimes&&settings.leadTimes[l.account])||settings.leadToLive}d to live)`:`Default (${settings.leadToLive}d)`}</div></div>
       <div class="ld-f"><div class="ld-fl">Recommended Buy</div><div class="ld-fv">${p.recBuy?fmtLong(p.recBuy):'—'}</div></div>
     </div>
     ${l.notes?`<div class="ld-notes">${l.notes}</div>`:''}
@@ -2510,7 +2581,7 @@ function openEdit(id){
   editId=id;
   sv('em-id',id);sv('em-asin',l.asin);sv('em-market',l.market||'amazon.co.uk');
   sv('em-type',l.type||'A2A');sv('em-cog',l.cog||'');sv('em-comp',l.comp!=null?l.comp:'');
-  sv('em-src',l.src||'');sv('em-end',isoToDM(l.endDate));sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
+  sv('em-src',l.src||'');sv('em-end',isoToDM(l.endDate));sv('em-account',l.account||'');sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
   openM('editModal');
 }
 function saveEdit(){
@@ -2518,7 +2589,7 @@ function saveEdit(){
   l.market=gv('em-market');l.type=gv('em-type');l.src=gv('em-src')||null;
   l.cog=gv('em-cog')?parseFloat(gv('em-cog')):null;
   l.comp=gv('em-comp')!==''?parseInt(gv('em-comp')):null;
-  l.endDate=dmToISO(gv('em-end'),'future')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
+  l.endDate=dmToISO(gv('em-end'),'future')||null;l.account=gv('em-account')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
   l.updatedAt=todayStr();
   sv2(SK,leads);closeM('editModal');render();toast('Saved','ok');
 }
@@ -2829,10 +2900,10 @@ const scrollTo_=id=>setTimeout(()=>document.getElementById(id)?.scrollIntoView({
 function leadLinks(l){
   return `<button class="aq-link" onclick="event.stopPropagation();window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>`+
          `<button class="aq-link" onclick="event.stopPropagation();window.open('${sasUrl(l.asin)}','_blank')">SAS</button>`+
-         (l.oaLink?`<button class="aq-link" onclick="event.stopPropagation();window.open('${l.oaLink}','_blank')">SRC</button>`:'');
+         (l.oaLink?`<button class="aq-link" onclick="event.stopPropagation();window.open('${l.oaLink}','_blank')">Source</button>`:'');
 }
 function oaLinks(i){
-  return (i.link?`<button class="aq-link" onclick="event.stopPropagation();window.open('${i.link}','_blank')">SRC</button>`:'')+
+  return (i.link?`<button class="aq-link" onclick="event.stopPropagation();window.open('${i.link}','_blank')">Source</button>`:'')+
          `<button class="aq-link" onclick="event.stopPropagation();window.open('${sasUrl(i.asin)}','_blank')">SAS</button>`;
 }
 
@@ -2887,10 +2958,6 @@ function computeActions(){
       A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S REVIEW',title:acc,
         sub:`Check prices & profitability · ${fmt(addD(pd(d.editDay),3))}–${fmt(addD(pd(d.editDay),4))}`,
         jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
-    } else if(s.status==='needs'){
-      A.push({key:'snsn-'+acc,cat:'sns',priority:7,color:'blue',chip:'S&S SET CYCLE',title:acc,
-        sub:'Cycle complete — enter next cycle dates',jump:`openSnsEdit('${acc}',true)`,
-        primary:{label:'Set Dates',fn:`openSnsEdit('${acc}',true)`},links:''});
     }
   });
   // Rebuy
@@ -3660,9 +3727,6 @@ function calcSnsStatus(acc){
   const reviewEnd=addD(editD,4);
   const daysToEdit=diff(now,editD);
   const daysToReviewStart=diff(now,reviewStart);
-  const daysToDelivery=diff(now,delivD);
-  // Past delivery — needs next cycle dates
-  if(daysToDelivery<-1)return{status:'needs',editD,delivD,reviewStart,reviewEnd};
   // In review window (editDay+3 or editDay+4)
   if(daysToReviewStart<=0 && diff(now,reviewEnd)>=0)
     return{status:'review',daysToEdit,editD,delivD,reviewStart,reviewEnd};
@@ -3677,56 +3741,83 @@ function calcSnsStatus(acc){
   return{status:'active',daysToEdit,editD,delivD,reviewStart,reviewEnd};
 }
 
+// ── Fixed monthly cycles auto-roll: dates never need re-entering ──
+function isoOf(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
+function monthDate(y,m,day){const dim=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(day,dim));}
+function snsCurrentCycle(dayE,dayD,now){
+  for(let m=-1;m<14;m++){
+    const ed=monthDate(now.getFullYear(),now.getMonth()+m,dayE);
+    const dl=monthDate(ed.getFullYear(),ed.getMonth()+(dayD>=dayE?0:1),dayD);
+    if(diff(now,dl)>=-1)return{editDay:isoOf(ed),deliveryDay:isoOf(dl)};
+  }
+  return null;
+}
+function advanceSnsCycles(){
+  let changed=false;
+  Object.keys(snsData).forEach(acc=>{
+    const d=snsData[acc];if(!d||!d.editDay||!d.deliveryDay)return;
+    const ed=pd(d.editDay),dl=pd(d.deliveryDay);if(!ed||!dl)return;
+    const cur=snsCurrentCycle(ed.getDate(),dl.getDate(),today());
+    if(cur&&(cur.editDay!==d.editDay||cur.deliveryDay!==d.deliveryDay)){
+      snsData[acc]={...d,editDay:cur.editDay,deliveryDay:cur.deliveryDay};changed=true;
+    }
+  });
+  if(changed)sv2(SNSK,snsData);
+}
+
 function renderSns(){
+  advanceSnsCycles();
   const tbody=document.getElementById('sns-tbody');
   if(!tbody)return;
 
   let needsCount=0, alertAccounts=[], reviewAccounts=[];
 
   // Sort action-needed accounts to the top
-  const SNS_ORDER={'edit-today':0,'needs':1,'no-data':1,'review':2,'between':3,'soon':4,'active':5};
+  const SNS_ORDER={'edit-today':0,'no-data':1,'review':2,'between':3,'soon':4,'active':5};
   const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>
     (SNS_ORDER[calcSnsStatus(a).status]??5)-(SNS_ORDER[calcSnsStatus(b).status]??5));
 
   tbody.innerHTML=sortedAccs.map(acc=>{
     const c=calcSnsStatus(acc);
     const d=snsData[acc]||{};
-    let statusHtml='',actionHtml='';
+    let statusHtml='',actionHtml='',rowCls='',next='';
 
     if(c.status==='no-data'){
       statusHtml=`<span class="sns-status needs">No Dates Set</span>`;
+      next='Set the monthly dates once — they roll forward automatically after that';
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Set Dates</button>`;
-      needsCount++;alertAccounts.push({acc,type:'no-data'});
-    } else if(c.status==='needs'){
-      statusHtml=`<span class="sns-status needs">Set Next Cycle</span>`;
-      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
-      needsCount++;alertAccounts.push({acc,type:'needs'});
+      needsCount++;alertAccounts.push({acc,type:'no-data'});rowCls='sns-row-act';
     } else if(c.status==='edit-today'){
       statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
+      next='Add or amend items today — final chance this cycle';rowCls='sns-row-act';
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
     } else if(c.status==='review'){
       statusHtml=`<span class="sns-status review">Review Window</span>`;
-      actionHtml=`<button class="sns-act-btn next-btn" style="background:rgba(162,89,255,.25);color:var(--purple)" onclick="openSnsEdit('${acc}',true)">Add Next Cycle</button>`;
+      next='Check prices, profit & competition now — decide keep / cancel / amend';rowCls='sns-row-act';
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
       reviewAccounts.push(acc);
     } else if(c.status==='between'){
       statusHtml=`<span class="sns-status between">Review in ${c.daysToReviewStart}d</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
+      next=`Review window opens ${fmt(c.reviewStart)} — nothing to do yet`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
     } else if(c.status==='soon'){
       statusHtml=`<span class="sns-status soon">Add in ${c.daysToEdit}d</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
+      next=`Last day to add is ${fmt(c.editD)} — get items in before then`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
     } else {
       statusHtml=`<span class="sns-status active">Active</span>`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Update</button>`;
+      next=`Nothing due — next add-by ${fmt(c.editD)}`;
+      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
     }
 
     const reviewStartFmt=d.editDay?fmt(addD(pd(d.editDay),3)):'—';
     const reviewEndFmt=d.editDay?fmt(addD(pd(d.editDay),4)):'—';
-    return`<tr>
+    return`<tr class="${rowCls}">
       <td><span class="sns-acc">${acc}</span></td>
       <td><span class="sns-date">${d.editDay?fmtLong(pd(d.editDay)):'—'}</span></td>
       <td><span class="sns-date" style="color:var(--amber)">${d.editDay?reviewStartFmt+' – '+reviewEndFmt:'—'}</span></td>
       <td><span class="sns-date">${d.deliveryDay?fmtLong(pd(d.deliveryDay)):'—'}</span></td>
-      <td>${statusHtml}</td>
+      <td>${statusHtml}<div class="sns-next">${next}</div></td>
       <td>${actionHtml}</td>
     </tr>`;
   }).join('');
@@ -3735,13 +3826,13 @@ function renderSns(){
   // Summary strip (action-first)
   let snsNeeds=0,snsReview=0,snsActive=0;
   SNS_ACCOUNTS.forEach(acc=>{const st=calcSnsStatus(acc).status;
-    if(st==='no-data'||st==='needs')snsNeeds++;
+    if(st==='no-data')snsNeeds++;
     else if(st==='review')snsReview++;
     else snsActive++;});
   const snsSumEl=document.getElementById('sns-summary');
   if(snsSumEl){
     const cards=[
-      {cv:'cv-red',n:snsNeeds,lbl:'Needs Dates'},
+      {cv:'cv-red',n:snsNeeds,lbl:'Not Set'},
       {cv:'cv-purple',n:snsReview,lbl:'Review Now'},
       {cv:'cv-green',n:snsActive,lbl:'Active'},
     ];
@@ -3761,7 +3852,7 @@ function snsCheckAndDismiss(){
   // Re-check — if all resolved, close popup
   const stillNeeds=SNS_ACCOUNTS.filter(acc=>{
     const c=calcSnsStatus(acc);
-    return c.status==='needs'||c.status==='no-data';
+    return c.status==='no-data';
   });
   if(stillNeeds.length===0){
     window._snsPopupDismissed=true;
@@ -3846,6 +3937,7 @@ function toggleSidebar(){
   const now=new Date();
   const msUntilMidnight=(new Date(now.getFullYear(),now.getMonth(),now.getDate()+1)-now);
   setTimeout(()=>{updateDate();setInterval(updateDate,86400000);},msUntilMidnight);
+  advanceSnsCycles();
   render();
   renderNotes();
   renderSns();
