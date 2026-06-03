@@ -1044,6 +1044,8 @@ header{
 
 /* ═══ S&S readability + per-account lead-time editor ═══ */
 .sns-next{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.4;max-width:340px;}
+.sns-sub{font-size:10.5px;color:var(--text2);margin-top:3px;}
+.sns-dim{font-size:12px;color:var(--muted);font-style:italic;}
 .sns-row-act td{background:color-mix(in srgb,var(--red) 6%,transparent);}
 tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .sns-act-btn.edit-btn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2)!important;animation:none!important;font-weight:600;}
@@ -1503,9 +1505,8 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
           <thead>
             <tr>
               <th>Account</th>
-              <th>Last Day to Add</th>
-              <th>Review Window</th>
-              <th>Delivery</th>
+              <th>Next Add-By</th>
+              <th>Current Order (in flight)</th>
               <th>Status</th>
               <th></th>
             </tr>
@@ -2950,13 +2951,13 @@ function computeActions(){
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc]; if(!d||!d.editDay)return;
     const s=calcSnsStatus(acc);
-    if(s.status==='edit-today'){
+    if(s.status==='lda-today'){
       A.push({key:'snse-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S LAST DAY',title:acc,
-        sub:'Last day to add or amend items',jump:`go('sns')`,
+        sub:'Last day to add or amend items for this cycle',jump:`go('sns')`,
         primary:{label:'Open',fn:`go('sns')`},links:''});
     } else if(s.status==='review'){
       A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S REVIEW',title:acc,
-        sub:`Check prices & profitability · ${fmt(addD(pd(d.editDay),3))}–${fmt(addD(pd(d.editDay),4))}`,
+        sub:`Current order: check prices & profit · ${fmt(s.reviewStart)}–${fmt(s.reviewEnd)}`,
         jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
     }
   });
@@ -2993,8 +2994,8 @@ function computeUpcoming(){
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc]; if(!d||!d.editDay)return;
     const s=calcSnsStatus(acc);
-    if(s.status==='soon') U.push({key:'soon-snse-'+acc,color:'blue',chip:'SOON',title:acc,sub:`Last day to add in ${s.daysToEdit} day${s.daysToEdit!==1?'s':''}`,jump:`go('sns')`});
-    else if(s.status==='between') U.push({key:'soon-snsr-'+acc,color:'purple',chip:'SOON',title:acc,sub:`Review window in ${s.daysToReviewStart} day${s.daysToReviewStart!==1?'s':''}`,jump:`go('sns')`});
+    if(s.status==='lda-soon') U.push({key:'soon-snse-'+acc,color:'amber',chip:'SOON',title:acc,sub:`Last day to add ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+' days'}`,jump:`go('sns')`});
+    else if(s.status==='arriving') U.push({key:'soon-snsd-'+acc,color:'teal',chip:'SOON',title:acc,sub:`Order arrives ${s.daysToDelivery===0?'today':'in '+s.daysToDelivery+'d'} (${fmt(s.deliv)})`,jump:`go('sns')`});
   });
   return U;
 }
@@ -3718,27 +3719,32 @@ let snsHist = ld(SNSHK) || [];
 
 function saveSns(){sv2(SNSK,snsData);sv2(SNSHK,snsHist);}
 
+// Two parallel timelines per account: the next add-by you're working toward,
+// and the current in-flight order (review window → delivery).
+function nextDayOfMonth(day,now){
+  for(let m=0;m<13;m++){const dt=monthDate(now.getFullYear(),now.getMonth()+m,day);if(diff(now,dt)>=0)return dt;}
+  return monthDate(now.getFullYear(),now.getMonth(),day);
+}
 function calcSnsStatus(acc){
   const d=snsData[acc];
   if(!d||!d.editDay)return{status:'no-data'};
-  const now=today(),editD=pd(d.editDay),delivD=pd(d.deliveryDay);
-  // Review window = editDay +3 to editDay +4 (fixed)
-  const reviewStart=addD(editD,3);
-  const reviewEnd=addD(editD,4);
-  const daysToEdit=diff(now,editD);
-  const daysToReviewStart=diff(now,reviewStart);
-  // In review window (editDay+3 or editDay+4)
-  if(daysToReviewStart<=0 && diff(now,reviewEnd)>=0)
-    return{status:'review',daysToEdit,editD,delivD,reviewStart,reviewEnd};
-  // Edit day
-  if(daysToEdit===0)return{status:'edit-today',editD,delivD,reviewStart,reviewEnd};
-  // Edit day passed, not in review window yet
-  if(daysToEdit<0 && daysToReviewStart>0)
-    return{status:'between',daysToEdit,daysToReviewStart,editD,delivD,reviewStart,reviewEnd};
-  // Edit day coming up soon (within 3 days)
-  if(daysToEdit<=3)return{status:'soon',daysToEdit,editD,delivD,reviewStart,reviewEnd};
-  // Active — normal state
-  return{status:'active',daysToEdit,editD,delivD,reviewStart,reviewEnd};
+  const now=today(), lda=pd(d.editDay), deliv=pd(d.deliveryDay);
+  const nextLDA=nextDayOfMonth(lda.getDate(),now);
+  const daysToLDA=diff(now,nextLDA);
+  const ldaPassed=diff(now,lda)<0;                 // stored add-cutoff is before today
+  const inFlight=ldaPassed && diff(now,deliv)>=0;   // order placed, not yet delivered
+  const reviewStart=addD(lda,3), reviewEnd=addD(lda,4);
+  const inReview=inFlight && diff(now,reviewStart)<=0 && diff(now,reviewEnd)>=0;
+  const daysToDelivery=diff(now,deliv);
+  let status;
+  if(inReview)             status='review';
+  else if(daysToLDA===0)   status='lda-today';
+  else if(daysToLDA<=3)    status='lda-soon';
+  else if(inFlight && daysToDelivery<=4) status='arriving';
+  else if(inFlight)        status='in-flight';
+  else                     status='idle';
+  return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,
+    editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
 
 // ── Fixed monthly cycles auto-roll: dates never need re-entering ──
@@ -3772,69 +3778,74 @@ function renderSns(){
 
   let needsCount=0, alertAccounts=[], reviewAccounts=[];
 
-  // Sort action-needed accounts to the top
-  const SNS_ORDER={'edit-today':0,'no-data':1,'review':2,'between':3,'soon':4,'active':5};
+  // Sort: act-now first (review / last-day), then soon, arriving, in-flight, idle
+  const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'idle':4};
   const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>
     (SNS_ORDER[calcSnsStatus(a).status]??5)-(SNS_ORDER[calcSnsStatus(b).status]??5));
 
+  const dueLbl=n=>n===0?'today':n===1?'tomorrow':`in ${n}d`;
+
   tbody.innerHTML=sortedAccs.map(acc=>{
     const c=calcSnsStatus(acc);
-    const d=snsData[acc]||{};
-    let statusHtml='',actionHtml='',rowCls='',next='';
+    let statusHtml='',actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`,rowCls='',next='';
 
     if(c.status==='no-data'){
-      statusHtml=`<span class="sns-status needs">No Dates Set</span>`;
-      next='Set the monthly dates once — they roll forward automatically after that';
+      statusHtml=`<span class="sns-status needs">Not Set</span>`;
+      next='Set this account\u2019s monthly dates once — it rolls forward automatically after that';
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Set Dates</button>`;
       needsCount++;alertAccounts.push({acc,type:'no-data'});rowCls='sns-row-act';
-    } else if(c.status==='edit-today'){
-      statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
-      next='Add or amend items today — final chance this cycle';rowCls='sns-row-act';
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
     } else if(c.status==='review'){
-      statusHtml=`<span class="sns-status review">Review Window</span>`;
-      next='Check prices, profit & competition now — decide keep / cancel / amend';rowCls='sns-row-act';
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
+      statusHtml=`<span class="sns-status review">Review Now</span>`;
+      next='Current order: check prices, profit &amp; competition — decide keep / cancel / amend';rowCls='sns-row-act';
       reviewAccounts.push(acc);
-    } else if(c.status==='between'){
-      statusHtml=`<span class="sns-status between">Review in ${c.daysToReviewStart}d</span>`;
-      next=`Review window opens ${fmt(c.reviewStart)} — nothing to do yet`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
-    } else if(c.status==='soon'){
-      statusHtml=`<span class="sns-status soon">Add in ${c.daysToEdit}d</span>`;
-      next=`Last day to add is ${fmt(c.editD)} — get items in before then`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
+    } else if(c.status==='lda-today'){
+      statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
+      next='Final day to add or amend for this cycle — do it today';rowCls='sns-row-act';
+    } else if(c.status==='lda-soon'){
+      statusHtml=`<span class="sns-status soon">Add ${dueLbl(c.daysToLDA)}</span>`;
+      next=`Get items in before the ${fmt(c.nextLDA)} cutoff`;
+    } else if(c.status==='arriving'){
+      statusHtml=`<span class="sns-status between">Arrives ${dueLbl(c.daysToDelivery)}</span>`;
+      next=`Current order lands ${fmt(c.deliv)} — prep to send in`;
+    } else if(c.status==='in-flight'){
+      statusHtml=`<span class="sns-status between">Order Placed</span>`;
+      next=`Current order delivers ${fmt(c.deliv)} · next add-by ${fmt(c.nextLDA)}`;
     } else {
-      statusHtml=`<span class="sns-status active">Active</span>`;
-      next=`Nothing due — next add-by ${fmt(c.editD)}`;
-      actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit dates</button>`;
+      statusHtml=`<span class="sns-status active">Idle</span>`;
+      next=`Nothing in flight — next add-by ${fmt(c.nextLDA)}`;
     }
 
-    const reviewStartFmt=d.editDay?fmt(addD(pd(d.editDay),3)):'—';
-    const reviewEndFmt=d.editDay?fmt(addD(pd(d.editDay),4)):'—';
+    // Next add-by cell (what you're working toward)
+    const addByCell = c.status==='no-data' ? '—'
+      : `<span class="sns-date">${fmt(c.nextLDA)}</span><div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</div>`;
+    // In-flight order cell (review + delivery), only if an order is actually in flight
+    const flightCell = (c.status==='no-data') ? '—'
+      : c.inFlight
+        ? `<span class="sns-date" style="color:var(--purple)">Review ${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span><div class="sns-sub">delivers ${fmt(c.deliv)}</div>`
+        : `<span class="sns-dim">none in flight</span>`;
+
     return`<tr class="${rowCls}">
       <td><span class="sns-acc">${acc}</span></td>
-      <td><span class="sns-date">${d.editDay?fmtLong(pd(d.editDay)):'—'}</span></td>
-      <td><span class="sns-date" style="color:var(--amber)">${d.editDay?reviewStartFmt+' – '+reviewEndFmt:'—'}</span></td>
-      <td><span class="sns-date">${d.deliveryDay?fmtLong(pd(d.deliveryDay)):'—'}</span></td>
+      <td>${addByCell}</td>
+      <td>${flightCell}</td>
       <td>${statusHtml}<div class="sns-next">${next}</div></td>
       <td>${actionHtml}</td>
     </tr>`;
   }).join('');
 
 
-  // Summary strip (action-first)
-  let snsNeeds=0,snsReview=0,snsActive=0;
-  SNS_ACCOUNTS.forEach(acc=>{const st=calcSnsStatus(acc).status;
-    if(st==='no-data')snsNeeds++;
-    else if(st==='review')snsReview++;
-    else snsActive++;});
+  // KPIs — meaningful, action-first
+  let kReview=0,kAdd=0,kArrive=0;
+  SNS_ACCOUNTS.forEach(acc=>{const s=calcSnsStatus(acc);
+    if(s.status==='review')kReview++;
+    if(s.status==='lda-today'||s.status==='lda-soon')kAdd++;
+    if(s.status==='arriving')kArrive++;});
   const snsSumEl=document.getElementById('sns-summary');
   if(snsSumEl){
     const cards=[
-      {cv:'cv-red',n:snsNeeds,lbl:'Not Set'},
-      {cv:'cv-purple',n:snsReview,lbl:'Review Now'},
-      {cv:'cv-green',n:snsActive,lbl:'Active'},
+      {cv:'cv-purple',n:kReview,lbl:'Review Now'},
+      {cv:'cv-amber',n:kAdd,lbl:'Add Soon'},
+      {cv:'cv-teal',n:kArrive,lbl:'Arriving'},
     ];
     snsSumEl.innerHTML=cards.map(c=>`<div class="sns-sum ${c.cv}">
       <div class="sns-sum-n ${c.n===0?'dim':''}">${c.n}</div><div class="sns-sum-lbl">${c.lbl}</div></div>`).join('');
