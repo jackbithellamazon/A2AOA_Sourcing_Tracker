@@ -4,41 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A2AOA Sourcing Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#0d1117;
-  --surface:#13191f;
-  --card:#1c2330;
-  --card2:#222b3a;
-  --border:#263044;
-  --border2:#344060;
+  --bg:#090c12;
+  --surface:#10141d;
+  --card:#161b27;
+  --card2:#1e2532;
+  --border:#242c3c;
+  --border2:#36415c;
 
-  --text:#e8eaf6;
-  --text2:#8892b0;
-  --muted:#4a5578;
+  --text:#f2f4fc;
+  --text2:#aab4d6;
+  --muted:#727ea6;
 
-  --green:#00d084;
-  --green-d:#00a868;
-  --red:#ff4560;
-  --red-d:#e02040;
-  --blue:#5b8eff;
-  --blue-d:#3a6de8;
-  --amber:#ffb830;
-  --amber-d:#e09420;
-  --teal:#00c4b4;
-  --teal-d:#009688;
-  --orange:#ff6b35;
-  --orange-d:#e05020;
-  --purple:#a259ff;
-  --purple-d:#8040e8;
+  --green:#16d196;
+  --green-d:#0fa876;
+  --red:#ff5269;
+  --red-d:#e23552;
+  --blue:#6e8bff;
+  --blue-d:#4c6cf0;
+  --amber:#ffbe45;
+  --amber-d:#e09a26;
+  --teal:#15cabb;
+  --teal-d:#0f9c90;
+  --orange:#ff7a45;
+  --orange-d:#e0571f;
+  --purple:#ab6bff;
+  --purple-d:#8c47ec;
+  --accent:var(--blue);
 
-  --dm:'DM Sans',sans-serif;
-  --mono:'DM Mono',monospace;
+  --dm:'Plus Jakarta Sans',-apple-system,system-ui,sans-serif;
+  --mono:'JetBrains Mono','SF Mono',monospace;
 }
 
-body{background:var(--bg);color:var(--text);font-family:var(--dm);font-size:14px;min-height:100vh;}
+body{background:var(--bg);color:var(--text);font-family:var(--dm);font-size:14px;min-height:100vh;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.005em;}
 
 /* ── HEADER ── */
 header{
@@ -55,6 +57,11 @@ header{
 .logo-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.5px;text-transform:uppercase;}
 .logo-divider{width:1px;height:16px;background:var(--border2);}
 .logo-sub{font-size:11px;color:var(--muted);}
+.hdr-backup-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:var(--card);
+  color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-family:var(--dm);font-size:12px;
+  font-weight:600;cursor:pointer;transition:all .13s;white-space:nowrap;}
+.hdr-backup-btn:hover{background:var(--card2);color:var(--text);border-color:var(--blue);}
+@media(max-width:560px){.hdr-backup-btn span{display:none;}.hdr-backup-btn{padding:7px 9px;}}
 .hdr-r{display:flex;align-items:center;gap:10px;}
 .sw{position:relative;}
 .sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
@@ -67,7 +74,10 @@ header{
 .layout{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 52px);transition:grid-template-columns .2s ease;}
 .layout.collapsed{grid-template-columns:52px 1fr;}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:10px 6px;
-  overflow:hidden;transition:all .2s ease;}
+  overflow-x:hidden;overflow-y:auto;transition:all .2s ease;
+  position:sticky;top:52px;align-self:start;height:calc(100vh - 52px);}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 .layout.collapsed .sidebar{padding:10px 4px;}
 .layout.collapsed .nb-label{display:none;}
 .layout.collapsed .nbadge{display:none;}
@@ -90,6 +100,7 @@ header{
 .nbadge.grey{background:var(--border2);color:var(--muted);}
 .nbadge.green{background:var(--green);}
 .nbadge.amber{background:var(--amber);}
+.nbadge.red{background:var(--red);}
 
 /* ── MAIN ── */
 .main{padding:20px 22px;overflow-y:auto;}
@@ -121,7 +132,7 @@ header{
   background:rgba(45,110,223,.18);color:#7eb3ff;border:1px solid rgba(45,110,223,.3);}
 
 /* ── TILE GRID ── */
-.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:4px;}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px;margin-bottom:4px;}
 
 .tile{border-radius:10px;padding:12px 11px;cursor:pointer;transition:all .18s;
   display:flex;flex-direction:column;gap:3px;min-height:106px;text-align:left;
@@ -228,9 +239,9 @@ header{
   font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
 .qc-btn:hover{background:var(--green-d);transform:translateY(-1px);}
 
-.inbox-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
-  padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:border-color .2s;}
-.inbox-card:hover{border-color:var(--border2);}
+.inbox-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);
+  padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;gap:12px;transition:transform .15s,border-color .15s,box-shadow .15s;}
+.inbox-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow-md);}
 .inbox-asin{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);min-width:120px;}
 .inbox-market{font-size:11px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);}
 .inbox-note{flex:1;font-size:12px;color:var(--text2);font-style:italic;}
@@ -244,9 +255,9 @@ header{
 .ib.del:hover{background:rgba(224,53,53,.15);}
 
 /* ── WATCHLIST CARDS ── */
-.wl-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
-  padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;gap:14px;transition:border-color .2s;}
-.wl-card:hover{border-color:var(--border2);}
+.wl-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);
+  padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;gap:14px;transition:transform .15s,border-color .15s,box-shadow .15s;}
+.wl-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow-md);}
 .wl-asin{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text);min-width:130px;}
 .wl-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
   background:rgba(124,77,219,.2);color:#c4b5fd;white-space:nowrap;}
@@ -361,8 +372,11 @@ header{
 .exp-asin{font-family:var(--mono);font-weight:600;color:var(--text2);}
 
 /* ── EMPTY ── */
-.empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;
-  border:1.5px dashed var(--border2);border-radius:9px;background:var(--surface);}
+.empty{text-align:center;padding:34px 22px;color:var(--text2);font-size:13px;line-height:1.5;font-weight:500;
+  border:1.5px dashed var(--border2);border-radius:12px;background:color-mix(in srgb,var(--surface) 60%,transparent);}
+.empty::before{content:"";display:block;width:24px;height:24px;margin:0 auto 10px;background:var(--muted);opacity:.6;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'><path d='M5 12h14M12 5v14'/></svg>") center/22px no-repeat;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'><path d='M5 12h14M12 5v14'/></svg>") center/22px no-repeat;}
 
 /* ── TOAST ── */
 .toast{position:fixed;bottom:20px;right:20px;padding:10px 16px;border-radius:8px;font-size:12.5px;
@@ -379,7 +393,7 @@ header{
 
 @media(max-width:960px){
   .layout{grid-template-columns:1fr;}
-  .sidebar{display:flex;gap:3px;padding:9px 13px;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;}
+  .sidebar{display:flex;gap:3px;padding:9px 13px;border-right:none;border-bottom:1px solid var(--border);overflow-x:auto;position:static;height:auto;}
   .nav-sec-lbl{display:none;}
   .nb{white-space:nowrap;padding:8px 13px;}
   .kpi-row{grid-template-columns:repeat(3,1fr);}
@@ -637,8 +651,8 @@ header{
 
 /* — Refined surface palette for a more serious feel — */
 :root{
-  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
-  --shadow-md:0 4px 16px rgba(0,0,0,.35);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.2);
+  --shadow-md:0 6px 22px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.25);
 }
 
 /* — HEADER right cluster + notification bell — */
@@ -714,17 +728,31 @@ header{
   background:var(--cv);box-shadow:0 2px 8px color-mix(in srgb,var(--cv) 35%,transparent);}
 .aq-btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
 
+/* ── One-tap action tiles ── */
+.aq-t{padding:7px 11px;font-size:10.5px;font-weight:700;letter-spacing:.3px;border:1.5px solid var(--border2);
+  background:var(--card);color:var(--text2);border-radius:7px;cursor:pointer;font-family:var(--dm);
+  transition:all .12s;white-space:nowrap;line-height:1;}
+.aq-t:hover{background:var(--card2);color:var(--text);border-color:var(--cv);transform:translateY(-1px);}
+.aq-t.go{border:none;color:#06121a;background:var(--cv);box-shadow:0 2px 8px color-mix(in srgb,var(--cv) 35%,transparent);}
+.aq-t.go:hover{filter:brightness(1.08);color:#06121a;}
+.aq-t.danger{padding:7px 9px;color:var(--muted);}
+.aq-t.danger:hover{color:var(--red);border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+.aq-row{overflow:hidden;}
+.aq-row.aq-gone{opacity:0;transform:translateX(14px);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0;
+  transition:all .15s ease-in;}
+
 .ac-clear{text-align:center;padding:54px 24px;background:var(--surface);border:1.5px solid var(--border);border-radius:13px;}
 .ac-clear svg{color:var(--green);margin-bottom:14px;}
 .ac-clear-t{font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px;}
 .ac-clear-s{font-size:12.5px;color:var(--text2);}
 
 /* ── REFINED TILES (override loud gradients) ── */
-.tile{background:var(--card)!important;border:1.5px solid var(--border)!important;
+.tile{background:linear-gradient(180deg,color-mix(in srgb,var(--tcol,var(--border2)) 7%,var(--card)),var(--card))!important;
+  border:1.5px solid var(--border)!important;
   border-left:3px solid var(--tcol,var(--border2))!important;color:var(--text)!important;
-  box-shadow:var(--shadow-sm)!important;border-radius:10px;padding:12px 12px 11px 13px;}
-.tile:hover{border-color:var(--border2)!important;border-left-color:var(--tcol)!important;
-  transform:translateY(-2px);box-shadow:var(--shadow-md)!important;}
+  box-shadow:var(--shadow-sm)!important;border-radius:12px;padding:14px 14px 12px 15px;gap:7px;min-height:118px;}
+.tile:hover{border-color:color-mix(in srgb,var(--tcol) 45%,var(--border2))!important;border-left-color:var(--tcol)!important;
+  transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.4)!important;}
 .t-green {--tcol:var(--green);}
 .t-red   {--tcol:var(--red);}
 .t-amber {--tcol:var(--amber);}
@@ -733,18 +761,23 @@ header{
 .t-blue  {--tcol:var(--blue);}
 .t-purple{--tcol:var(--purple);}
 .t-neu   {--tcol:var(--border2);}
-.tile .tile-asin{color:var(--text2)!important;text-shadow:none!important;}
-.tile .tile-status{color:var(--tcol)!important;text-shadow:none!important;font-size:12px;letter-spacing:.2px;}
+.tile .tile-asin{color:#fff!important;text-shadow:none!important;font-size:14px;font-weight:600;letter-spacing:.3px;}
+.tile .tile-status{align-self:flex-start;display:inline-block;color:var(--tcol)!important;text-shadow:none!important;
+  font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 9px;border-radius:6px;background:color-mix(in srgb,var(--tcol) 16%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--tcol) 30%,transparent);}
 .tile .tile-meta{color:var(--text2)!important;opacity:1!important;text-shadow:none!important;}
 .tile .tile-note{color:var(--muted)!important;opacity:1!important;text-shadow:none!important;}
 .tile .tile-updated{color:var(--muted)!important;}
 .tile .tile-src{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
 .tile .tile-comp{background:var(--bg)!important;color:var(--text2)!important;}
 .tile .tile-snooze-badge{background:var(--bg)!important;color:var(--muted)!important;border:1px solid var(--border2);}
-.tile .tbtn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
-.tile .tbtn:hover{background:var(--card2)!important;color:var(--text)!important;}
-.tile .tbtn.buy{background:color-mix(in srgb,var(--tcol) 18%,transparent)!important;color:var(--tcol)!important;border-color:color-mix(in srgb,var(--tcol) 35%,transparent);}
+.tile .tbtn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);
+  padding:6px 3px!important;font-size:9.5px!important;border-radius:6px;}
+.tile .tbtn:hover{background:var(--card2)!important;color:var(--text)!important;border-color:var(--tcol);}
+.tile .tbtn.buy{background:color-mix(in srgb,var(--tcol) 20%,transparent)!important;color:var(--tcol)!important;border-color:color-mix(in srgb,var(--tcol) 40%,transparent);font-weight:800;}
 .tile .tbtn.buy:hover{background:var(--tcol)!important;color:#06121a!important;}
+.tile .tbtns{gap:5px;margin-top:9px;}
 
 /* competition indicator */
 .tile-comp.comp-low{color:var(--green)!important;border-color:color-mix(in srgb,var(--green) 35%,transparent)!important;}
@@ -805,7 +838,7 @@ header{
 /* ═══════════════════════════════════════════════════════════
    REDESIGN LAYER 2 — richer Action Center + OA Replen guidance
    ═══════════════════════════════════════════════════════════ */
-:root{--text3:#aeb8d6;}
+:root{--text3:#c2cbe6;}
 
 /* — Action Center two-column — */
 .ac-grid{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start;}
@@ -943,8 +976,11 @@ header{
 .rc{border-radius:12px;border-left:3px solid var(--border2);}
 .rc:hover{border-left-color:var(--blue);}
 .rc-asin{font-size:15px;color:#fff;font-weight:700;}
-.acc{font-size:11px;border-radius:8px;padding:8px 3px;color:var(--text2);}
-.acc.ready{box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 50%,transparent);}
+.acc{font-size:11px;border-radius:8px;padding:8px 3px;color:var(--text2);line-height:1.3;text-align:center;}
+.acc.soon{background:var(--card2);color:var(--text3);}
+.acc.ready{background:color-mix(in srgb,var(--green) 18%,transparent);color:#bdf5dd;font-weight:700;cursor:pointer;box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 55%,transparent);}
+.acc.ready:hover{background:color-mix(in srgb,var(--green) 28%,transparent);}
+.acc.snoozed{background:color-mix(in srgb,var(--purple) 15%,transparent);color:#d9c2ff;box-shadow:0 0 0 1px color-mix(in srgb,var(--purple) 45%,transparent);}
 
 /* Inbox / Watchlist cards */
 .inbox-card,.wl-card{border-radius:11px;border-left:3px solid var(--border2);transition:all .15s;}
@@ -1013,14 +1049,15 @@ header{
 .vt-btn:hover{color:var(--text);background:var(--card);}
 .vt-btn.active{background:var(--card2);color:var(--text);}
 
-.ltbl-wrap{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;}
+.ltbl-wrap{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;box-shadow:var(--shadow-sm);}
 .ltbl{width:100%;border-collapse:collapse;font-size:13px;}
 .ltbl thead th{text-align:left;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--text2);
-  padding:11px 12px;background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap;}
+  padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border2);white-space:nowrap;position:sticky;top:52px;z-index:5;}
 .ltbl-row{border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.ltbl-row:nth-child(even){background:color-mix(in srgb,var(--surface) 45%,transparent);}
 .ltbl-row:last-child{border-bottom:none;}
-.ltbl-row:hover{background:var(--card);}
-.ltbl td{padding:11px 12px;color:var(--text3);white-space:nowrap;vertical-align:middle;}
+.ltbl-row:hover{background:var(--card2);}
+.ltbl td{padding:13px 14px;color:var(--text3);white-space:nowrap;vertical-align:middle;}
 .ltbl-row td:first-child{width:6px;padding-right:0;}
 .ltbl-dot{display:block;width:9px;height:9px;border-radius:50%;background:var(--cv);box-shadow:0 0 7px color-mix(in srgb,var(--cv) 70%,transparent);}
 .ltbl-asin{font-family:var(--mono);font-weight:600;color:#fff;}
@@ -1065,6 +1102,119 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .notif-it-title{color:#fff!important;}
 .sched-row-asin{color:#fff!important;font-weight:600!important;}
 .ltbl-buy{letter-spacing:.4px;}
+/* ══ REBUY — refined card (authoritative) ══ */
+.rc{background:var(--surface)!important;border:1.5px solid var(--border)!important;border-left:3px solid var(--blue)!important;border-radius:14px;padding:15px 16px;margin-bottom:12px;}
+.rc:hover{border-left-color:var(--blue)!important;}
+.rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.rc-asin{font-family:var(--mono)!important;font-size:15px!important;font-weight:700!important;color:#fff!important;letter-spacing:.3px;}
+.rb-howto{font-size:11.5px;line-height:1.55;color:var(--text2);background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--blue);border-radius:10px;padding:11px 14px;margin-bottom:14px;}
+.rc-summary{font-size:12px;font-weight:600;border-radius:9px;padding:8px 12px;margin-bottom:13px;}
+.rc-summary.rdy{background:color-mix(in srgb,var(--green) 14%,transparent);color:#bdf5dd;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 32%,transparent);}
+.rc-summary.soon{background:var(--card);color:var(--text2);box-shadow:inset 0 0 0 1px var(--border);}
+.rc-summary.snz{background:color-mix(in srgb,var(--purple) 12%,transparent);color:#d9c2ff;}
+.rc-summary.none{background:var(--card);color:var(--muted);box-shadow:inset 0 0 0 1px var(--border);}
+.acc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:13px;}
+.acc{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:10px;padding:8px 4px 7px!important;
+  display:flex!important;flex-direction:column;align-items:center;gap:3px;min-height:66px;justify-content:center;text-align:center;box-shadow:none!important;}
+.acc-h{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.4px;}
+.acc-s{font-size:9.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.2px;}
+.acc-d{font-size:8.5px;font-weight:500;color:var(--muted);margin-top:2px;}
+.acc.ready .acc-d{color:color-mix(in srgb,#bdf5dd 70%,transparent);}
+.acc.snoozed .acc-d{color:color-mix(in srgb,#d9c2ff 70%,transparent);}
+/* Rebuy page explainer */
+.rebuy-explain{background:var(--surface);border:1.5px solid var(--border);border-left:3px solid var(--blue);
+  border-radius:11px;padding:13px 16px;margin-bottom:18px;}
+.rebuy-explain-h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px;}
+.rebuy-explain p{font-size:12.5px;line-height:1.6;color:var(--text2);}
+.rebuy-explain strong{color:var(--text);font-weight:700;}
+.re-tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;letter-spacing:.2px;white-space:nowrap;}
+.re-tag.re-ready{background:color-mix(in srgb,var(--green) 16%,transparent);color:#bdf5dd;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 32%,transparent);}
+.re-tag.re-deliv{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--teal);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--teal) 35%,transparent);}
+.re-tag.re-snz{background:color-mix(in srgb,var(--amber) 16%,transparent);color:var(--amber);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 35%,transparent);}
+
+/* ── PRIME DAY TAB ── */
+.pd-banner{border-radius:11px;padding:13px 17px;margin-bottom:16px;font-size:13.5px;font-weight:600;}
+.pd-banner.act{background:color-mix(in srgb,var(--red) 14%,transparent);color:#ffd4d4;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--red) 38%,transparent);}
+.pd-banner.act strong{color:#fff;font-weight:800;font-size:15px;}
+.pd-banner.clear{background:color-mix(in srgb,var(--green) 13%,transparent);color:#bdf5dd;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 30%,transparent);}
+.pd-banner.none{background:var(--surface);color:var(--text2);box-shadow:inset 0 0 0 1px var(--border);}
+.pd-deadlines{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;align-items:stretch;}
+.pd-dchip{background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--border2);
+  border-radius:11px;padding:11px 14px;display:flex;flex-direction:column;gap:3px;}
+.pd-dchip.early{border-top-color:var(--amber);}
+.pd-dchip.prime{border-top-color:var(--blue);}
+.pd-dchip.event{border-top-color:var(--purple);}
+.pd-dchip.ltd{border-top-color:var(--teal);}
+.pd-manage{grid-column:1/-1;justify-self:start;margin-top:-4px;background:var(--card);border:1.5px solid var(--border2);
+  color:var(--text2);font-family:var(--dm);font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .13s;}
+.pd-manage:hover{color:var(--text);border-color:var(--blue);background:var(--card2);}
+.pds-master{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--text);
+  padding:11px 13px;background:var(--card);border:1.5px solid var(--border);border-radius:9px;cursor:pointer;margin-bottom:12px;}
+.pds-master input{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
+.pds-rows{display:flex;flex-direction:column;gap:9px;}
+.pds-row{display:flex;align-items:center;gap:12px;padding:10px 13px;background:var(--card);border:1.5px solid var(--border);border-radius:9px;}
+.pds-en{display:flex;align-items:center;gap:9px;flex:1;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;}
+.pds-en input{width:15px;height:15px;accent-color:var(--blue);cursor:pointer;}
+.pds-date{max-width:96px;text-align:center;}
+.pd-dchip-l{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);}
+.pd-dchip-d{font-size:15px;font-weight:800;color:var(--text);}
+.pd-group{margin-bottom:22px;}
+.pd-tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px;}
+.pd-tile{background:var(--card);border:1.5px solid var(--border);border-left:3px solid var(--tc,var(--border2));
+  border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:8px;transition:all .15s;}
+.pd-tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-left-color:var(--tc);}
+.pd-tile.pd-open{--tc:var(--teal);}
+.pd-tile.pd-today{--tc:var(--red);background:linear-gradient(180deg,color-mix(in srgb,var(--red) 9%,var(--card)),var(--card));}
+.pd-tile.pd-expired{--tc:var(--red);}
+.pd-tile.pd-nodate{--tc:var(--amber);}
+.pd-tile.pd-buy{--tc:var(--green);opacity:.78;}
+.pd-tile.pd-nobuy{--tc:var(--muted);opacity:.62;}
+.pd-tile-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.pd-asin{font-family:var(--mono);font-size:13.5px;font-weight:600;color:#fff;}
+.pd-deadline{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--text3);
+  padding:3px 8px;border-radius:6px;background:var(--bg);white-space:nowrap;}
+.pd-deadline.urg{background:color-mix(in srgb,var(--red) 20%,transparent);color:#ffb3b3;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 40%,transparent);}
+.pd-deadline.exp{background:color-mix(in srgb,var(--red) 14%,transparent);color:#ff9b9b;}
+.pd-deadline.dec{background:transparent;color:var(--muted);}
+.pd-meta{font-size:11.5px;color:var(--text2);line-height:1.4;}
+.pd-links{display:flex;gap:8px;}
+.pd-links a{font-size:11px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:3px 9px;border-radius:6px;
+  background:rgba(45,110,223,.12);border:1px solid rgba(45,110,223,.35);transition:all .15s;}
+.pd-links a:hover{background:var(--blue);color:#fff;}
+.pd-actions{display:flex;gap:6px;margin-top:2px;}
+.pd-b{flex:1;padding:8px 4px;border:1px solid var(--border2);border-radius:7px;font-family:var(--dm);
+  font-size:11px;font-weight:700;cursor:pointer;transition:all .14s;background:var(--bg);color:var(--text2);}
+.pd-b.buy{background:color-mix(in srgb,var(--green) 16%,transparent);color:#bdf5dd;border-color:color-mix(in srgb,var(--green) 40%,transparent);}
+.pd-b.buy:hover{background:var(--green);color:#06121a;}
+.pd-b.nobuy:hover{background:var(--card2);color:var(--text);border-color:var(--muted);}
+.pd-b.undo{flex:1;}
+.pd-b.del{flex:0 0 auto;padding:8px 11px;color:var(--red);border-color:transparent;background:transparent;}
+.pd-b.del:hover{background:color-mix(in srgb,var(--red) 14%,transparent);}
+@media(max-width:560px){.pd-deadlines{grid-template-columns:1fr;}}
+.acc.soon{background:var(--card)!important;}
+.acc.ready{background:color-mix(in srgb,var(--green) 15%,transparent)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 50%,transparent)!important;cursor:pointer;}
+.acc.ready:hover{background:color-mix(in srgb,var(--green) 26%,transparent)!important;transform:translateY(-1px);}
+.acc.ready .acc-h,.acc.ready .acc-s{color:#bdf5dd;}
+.acc.snoozed{background:color-mix(in srgb,var(--purple) 13%,transparent)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--purple) 40%,transparent)!important;}
+.acc.snoozed .acc-h,.acc.snoozed .acc-s{color:#d9c2ff;}
+.acc-deliv{margin-top:3px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;padding:2px 6px;border-radius:5px;
+  border:1px solid var(--border2);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .13s;}
+.acc-deliv:hover{color:var(--text2);border-color:var(--text2);}
+.acc-deliv.on{background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal);border-color:color-mix(in srgb,var(--teal) 45%,transparent);}
+.rc-note{font-size:12px;color:var(--text2);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 11px;margin-bottom:12px;font-style:italic;}
+.rc-acts{display:flex!important;justify-content:flex-end;gap:7px;padding-top:13px;border-top:1px solid var(--border);}
+.rb{flex:0 0 auto!important;padding:7px 15px!important;border:none;border-radius:8px;font-family:var(--dm);font-size:11px!important;
+  font-weight:700!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;transition:all .15s;color:#fff;}
+.rb.sas{background:var(--card2)!important;color:var(--text2)!important;border:1px solid var(--border2);}
+.rb.sas:hover{background:var(--border)!important;color:var(--text)!important;}
+.rb.bought{background:var(--green)!important;color:#06121a!important;}
+.rb.bought:hover{background:var(--green-d)!important;}
+.rb.snz{background:color-mix(in srgb,var(--amber) 18%,transparent)!important;color:var(--amber)!important;border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);}
+.rb.snz:hover{background:var(--amber)!important;color:#06121a!important;}
+.rb.del{background:transparent!important;color:var(--muted)!important;border:1px solid var(--border2);}
+.rb.del:hover{color:var(--red)!important;border-color:color-mix(in srgb,var(--red) 40%,transparent);background:color-mix(in srgb,var(--red) 10%,transparent)!important;}
+@media(max-width:620px){.acc-grid{grid-template-columns:repeat(3,1fr);}.rc-acts{flex-wrap:wrap;}}
 </style>
 </head>
 <body>
@@ -1085,6 +1235,10 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="si" id="searchInput" placeholder="Search ASIN…" oninput="runSearch(this.value)">
     </div>
+    <button class="hdr-backup-btn" onclick="openM('backupModal')" title="Backup or restore your data">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Backup</span>
+    </button>
   </div>
 </header>
 
@@ -1102,6 +1256,10 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
     <button class="nb" onclick="go('rebuy')">
       <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
       <span class="nb-label">Rebuy</span><span class="nbadge grey" id="nb-rebuy">0</span>
+    </button>
+    <button class="nb" onclick="go('pday')">
+      <svg class="nb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <span class="nb-label">Prime Day</span><span class="nbadge red" id="nb-pday">0</span>
     </button>
     <div class="nav-sec-lbl nb-lbl">Capture</div>
     <button class="nb" onclick="go('inbox')">
@@ -1172,7 +1330,6 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
           <span class="strat-bar-lbl">Buy → live on Amazon</span>
           <input class="fi lt-input" id="lt-input" type="number" min="1" max="60" onchange="setLeadTime(this.value)">
           <span class="strat-bar-unit">days default</span>
-          <button class="lt-edit-btn" onclick="openLeadTimes()">Per-account…</button>
         </div>
       </div>
 
@@ -1216,20 +1373,11 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
               <label class="fl">Found By</label>
               <select class="fs" id="s-src">
                 <option value="">-- Optional --</option>
-                <option value="Myself">Myself</option>
                 <option value="Jack">Jack</option>
                 <option value="TFTJ">TFTJ</option>
                 <option value="VAA">VAA</option>
                 <option value="VAS">VAS</option>
                 <option value="Discord Group">Discord Group</option>
-              </select>
-            </div>
-            <div class="fg">
-              <label class="fl">Send-to Account</label>
-              <select class="fs" id="s-account">
-                <option value="">-- Default lead time --</option>
-                <option value="EU01">EU01</option><option value="EU02">EU02</option><option value="EU03">EU03</option>
-                <option value="Biz1">Biz1</option><option value="Biz2">Biz2</option><option value="Biz3">Biz3</option>
               </select>
             </div>
           </div>
@@ -1328,6 +1476,10 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
     <!-- ══════════════ REBUY ══════════════ -->
     <div id="rebuy" class="tc">
       <div class="pg-title">Rebuy</div>
+      <div class="rebuy-explain">
+        <div class="rebuy-explain-h">How rebuy works</div>
+        <p>Log the date you <strong>bought</strong> on each account. Each account reopens <strong>8 days later</strong> — that's when it shows <span class="re-tag re-ready">rebuy now</span> and appears in your to-do list. The countdown runs from the purchase date, not delivery, so you're prompted regardless of when stock lands. <strong>Always re-check the price before buying again</strong> — deals move. Marking stock <span class="re-tag re-deliv">arrived</span> is optional, just a note for yourself. Not ready when it opens? <span class="re-tag re-snz">Snooze 1d</span> pushes it a day.</p>
+      </div>
       <div class="fc" id="rb-fc">
         <div class="fc-hd" onclick="toggleFC('rb-fc')">
           <div class="fc-title">Log Purchase</div>
@@ -1367,11 +1519,77 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
             <div class="fg"><label class="fl">EU2 Date</label><input class="fi dm" id="r-eu2" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
             <div class="fg"><label class="fl">EU3 Date</label><input class="fi dm" id="r-eu3" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
           </div>
+          <div style="font-size:11px;color:var(--text3);margin:2px 0 12px;line-height:1.4">Enter the date you <strong style="color:var(--text2)">bought</strong> on each account. Each becomes ready to rebuy 8 days later, and shows in your to-do list — snooze a day if you're not ready.</div>
           <button class="badd" onclick="addRebuy()">Add to Rebuy Queue</button>
         </div>
       </div>
       <div class="sec nt"><span class="sec-t">Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span></div>
+      <div class="rb-howto">How it works: log the date you <strong>bought</strong> on each account. 8 days later that account turns <strong style="color:var(--green)">rebuy now</strong> — that's your cue to check the price and buy again if it still works. Not ready? Snooze a day. "Arrived?" is an optional tick just to track what's landed; it doesn't change the countdown.</div>
       <div id="rebuy-list"></div>
+    </div>
+
+    <!-- ══════════════ PRIME DAY ══════════════ -->
+    <div id="pday" class="tc">
+      <div class="pg-title">Prime Day</div>
+      <div id="pd-banner" class="pd-banner clear">All Prime Day leads decided ✓</div>
+
+      <div class="pd-deadlines">
+        <div class="pd-dchip early" id="pd-chip-early"><span class="pd-dchip-l">Early Prime Day</span><span class="pd-dchip-d" id="pd-dl-early">—</span></div>
+        <div class="pd-dchip prime" id="pd-chip-prime"><span class="pd-dchip-l">Prime Day</span><span class="pd-dchip-d" id="pd-dl-prime">—</span></div>
+        <div class="pd-dchip event" id="pd-chip-event"><span class="pd-dchip-l">Big Deal Days</span><span class="pd-dchip-d" id="pd-dl-event">—</span></div>
+        <div class="pd-dchip ltd" id="pd-chip-ltd"><span class="pd-dchip-l">LTDs</span><span class="pd-dchip-d" id="pd-dl-ltd">—</span></div>
+        <button class="pd-manage" onclick="openPdaySettings()" title="Manage Prime Day dates & phases">⚙ Manage dates</button>
+      </div>
+
+      <div class="fc" id="pd-fc">
+        <div class="fc-hd" onclick="toggleFC('pd-fc')">
+          <div class="fc-title">Add Prime Day Lead</div>
+          <svg class="cico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="fb">
+          <div style="height:14px"></div>
+          <div class="g3">
+            <div class="fg"><label class="fl">ASIN *</label><input class="fi" id="pd-asin" placeholder="B07X9KYZ6L" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
+            <div class="fg"><label class="fl">Deal Type *</label>
+              <select class="fs" id="pd-type" onchange="onPdayType()">
+                <option value="">-- Choose --</option>
+                <option value="early">Early Prime Day (ends 22 Jun)</option>
+                <option value="prime">Prime Day (ends 26 Jun)</option>
+                <option value="ltd">LTD (set end date)</option>
+              </select>
+            </div>
+            <div class="fg" id="pd-end-row" style="display:none"><label class="fl">LTD End Date</label><input class="fi dm" id="pd-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+            <div class="fg"><label class="fl">Marketplace</label>
+              <select class="fs" id="pd-market">
+                <option value="amazon.co.uk">🇬🇧 Amazon UK</option><option value="amazon.de">🇩🇪 Amazon DE</option>
+                <option value="amazon.fr">🇫🇷 Amazon FR</option><option value="amazon.it">🇮🇹 Amazon IT</option><option value="amazon.es">🇪🇸 Amazon ES</option>
+              </select>
+            </div>
+            <div class="fg"><label class="fl">Target Buy Price (£)</label><input class="fi" id="pd-target" type="number" step="0.01" placeholder="optional"></div>
+            <div class="fg" style="grid-column:1/-1"><label class="fl">Notes</label><input class="fi" id="pd-notes" placeholder="Seller, BSR, why you're watching it…"></div>
+          </div>
+          <button class="badd" onclick="addPday()">Add to Prime Day</button>
+        </div>
+      </div>
+
+      <div class="rb-howto">Every lead needs a <strong>Buy</strong> or <strong>No-buy</strong> decision before its deadline — undecided leads show up on your Overview and turn red as the deadline nears. Decide each one before it expires; nothing here waits for you.</div>
+
+      <div class="pd-group" id="pd-group-early">
+        <div class="sec nt"><span class="sec-t"><span id="pd-name-early">Early Prime Day</span> — <span id="pd-when-early">—</span></span><span class="sec-pill" id="pd-cnt-early">0</span></div>
+        <div id="pd-grid-early"></div>
+      </div>
+      <div class="pd-group" id="pd-group-prime">
+        <div class="sec"><span class="sec-t"><span id="pd-name-prime">Prime Day</span> — <span id="pd-when-prime">—</span></span><span class="sec-pill" id="pd-cnt-prime">0</span></div>
+        <div id="pd-grid-prime"></div>
+      </div>
+      <div class="pd-group" id="pd-group-event">
+        <div class="sec"><span class="sec-t"><span id="pd-name-event">Big Deal Days</span> — <span id="pd-when-event">—</span></span><span class="sec-pill" id="pd-cnt-event">0</span></div>
+        <div id="pd-grid-event"></div>
+      </div>
+      <div class="pd-group" id="pd-group-ltd">
+        <div class="sec"><span class="sec-t">LTDs — your own end dates</span><span class="sec-pill" id="pd-cnt-ltd">0</span></div>
+        <div id="pd-grid-ltd"></div>
+      </div>
     </div>
 
     <!-- ══════════════ INBOX ══════════════ -->
@@ -1402,7 +1620,6 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
               <option value="amazon.com">🇺🇸 US</option>
             </select>
             <select class="qc-sel" id="qc-src">
-              <option value="Myself">Myself</option>
               <option value="Jack">Jack</option>
               <option value="TFTJ">TFTJ</option>
               <option value="VAA">VAA</option>
@@ -1466,7 +1683,6 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
               <label class="fl">Found By</label>
               <select class="fs" id="w-src">
                 <option value="">-- Optional --</option>
-                <option value="Myself">Myself</option>
                 <option value="Jack">Jack</option>
                 <option value="TFTJ">TFTJ</option>
                 <option value="VAA">VAA</option>
@@ -1629,19 +1845,12 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
     <div class="g2">
       <div class="fg"><label class="fl">Found By</label>
         <select class="fs" id="em-src">
-          <option value="">--</option><option value="Myself">Myself</option><option value="Jack">Jack</option>
+          <option value="">--</option><option value="Jack">Jack</option>
           <option value="TFTJ">TFTJ</option><option value="VAA">VAA</option>
           <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
         </select>
       </div>
       <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
-    </div>
-    <div class="fg"><label class="fl">Send-to Account (lead-time)</label>
-      <select class="fs" id="em-account">
-        <option value="">-- Default lead time --</option>
-        <option value="EU01">EU01</option><option value="EU02">EU02</option><option value="EU03">EU03</option>
-        <option value="Biz1">Biz1</option><option value="Biz2">Biz2</option><option value="Biz3">Biz3</option>
-      </select>
     </div>
     <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
@@ -1673,7 +1882,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
     </div>
     <div class="fg"><label class="fl">Found By</label>
       <select class="fs" id="we-src">
-        <option value="">--</option><option value="Myself">Myself</option><option value="Jack">Jack</option>
+        <option value="">--</option><option value="Jack">Jack</option>
         <option value="TFTJ">TFTJ</option><option value="VAA">VAA</option>
         <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
       </select>
@@ -1699,7 +1908,19 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
   </div>
 </div>
 
-<!-- REBUY BOUGHT MODAL -->
+<!-- PRIME DAY SETTINGS MODAL -->
+<div class="mbg" id="pdaySetModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mhd"><span class="mt">Prime Day Settings</span><button class="mx" onclick="closeM('pdaySetModal')">×</button></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">Turn each phase on or off and set its end date (dd/mm). A phase that's off stops appearing in the form, the queue and the deadline chips. Turn the master switch off to pause Prime Day entirely.</p>
+    <label class="pds-master"><input type="checkbox" id="pds-master"><span>Prime Day enabled</span></label>
+    <div class="pds-rows" id="pds-rows"></div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="savePdaySettings()">Save</button>
+      <button class="mbtn cancel" onclick="closeM('pdaySetModal')">Cancel</button>
+    </div>
+  </div>
+</div>
 <div class="mbg" id="rbModal">
   <div class="modal">
     <div class="mhd"><span class="mt">Mark as Bought</span><button class="mx" onclick="closeM('rbModal')">×</button></div>
@@ -1716,6 +1937,20 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
       <button class="mbtn ok" onclick="confirmRbBought()">Confirm</button>
       <button class="mbtn cancel" onclick="closeM('rbModal')">Cancel</button>
     </div>
+  </div>
+</div>
+
+<!-- BACKUP / RESTORE MODAL -->
+<div class="mbg" id="backupModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Backup &amp; Restore</span><button class="mx" onclick="closeM('backupModal')">×</button></div>
+    <p style="font-size:12.5px;color:var(--text2);line-height:1.5;margin-bottom:6px">Your data lives in this browser only, tied to where this file is opened from. Export a backup regularly so you never lose it — and use it to move data into a new copy of the tracker.</p>
+    <div style="font-size:11.5px;color:var(--text3);line-height:1.5;margin-bottom:16px">Lost data after a download? Open your <strong style="color:var(--text2)">previous</strong> file, Export there, then Import the file here.</div>
+    <button class="mbtn ok" style="width:100%;margin-bottom:10px" onclick="exportData()">Export backup (.json)</button>
+    <label class="mbtn cancel" style="width:100%;display:block;text-align:center;cursor:pointer;margin:0">
+      Import backup…
+      <input type="file" accept="application/json,.json" style="display:none" onchange="importDataFile(this)">
+    </label>
   </div>
 </div>
 
@@ -2015,6 +2250,38 @@ const SK='a2a_src_v5',RK='a2a_rb_v5',IK='a2a_inbox_v5',WK='a2a_watch_v5';
 const ld=k=>{try{return JSON.parse(localStorage.getItem(k))||null;}catch{return null;}};
 const sv2=( k,d)=>localStorage.setItem(k,JSON.stringify(d));
 
+// ── BACKUP / RESTORE ──
+function exportData(){
+  const dump={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('a2a_'))dump[k]=localStorage.getItem(k);}
+  const payload={_app:'A2AOA',_version:'v5',_ts:new Date().toISOString(),data:dump};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='a2aoa-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  if(window.toast)toast('Backup downloaded','ok');
+}
+function importDataFile(input){
+  const f=input.files&&input.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const parsed=JSON.parse(rd.result);
+      const data=(parsed&&parsed.data)?parsed.data:parsed;
+      if(!data||typeof data!=='object')throw new Error('bad');
+      const keys=Object.keys(data).filter(k=>k.startsWith('a2a_'));
+      if(!keys.length){toast('No A2AOA data found in that file','bad');input.value='';return;}
+      if(!confirm('Import '+keys.length+' data set'+(keys.length!==1?'s':'')+'? This replaces the data currently in this browser.')){input.value='';return;}
+      keys.forEach(k=>localStorage.setItem(k,typeof data[k]==='string'?data[k]:JSON.stringify(data[k])));
+      toast('Imported — reloading…','ok');
+      setTimeout(()=>location.reload(),700);
+    }catch(e){toast('Could not read that backup file','bad');}
+    input.value='';
+  };
+  rd.readAsText(f);
+}
+
 // ═══════════════════════════════════
 // DEMO DATA
 // ═══════════════════════════════════
@@ -2025,6 +2292,9 @@ let leads     = ld(SK) || [];
 let rebuys    = ld(RK) || [];
 let inbox     = ld(IK) || [];
 let watchlist = ld(WK) || [];
+const PDK='a2a_pday_v5';
+let pdayLeads = ld(PDK) || [];
+const PDAY_TYPES={early:{label:'Early Prime Day',month:5,day:22},prime:{label:'Prime Day',month:5,day:26},ltd:{label:'LTD',month:null,day:null}};
 let editId=null,rbBoughtId=null,srcBoughtId=null,promoteId=null,wEditId=null;
 
 // ═══════════════════════════════════
@@ -2036,6 +2306,7 @@ const diff=(a,b)=>Math.round((b-a)/86400000);
 const addD=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r;};
 const fmt=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
 const fmtLong=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long'}):'—';
+const fmtEnd=d=>{if(!d)return'—';const s=d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});return d.getFullYear()!==(new Date()).getFullYear()?s+' '+d.getFullYear():s;};
 const amzUrl=(asin,mkt)=>`https://www.${mkt||'amazon.co.uk'}/dp/${asin}`;
 const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term%5D=${asin}`;
 
@@ -2045,20 +2316,39 @@ const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term
 const SETK='a2a_settings_v5';
 let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{}},ld(SETK)||{});
 if(!settings.leadTimes)settings.leadTimes={};
+// ── Prime Day phases: editable dates + on/off, managed in Settings ──
+const PDAY_DEF={
+  early:{label:'Early Prime Day', md:'06-22'},
+  prime:{label:'Prime Day',       md:'06-26'},
+  event:{label:'Prime Big Deal Days', md:'07-08'},
+};
+if(!settings.pday)settings.pday={master:true,
+  early:{enabled:true, md:'06-22'},
+  prime:{enabled:true, md:'06-26'},
+  event:{enabled:false,md:'07-08'}};
+function pdayInfo(type){
+  if(type==='ltd')return{label:'LTD',enabled:true,ltd:true};
+  const def=PDAY_DEF[type]||{label:type,md:'06-26'};
+  const s=(settings.pday&&settings.pday[type])||{};
+  const masterOn=!settings.pday||settings.pday.master!==false;
+  return{label:s.label||def.label, md:s.md||def.md, enabled:masterOn && s.enabled!==false};
+}
+function pdayDateOf(type){const i=pdayInfo(type);if(!i.md)return null;const[mm,dd]=i.md.split('-').map(Number);return new Date((new Date()).getFullYear(),mm-1,dd);}
+const mdToDM=md=>{if(!md)return'';const[m,d]=md.split('-');return `${d}/${m}`;};
+const dmToMd=dm=>{const m=(dm||'').match(/^(\d{1,2})\/(\d{1,2})$/);if(!m)return null;const dd=+m[1],mm=+m[2];if(mm<1||mm>12||dd<1||dd>31)return null;return `${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;};
 function saveSettings(){sv2(SETK,settings);}
 
 // ── Day/Month date entry (no year). Internal storage stays ISO yyyy-mm-dd ──
-function dmToISO(str,kind){            // kind: 'future' (end dates) | 'past' (drop/found)
+function dmToISO(str,kind){            // picks whichever year (prev/this/next) lands nearest today
   if(!str)return'';
   const m=String(str).match(/^\s*(\d{1,2})\D?(\d{1,2})\s*$/);
   if(!m)return'';
   const d=+m[1],mo=+m[2];
   if(d<1||d>31||mo<1||mo>12)return'';
-  const y=new Date().getFullYear(); const tnow=today();
-  let dt=new Date(y,mo-1,d);
-  if(kind==='future'){ if(dt<tnow)dt=new Date(y+1,mo-1,d); }
-  else { if(diff(tnow,dt)>200)dt=new Date(y-1,mo-1,d); }   // far future ⇒ it was last year
-  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+  const y=new Date().getFullYear(), tnow=today();
+  let best=null,bestAbs=Infinity;
+  [y-1,y,y+1].forEach(yy=>{const dt=new Date(yy,mo-1,d);const ad=Math.abs(diff(tnow,dt));if(ad<bestAbs){bestAbs=ad;best=dt;}});
+  return `${best.getFullYear()}-${String(best.getMonth()+1).padStart(2,'0')}-${String(best.getDate()).padStart(2,'0')}`;
 }
 const isoToDM=iso=>{const p=pd(iso);return p?`${String(p.getDate()).padStart(2,'0')}/${String(p.getMonth()+1).padStart(2,'0')}`:'';};
 function maskDM(el){
@@ -2544,7 +2834,7 @@ function openLead(id){
       <div class="ld-f"><div class="ld-fl">COG</div><div class="ld-fv">${l.cog?'£'+l.cog.toFixed(2):'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">Competitors</div><div class="ld-fv">${compTxt||'Not set'}</div></div>
       <div class="ld-f"><div class="ld-fl">LTD End Date</div><div class="ld-fv">${l.endDate?fmtLong(pd(l.endDate)):'N/A (7DD)'}</div></div>
-      <div class="ld-f"><div class="ld-fl">Send-to Account</div><div class="ld-fv">${l.account?`${l.account} (${(settings.leadTimes&&settings.leadTimes[l.account])||settings.leadToLive}d to live)`:`Default (${settings.leadToLive}d)`}</div></div>
+      <div class="ld-f"><div class="ld-fl">Lead time</div><div class="ld-fv">${settings.leadToLive}d to live</div></div>
       <div class="ld-f"><div class="ld-fl">Recommended Buy</div><div class="ld-fv">${p.recBuy?fmtLong(p.recBuy):'—'}</div></div>
     </div>
     ${l.notes?`<div class="ld-notes">${l.notes}</div>`:''}
@@ -2691,13 +2981,140 @@ function addRebuy(){
   ['r-asin','r-notes','r-uk1','r-uk2','r-uk3','r-eu1','r-eu2','r-eu3'].forEach(i=>sv(i,''));
   render();toast(`${asin} added to rebuy`,'ok');
 }
-function calcAcc(ds){
+function calcAcc(ds,snoozeUntil){
   if(!ds)return{type:'none'};
-  const rd=addD(pd(ds),8),d=diff(today(),rd);
-  return d<=0?{type:'ready'}:{type:'soon',days:d};
+  const rd=addD(pd(ds),8),d=diff(today(),rd);   // d>0 => still waiting, d<=0 => window cleared
+  if(d>0)return{type:'soon',days:d,readyDate:rd};
+  if(snoozeUntil&&diff(today(),pd(snoozeUntil))>0)return{type:'snoozed',wake:pd(snoozeUntil),readyDate:rd};
+  return{type:'ready',readyDate:rd};
 }
 function skipRebuy(id){if(!confirm('Remove?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Skipped','info');}
 function delRebuy(id){if(!confirm('Delete?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Deleted','info');}
+
+// ═══════════════ PRIME DAY ═══════════════
+function pdayDeadline(l){
+  if(l.type==='ltd')return l.endDate?pd(l.endDate):null;
+  const info=pdayInfo(l.type);if(!info.enabled)return null; // disabled phase = no deadline nag
+  return pdayDateOf(l.type);
+}
+function pdayState(l){
+  if(l.decision)return{type:'decided'};
+  const dl=pdayDeadline(l);if(!dl)return{type:'nodate'};
+  const d=diff(today(),dl);                 // >0 days left · 0 today · <0 past
+  if(d<0)return{type:'expired',days:-d,deadline:dl};
+  if(d===0)return{type:'today',deadline:dl};
+  return{type:'open',days:d,deadline:dl};
+}
+function onPdayType(){se('pd-end-row',gv('pd-type')==='ltd');}
+function addPday(){
+  const asin=gv('pd-asin').trim().toUpperCase(),type=gv('pd-type');
+  if(!asin){toast('Enter an ASIN','bad');return;}
+  if(!type){toast('Pick a deal type','bad');return;}
+  let endDate=null;
+  if(type==='ltd'){endDate=dmToISO(gv('pd-end'),'future');if(!endDate){toast('LTD needs an end date (dd/mm)','bad');return;}}
+  pdayLeads.push({id:Date.now(),asin,type,market:gv('pd-market')||'amazon.co.uk',endDate,
+    target:gv('pd-target')?parseFloat(gv('pd-target')):null,notes:gv('pd-notes').trim(),
+    decision:null,decidedAt:null,createdAt:todayStr()});
+  sv2(PDK,pdayLeads);
+  ['pd-asin','pd-end','pd-target','pd-notes'].forEach(i=>sv(i,''));sv('pd-type','');se('pd-end-row',false);
+  render();toast(`${asin} added to ${pdayInfo(type).label}`,'ok');
+}
+function decidePday(id,decision){
+  const l=pdayLeads.find(x=>x.id===id);if(!l)return;
+  l.decision=decision;l.decidedAt=todayStr();sv2(PDK,pdayLeads);render();
+  toast(`${l.asin} — ${decision==='buy'?'marked BUY':'marked No-buy'}`,decision==='buy'?'ok':'info');
+}
+function undoPday(id){const l=pdayLeads.find(x=>x.id===id);if(!l)return;l.decision=null;l.decidedAt=null;sv2(PDK,pdayLeads);render();}
+function delPday(id){if(!confirm('Remove this Prime Day lead?'))return;pdayLeads=pdayLeads.filter(x=>x.id!==id);sv2(PDK,pdayLeads);render();toast('Removed','info');}
+function openPdaySettings(){
+  document.getElementById('pds-master').checked=settings.pday.master!==false;
+  document.getElementById('pds-rows').innerHTML=['early','prime','event'].map(t=>{
+    const s=settings.pday[t]||{},i=pdayInfo(t);
+    return `<div class="pds-row">
+      <label class="pds-en"><input type="checkbox" id="pds-en-${t}" ${s.enabled!==false?'checked':''}><span>${i.label}</span></label>
+      <input class="fi dm pds-date" id="pds-date-${t}" placeholder="dd/mm" maxlength="5" inputmode="numeric" value="${mdToDM(s.md||PDAY_DEF[t].md)}">
+    </div>`;
+  }).join('');
+  openM('pdaySetModal');
+}
+function savePdaySettings(){
+  settings.pday.master=document.getElementById('pds-master').checked;
+  ['early','prime','event'].forEach(t=>{
+    const en=document.getElementById('pds-en-'+t).checked;
+    const md=dmToMd(document.getElementById('pds-date-'+t).value.trim())||PDAY_DEF[t].md;
+    settings.pday[t]={enabled:en,md};
+  });
+  saveSettings();closeM('pdaySetModal');render();toast('Prime Day settings saved','ok');
+}
+function buildPdayTile(l){
+  const s=pdayState(l),amz=amzUrl(l.asin,l.market||'amazon.co.uk'),sas=sasUrl(l.asin);
+  const cls=s.type==='expired'?'pd-expired':s.type==='today'?'pd-today':s.type==='decided'?(l.decision==='buy'?'pd-buy':'pd-nobuy'):s.type==='nodate'?'pd-nodate':'pd-open';
+  let dl;
+  if(s.type==='expired')dl=`<span class="pd-deadline exp">Expired · ended ${fmtEnd(s.deadline)}</span>`;
+  else if(s.type==='today')dl=`<span class="pd-deadline urg">Decide today · ${fmtEnd(s.deadline)}</span>`;
+  else if(s.type==='open')dl=`<span class="pd-deadline">${s.days}d to decide · ${fmtEnd(s.deadline)}</span>`;
+  else if(s.type==='nodate')dl=`<span class="pd-deadline">No end date</span>`;
+  else dl=`<span class="pd-deadline dec">${l.decision==='buy'?'✓ Buy':'✗ No-buy'} · ${l.decidedAt}</span>`;
+  const meta=[l.target?`target £${l.target.toFixed(2)}`:'',l.notes].filter(Boolean).join(' · ');
+  const actions=l.decision
+    ? `<button class="pd-b undo" onclick="undoPday(${l.id})">Undo</button><button class="pd-b del" onclick="delPday(${l.id})">Remove</button>`
+    : `<button class="pd-b buy" onclick="decidePday(${l.id},'buy')">Buy</button><button class="pd-b nobuy" onclick="decidePday(${l.id},'nobuy')">No-buy</button><button class="pd-b del" onclick="delPday(${l.id})" title="Remove">✕</button>`;
+  return `<div class="pd-tile ${cls}">
+    <div class="pd-tile-top"><span class="pd-asin">${l.asin}</span>${dl}</div>
+    ${meta?`<div class="pd-meta">${meta}</div>`:''}
+    <div class="pd-links"><a href="${sas}" target="_blank">SAS ↗</a><a href="${amz}" target="_blank">Amazon ↗</a></div>
+    <div class="pd-actions">${actions}</div>
+  </div>`;
+}
+function renderPday(){
+  const groups={early:[],prime:[],event:[],ltd:[]};
+  pdayLeads.forEach(l=>{(groups[l.type]||groups.ltd).push(l);});
+  const order={expired:0,today:1,open:2,nodate:3,decided:4};
+  const sortFn=(a,b)=>{const sa=pdayState(a),sb=pdayState(b);if(order[sa.type]!==order[sb.type])return order[sa.type]-order[sb.type];const da=pdayDeadline(a)||0,db=pdayDeadline(b)||0;return da-db;};
+  let undecidedTotal=0;
+  ['early','prime','event','ltd'].forEach(t=>{
+    const arr=groups[t].sort(sortFn);
+    const info=t==='ltd'?{enabled:true,label:'LTD'}:pdayInfo(t);
+    // hide whole phase block + top chip if disabled and empty
+    const grp=document.getElementById('pd-group-'+t);
+    const chip=document.getElementById('pd-chip-'+t);
+    const showPhase=t==='ltd'||info.enabled||arr.length;
+    if(grp)grp.style.display=showPhase?'':'none';
+    if(chip)chip.style.display=(t==='ltd'||info.enabled)?'':'none';
+    const undec=arr.filter(l=>!l.decision).length; undecidedTotal+=undec;
+    setN('pd-cnt-'+t,undec);
+    const nameEl=document.getElementById('pd-name-'+t);if(nameEl&&t!=='ltd')nameEl.textContent=info.label;
+    set('pd-grid-'+t,arr.length?`<div class="pd-tg">${arr.map(buildPdayTile).join('')}</div>`:emp(t==='ltd'?'No LTDs added — pick LTD in the form and set an end date.':`No ${info.label} leads yet.`));
+    let dlText, whenText;
+    if(t==='ltd'){dlText='Own end dates';whenText='your own end dates';}
+    else if(!info.enabled){dlText='Off';whenText='disabled';}
+    else{const dl=pdayDateOf(t),d=diff(today(),dl);dlText=d<0?`Ended ${fmt(dl)}`:d===0?`Ends today`:`${d}d left`;whenText=`ends ${fmt(dl)}`;}
+    setN('pd-dl-'+t,dlText);
+    const whenEl=document.getElementById('pd-when-'+t);if(whenEl)whenEl.textContent=whenText;
+  });
+  // Rebuild the deal-type dropdown from enabled phases (preserve current pick)
+  const sel=document.getElementById('pd-type');
+  if(sel){
+    const cur=sel.value;
+    let opts='<option value="">-- Choose --</option>';
+    ['early','prime','event'].forEach(t=>{const i=pdayInfo(t);if(i.enabled)opts+=`<option value="${t}">${i.label} (ends ${fmt(pdayDateOf(t))})</option>`;});
+    opts+='<option value="ltd">LTD (set end date)</option>';
+    sel.innerHTML=opts;sel.value=cur;
+  }
+  setN('nb-pday',undecidedTotal);
+  const bn=document.getElementById('pd-banner');
+  if(bn){
+    if(undecidedTotal){bn.className='pd-banner act';bn.innerHTML=`<strong>${undecidedTotal}</strong> lead${undecidedTotal>1?'s':''} still need a decision before the deadline`;}
+    else if(pdayLeads.length){bn.className='pd-banner clear';bn.innerHTML='All Prime Day leads decided ✓';}
+    else {bn.className='pd-banner none';bn.innerHTML='No Prime Day leads yet — add deals above as you find them.';}
+  }
+}
+function dismissExpired(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  if(!confirm('Dismiss this expired LTD? It leaves your action list but stays under Sourcing.'))return;
+  l.rejectedAt=todayStr();l.rejectReason='LTD expired';l.updatedAt=todayStr();
+  sv2(SK,leads);render();toast(`${l.asin} dismissed`,'info');
+}
 
 function markDelivered(id,acc){
   const r=rebuys.find(x=>x.id===id);if(!r)return;
@@ -2717,8 +3134,20 @@ function confirmRbBought(){
   const sel=['uk1','uk2','uk3','eu1','eu2','eu3'].filter(a=>document.getElementById(`cb-${a}`).checked);
   if(!sel.length){toast('Select at least one account','bad');return;}
   const r=rebuys.find(x=>x.id===rbBoughtId);
-  if(r){const ts=today().toISOString().split('T')[0];sel.forEach(a=>r.accounts[a]=ts);sv2(RK,rebuys);}
-  closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')}`,'ok');
+  if(r){const ts=today().toISOString().split('T')[0];sel.forEach(a=>{r.accounts[a]=ts;if(r.snooze)delete r.snooze[a];});sv2(RK,rebuys);}
+  closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')} — 8-day countdown restarted`,'ok');
+}
+// Snooze every account that's ready-to-rebuy on this card by one day
+function snoozeRebuy(id){
+  const r=rebuys.find(x=>x.id===id);if(!r)return;
+  if(!r.snooze)r.snooze={};
+  const wake=addD(today(),1).toISOString().split('T')[0];
+  let n=0;
+  ['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>{
+    if(calcAcc(r.accounts[a],r.snooze[a]).type==='ready'){r.snooze[a]=wake;n++;}
+  });
+  if(!n){toast('Nothing ready to snooze on this item','info');return;}
+  sv2(RK,rebuys);render();toast(`${r.asin} rebuy snoozed 1 day`,'info');
 }
 
 // ═══════════════════════════════════
@@ -2728,18 +3157,26 @@ const TCLS={watching:'t-neu',ready:'t-green',missed:'t-red',buywindow:'t-teal',w
 
 function buildTile(l){
   const p=l._p||calcBuyPlan(l);
-  const cls = p.status==='closing' ? 't-red'
-    : (p.status==='buy'||p.status==='closing') ? (p.isLTD?'t-teal':'t-green')
+  const cls = p.status==='unknown' ? 't-amber'
+    : p.status==='expired' ? 't-red'
+    : p.status==='closing' ? 't-red'
+    : (p.status==='buy') ? (p.isLTD?'t-teal':'t-green')
     : p.isLTD ? 't-blue' : 't-amber';
   const cog=l.cog?`£${l.cog.toFixed(2)}`:'';
   const stratTag=p.strategy==='speed'?'Speed':'Validate';
   let st='',meta='';
-  if(p.status==='buy'||p.status==='closing'){
+  if(p.status==='unknown'){
+    st='ADD DROP DATE';
+    meta=`Set the date this deal dropped to start the buy plan${p.isLTD&&p.end?` · ends ${fmtEnd(p.end)}`:''}`;
+  } else if(p.status==='expired'){
+    st='LTD EXPIRED';
+    meta=`Ended ${fmtEnd(p.end)} — mark bought or remove${cog?' · '+cog:''}`;
+  } else if(p.status==='buy'||p.status==='closing'){
     st = p.status==='closing' ? 'BUY — CLOSING' : 'BUY NOW';
     meta = `${p.type||l.type} · ${stratTag} · live ~${fmt(p.estLive)}${cog?' · '+cog:''}`;
   } else { // wait
     st = p.isLTD ? `BUY ${fmt(p.recBuy)}` : `BUY IN ${p.daysToBuy}D`;
-    meta = `${stratTag} → ${fmt(p.recBuy)}${p.isLTD?` · ends ${fmt(p.end)}`:''}${cog?' · '+cog:''}`;
+    meta = `${stratTag} → ${fmt(p.recBuy)}${p.isLTD?` · ends ${fmtEnd(p.end)}`:''}${cog?' · '+cog:''}`;
   }
   const srcBadge=l.src?`<div class="tile-src">${l.src}</div>`:'';
   const compBadge=l.comp!=null?(()=>{const lvl=l.comp<=2?'low':l.comp<=5?'med':'high';const lbl=lvl==='low'?'Low comp':lvl==='med'?'Med comp':'High comp';return`<div class="tile-comp comp-${lvl}">${lbl} · ${l.comp} FBA</div>`;})():'';
@@ -2765,33 +3202,44 @@ function buildTile(l){
 function buildRC(r){
   const amz=amzUrl(r.asin,r.market||'amazon.co.uk'),sas=sasUrl(r.asin);
   const accs=['uk1','uk2','uk3','eu1','eu2','eu3'];
-  const pills=accs.map(a=>{
-    const purchased=r.accounts[a];
-    const delivered=r.delivered?.[a];
-    if(!purchased)return`<div class="acc">${a.toUpperCase()} —</div>`;
-    if(!delivered){
-      // Purchased but not delivered yet
-      return`<div class="acc soon" style="cursor:pointer" onclick="markDelivered(${r.id},'${a}')" title="Click to mark delivered">
-        ${a.toUpperCase()}<br><span style="font-size:9px">Awaiting</span>
-      </div>`;
-    }
-    // Delivered — calc rebuy from delivery date
-    const s=calcAcc(delivered);
-    if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')">${a.toUpperCase()}</div>`;
-    return`<div class="acc soon">${a.toUpperCase()} +${s.days}d</div>`;
+  const states=accs.map(a=>({a,purchased:r.accounts[a],deliv:r.delivered?.[a],
+    s:r.accounts[a]?calcAcc(r.accounts[a],r.snooze?.[a]):{type:'none'}}));
+  const readyCt=states.filter(x=>x.s.type==='ready').length;
+  const soonNext=states.filter(x=>x.s.type==='soon').sort((p,q)=>p.s.days-q.s.days)[0];
+  const snzNext=states.filter(x=>x.s.type==='snoozed').sort((p,q)=>p.s.wake-q.s.wake)[0];
+  let summary,summaryCls;
+  if(readyCt){summary=`${readyCt} account${readyCt>1?'s':''} ready — check the price, then rebuy`;summaryCls='rdy';}
+  else if(soonNext){summary=`Next rebuy: ${soonNext.a.toUpperCase()} in ${soonNext.s.days} day${soonNext.s.days!==1?'s':''} · ${fmt(soonNext.s.readyDate)}`;summaryCls='soon';}
+  else if(snzNext){summary=`Snoozed — back ${fmt(snzNext.s.wake)}`;summaryCls='snz';}
+  else {summary='No purchases logged yet — add a bought date below';summaryCls='none';}
+  const pills=states.map(({a,purchased,s,deliv})=>{
+    const lbl=a.toUpperCase();
+    if(!purchased)return`<div class="acc"><div class="acc-h">${lbl}</div><div class="acc-s">—</div></div>`;
+    const bought=`<div class="acc-d">bought ${fmt(pd(purchased))}</div>`;
+    const dBtn=`<button class="acc-deliv ${deliv?'on':''}" title="${deliv?'Arrived '+fmt(pd(deliv))+' — tap to undo':'Optional: mark stock arrived'}" onclick="event.stopPropagation();toggleDelivered(${r.id},'${a}')">${deliv?'✓ arrived':'arrived?'}</button>`;
+    if(s.type==='ready')return`<div class="acc ready" onclick="window.open('${amz}','_blank')" title="8 days cleared — opens Amazon"><div class="acc-h">${lbl}</div><div class="acc-s">rebuy now</div>${bought}${dBtn}</div>`;
+    if(s.type==='snoozed')return`<div class="acc snoozed"><div class="acc-h">${lbl}</div><div class="acc-s">till ${fmt(s.wake)}</div>${bought}${dBtn}</div>`;
+    return`<div class="acc soon"><div class="acc-h">${lbl}</div><div class="acc-s">in ${s.days}d</div>${bought}${dBtn}</div>`;
   }).join('');
   const noteHtml=r.notes?`<div class="rc-note">${r.notes}</div>`:'';
   return`<div class="rc" id="rebuy-${r.id}">
     <div class="rc-head"><div class="rc-asin">${r.asin}</div><a href="${amz}" target="_blank" class="rc-amz">Amazon ↗</a></div>
+    <div class="rc-summary ${summaryCls}">${summary}</div>
     <div class="acc-grid">${pills}</div>
     ${noteHtml}
     <div class="rc-acts">
       <button class="rb sas" onclick="window.open('${sas}','_blank')">SAS</button>
-      <button class="rb bought" onclick="openRbBought(${r.id})">Bought</button>
-      <button class="rb skip" onclick="skipRebuy(${r.id})">Skip</button>
+      <button class="rb bought" onclick="openRbBought(${r.id})">Mark bought</button>
+      ${readyCt?`<button class="rb snz" onclick="snoozeRebuy(${r.id})">Snooze 1d</button>`:''}
       <button class="rb del" onclick="delRebuy(${r.id})">Delete</button>
     </div>
   </div>`;
+}
+function toggleDelivered(id,acc){
+  const r=rebuys.find(x=>x.id===id);if(!r)return;
+  if(!r.delivered)r.delivered={};
+  if(r.delivered[acc])delete r.delivered[acc];else r.delivered[acc]=today().toISOString().split('T')[0];
+  sv2(RK,rebuys);render();
 }
 
 function buildInboxCard(item){
@@ -2842,7 +3290,7 @@ function render(){
   });
   const cmp=srcSorter;
   watching.sort(cmp); ltdWait.sort(cmp); readyBuy.sort(cmp);
-  const ltd=[...ltdOpen,...ltdWait,...ltdRev]; ltd.sort(cmp);
+  const ltd=[...ltdOpen,...ltdWait,...ltdRev,...expired]; ltd.sort(cmp);
 
   // Sourcing — cards or table
   const renderList=(arr,emptyMsg)=>{
@@ -2861,6 +3309,7 @@ function render(){
   // Rebuy
   set('rebuy-list',rebuys.map(buildRC).join('')||emp('No rebuy entries.'));
   setN('cnt-rebuy',rebuys.length);
+  renderPday();
 
   // Inbox
   set('inbox-list',inbox.map(buildInboxCard).join('')||emp('Inbox empty — use Quick Save above to capture items on the fly.'));
@@ -2915,6 +3364,23 @@ function computeActions(){
   leads.forEach(l=>{
     if(l.bought||l.rejectedAt||isSnoozed(l))return;
     const p=calcBuyPlan(l);
+    // No drop date — buy plan can't run until it's filled
+    if(p.status==='unknown'){
+      A.push({key:'nodate-'+l.id,cat:'buy',priority:5,color:'amber',chip:'NEEDS DATE',title:l.asin,
+        sub:'No drop date set — add it so the buy plan can run',
+        jump:`go('sourcing');openEdit(${l.id})`,
+        primary:{label:'Add Date',fn:`openEdit(${l.id})`},links:leadLinks(l)});
+      return;
+    }
+    // LTD safety net — an LTD must never lapse without a prompt
+    if(p.isLTD&&p.status==='expired'){
+      A.push({key:'ltdx-'+l.id,cat:'buy',priority:1,color:'red',chip:'LTD EXPIRED',title:l.asin,
+        sub:`Deal ended ${fmt(p.end)} — review and clear so it stops nagging`,
+        jump:`go('sourcing');ss('sec-ltd')`,
+        primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},
+        links:leadLinks(l)+`<button class="aq-link" onclick="event.stopPropagation();dismissExpired(${l.id})">Dismiss</button>`});
+      return;
+    }
     if(p.status==='buy'||p.status==='closing'){
       const stratTag=p.strategy==='speed'?'Speed':'Validate';
       if(p.isLTD){
@@ -2930,6 +3396,12 @@ function computeActions(){
           jump:`go('sourcing');ss('sec-ready')`,
           primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},links:leadLinks(l)});
       }
+    } else if(p.isLTD&&p.status==='wait'&&p.end&&diff(today(),p.end)<=3){
+      const dleft=diff(today(),p.end);
+      A.push({key:'ltdsoon-'+l.id,cat:'buy',priority:2,color:'red',chip:'LTD ENDING',title:l.asin,
+        sub:`Ends ${fmt(p.end)} (${dleft<=0?'today':dleft+'d left'}) — decide before it expires`,
+        jump:`go('sourcing');ss('sec-ltd')`,
+        primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},links:leadLinks(l)});
     }
   });
   // OA Replen
@@ -2950,25 +3422,53 @@ function computeActions(){
   // Sub & Save
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc]; if(!d||!d.editDay)return;
+    if(snsDismiss[acc]===today().toISOString().split('T')[0])return; // cleared for today
     const s=calcSnsStatus(acc);
     if(s.status==='lda-today'){
       A.push({key:'snse-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S LAST DAY',title:acc,
         sub:'Last day to add or amend items for this cycle',jump:`go('sns')`,
         primary:{label:'Open',fn:`go('sns')`},links:''});
-    } else if(s.status==='review'){
-      A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S REVIEW',title:acc,
-        sub:`Current order: check prices & profit · ${fmt(s.reviewStart)}–${fmt(s.reviewEnd)}`,
+    } else if(s.status==='lda-soon'){
+      A.push({key:'snsa-'+acc,cat:'sns',priority:5,color:'amber',chip:'S&S ADD',title:acc,
+        sub:`Add/amend window closes ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+' days'} · ${fmt(s.nextLDA)}`,
+        jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
+    } else if(s.inFlight && s.daysToReviewStart<=0){
+      A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S CHECK',title:acc,
+        sub:`Order placed — check prices & profit before delivery${s.deliv?` (~${fmt(s.deliv)})`:''}`,
         jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
     }
   });
   // Rebuy
   rebuys.forEach(r=>{
-    const ready=['uk1','uk2','uk3','eu1','eu2','eu3'].filter(a=>calcAcc(r.accounts[a]).type==='ready');
+    const ready=['uk1','uk2','uk3','eu1','eu2','eu3'].filter(a=>calcAcc(r.accounts[a],r.snooze?.[a]).type==='ready');
     if(ready.length){
       A.push({key:'rb-'+r.id,cat:'rebuy',priority:8,color:'blue',chip:'REBUY',title:r.asin,
-        sub:`Can rebuy on ${ready.map(a=>a.toUpperCase()).join(', ')}`,
+        sub:`Ready to rebuy on ${ready.map(a=>a.toUpperCase()).join(', ')} · 8-day window cleared`,
         jump:`go('rebuy');scrollTo_('rebuy-${r.id}')`,
-        primary:{label:'Open',fn:`go('rebuy')`},links:''});
+        primary:{label:'Mark Bought',fn:`openRbBought(${r.id})`},
+        links:`<button class="aq-link" onclick="event.stopPropagation();snoozeRebuy(${r.id})">Snooze 1d</button>`});
+    }
+  });
+  // Prime Day — every undecided lead must get a call before its deadline
+  pdayLeads.forEach(l=>{
+    if(l.decision)return;
+    if(l.snoozeUntil && pd(l.snoozeUntil)>today())return; // snoozed from queue
+    const s=pdayState(l); if(s.type==='nodate')return;
+    const tlabel=pdayInfo(l.type).label;
+    const lnks='';
+    if(s.type==='expired'){
+      A.push({key:'pd-'+l.id,cat:'buy',priority:1,color:'red',chip:'PRIME DAY MISSED',title:l.asin,
+        sub:`${tlabel} ended ${fmtEnd(s.deadline)} with no decision — decide or remove`,
+        jump:`go('pday')`,primary:{label:'Decide',fn:`go('pday')`},links:lnks});
+    } else if(s.type==='today'){
+      A.push({key:'pd-'+l.id,cat:'buy',priority:1,color:'red',chip:'PRIME DAY — TODAY',title:l.asin,
+        sub:`${tlabel} ends today (${fmtEnd(s.deadline)}) — decide now`,
+        jump:`go('pday')`,primary:{label:'Decide',fn:`go('pday')`},links:lnks});
+    } else if(s.type==='open'){
+      const col=s.days<=1?'red':s.days<=2?'amber':'teal';
+      A.push({key:'pd-'+l.id,cat:'buy',priority:s.days<=1?2:5,color:col,chip:'PRIME DAY',title:l.asin,
+        sub:`${tlabel} · decide within ${s.days}d (ends ${fmtEnd(s.deadline)})`,
+        jump:`go('pday')`,primary:{label:'Decide',fn:`go('pday')`},links:lnks});
     }
   });
   A.sort((a,b)=>a.priority-b.priority);
@@ -3004,7 +3504,7 @@ let _acFilter='all';
 function setAcFilter(cat){_acFilter=(_acFilter===cat)?'all':cat;refreshActionCenter();}
 
 const AC_BANDS=[
-  {key:'overdue',title:'Overdue — act now',color:'red',lbl:'Overdue'},
+  {key:'overdue',title:'Overdue & due today — act now',color:'red',lbl:'Act Now'},
   {key:'buy',title:'Buy today',color:'green',lbl:'To Buy'},
   {key:'checks',title:'OA checks due',color:'amber',lbl:'OA Due'},
   {key:'sns',title:'Sub & Save',color:'purple',lbl:'Sub & Save'},
@@ -3017,15 +3517,81 @@ function bandOf(a){
   if(a.cat==='sns')return'sns';
   return'rebuy';
 }
+// Resolve which underlying record an action row points at (no need to tag every push)
+function aqEntity(a){
+  const k=a.key;
+  if(k.indexOf('pd-')===0)return{t:'pday',id:parseInt(k.slice(3))};
+  if(a.cat==='oa')return{t:'oa',id:parseInt(k.slice(k.lastIndexOf('-')+1))};
+  if(a.cat==='rebuy')return{t:'rebuy',id:parseInt(k.slice(k.lastIndexOf('-')+1))};
+  if(a.cat==='sns')return{t:'sns',id:k.slice(k.indexOf('-')+1)};
+  return{t:'lead',id:parseInt(k.slice(k.lastIndexOf('-')+1))};
+}
 function acRowHtml(a){
-  return `<div class="aq-row ${COLW[a.color]}">
+  const e=aqEntity(a);
+  const T=(act,label,cls)=>`<button class="aq-t ${cls||''}" onclick="aqAct(event,'${act}','${e.t}','${e.id}')">${label}</button>`;
+  const openT=label=>`<button class="aq-t" onclick="event.stopPropagation();${a.jump}">${label}</button>`;
+  let tiles='';
+  if(e.t==='lead'){
+    if(a.chip==='NEEDS DATE')
+      tiles=`<button class="aq-t go" onclick="event.stopPropagation();openEdit(${e.id})">Add date</button>`+T('snooze','Snooze')+T('remove','✕','danger');
+    else
+      tiles=T('done','Bought','go')+T('skip','Skip')+T('snooze','Snooze')+T('remove','✕','danger');
+  } else if(e.t==='pday'){
+    tiles=T('done','Buy','go')+T('skip','No‑buy')+T('snooze','Snooze')+T('remove','✕','danger');
+  } else if(e.t==='oa'){
+    tiles=T('done','Checked','go')+T('snooze','Snooze')+openT('Log…');
+  } else if(e.t==='rebuy'){
+    tiles=T('done','Bought','go')+T('snooze','Snooze');
+  } else if(e.t==='sns'){
+    tiles=openT('Open')+T('done','Got it','go');
+  }
+  return `<div class="aq-row ${COLW[a.color]}" data-k="${a.key}">
     <span class="aq-chip">${a.chip}</span>
     <div class="aq-main" onclick="${a.jump}">
       <div class="aq-asin">${a.title}</div>
       <div class="aq-sub">${a.sub}</div>
     </div>
-    <div class="aq-acts">${a.links||''}<button class="aq-btn-primary" onclick="${a.primary.fn}">${a.primary.label}</button></div>
+    <div class="aq-acts">${tiles}</div>
   </div>`;
+}
+// One tap → row fades out → backend runs → re-render. No modals, no confirms.
+function aqAct(ev,action,etype,eid){
+  if(ev){ev.stopPropagation();}
+  const row=ev&&ev.currentTarget?ev.currentTarget.closest('.aq-row'):null;
+  const run=()=>aqPerform(action,etype,eid);
+  if(row){row.classList.add('aq-gone');setTimeout(run,150);}
+  else run();
+}
+function aqPerform(action,etype,eid){
+  if(etype==='lead'){
+    const id=parseInt(eid),l=leads.find(x=>x.id===id);if(!l)return;
+    if(action==='done'){l.bought=true;l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} bought ✓`,'ok');}
+    else if(action==='skip'){l.rejectedAt=todayStr();l.rejectReason='Skipped from queue';l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} skipped`,'info');}
+    else if(action==='snooze'){l.snoozed=true;l.snoozeUntil=addD(today(),3).toISOString().split('T')[0];l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} snoozed 3 days`,'info');}
+    else if(action==='remove'){leads=leads.filter(x=>x.id!==id);sv2(SK,leads);toast(`${l.asin} removed`,'info');}
+  } else if(etype==='pday'){
+    const id=parseInt(eid),l=pdayLeads.find(x=>x.id===id);if(!l)return;
+    if(action==='done'){l.decision='buy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);toast(`${l.asin} — BUY ✓`,'ok');}
+    else if(action==='skip'){l.decision='nobuy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);toast(`${l.asin} — No‑buy`,'info');}
+    else if(action==='snooze'){l.snoozeUntil=addD(today(),1).toISOString().split('T')[0];sv2(PDK,pdayLeads);toast(`${l.asin} snoozed 1 day`,'info');}
+    else if(action==='remove'){pdayLeads=pdayLeads.filter(x=>x.id!==id);sv2(PDK,pdayLeads);toast(`${l.asin} removed`,'info');}
+  } else if(etype==='oa'){
+    const id=parseInt(eid),it=oaItems.find(x=>x.id===id);if(!it)return;
+    it.lastChecked=today().toISOString().split('T')[0];
+    it.snoozedUntil=action==='snooze'?addD(today(),(parseInt(it.freq)||7)).toISOString().split('T')[0]:null;
+    it.checkLog=it.checkLog||[];it.checkLog.push({date:todayStr(),note:action==='snooze'?'Snoozed from queue':'Checked from queue'});
+    localStorage.setItem(OAK,JSON.stringify(oaItems));toast(`${it.asin} ${action==='snooze'?'snoozed':'checked'} ✓`,'ok');
+  } else if(etype==='rebuy'){
+    const id=parseInt(eid),r=rebuys.find(x=>x.id===id);if(!r)return;
+    if(action==='done'){
+      const ts=today().toISOString().split('T')[0];let n=0;
+      ['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>{if(calcAcc(r.accounts[a],r.snooze&&r.snooze[a]).type==='ready'){r.accounts[a]=ts;if(r.snooze)delete r.snooze[a];n++;}});
+      sv2(RK,rebuys);toast(`${r.asin} rebought (${n}) — 8‑day countdown reset`,'ok');
+    } else if(action==='snooze'){snoozeRebuy(id);return;}
+  } else if(etype==='sns'){
+    snsDismiss[eid]=today().toISOString().split('T')[0];sv2(SNSDK,snsDismiss);toast(`${eid} cleared for today`,'info');
+  }
+  render();
 }
 const acClearHtml=()=>`<div class="ac-clear">
   <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -3254,8 +3820,7 @@ function go(name){
   document.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById(name)?.classList.add('active');
-  const map={overview:0,sourcing:1,rebuy:2,inbox:3,watchlist:4,sns:5,oareplen:6,notes:7};
-  document.querySelectorAll('.nb')[map[name]??0]?.classList.add('active');
+  document.querySelectorAll('.nb').forEach(b=>{if((b.getAttribute('onclick')||'').includes(`go('${name}')`))b.classList.add('active');});
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function ss(id){setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}),130);}
@@ -3701,7 +4266,8 @@ function renderOA(){
 // ═══════════════════════════════════
 // SUBSCRIBE & SAVE
 // ═══════════════════════════════════
-const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5';
+const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5', SNSDK='a2a_sns_dismiss_v5';
+let snsDismiss = ld(SNSDK) || {};
 
 const SNS_ACCOUNTS=['EU01','EU02','EU03','Biz1','Biz2','Biz3'];
 
