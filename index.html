@@ -1137,6 +1137,7 @@ header{
 .sns-next{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.4;max-width:340px;}
 .sns-sub{font-size:10.5px;color:var(--text2);margin-top:3px;}
 .sns-dim{font-size:12px;color:var(--muted);font-style:italic;}
+.sns-notes{font-size:11px;color:var(--amber);margin-top:5px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:default;}
 .sns-row-act td{background:color-mix(in srgb,var(--red) 6%,transparent);}
 tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .sns-act-btn.edit-btn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2)!important;animation:none!important;font-weight:600;}
@@ -1317,6 +1318,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="si" id="searchInput" placeholder="Search ASIN…" oninput="runSearch(this.value)">
     </div>
+    <div class="bell-wrap">
+      <button class="bell-btn" id="bellBtn" onclick="toggleNotif(event)" title="Notifications">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="bell-count zero" id="bellCount">0</span>
+      </button>
+      <div class="notif-panel" id="notifPanel">
+        <div class="notif-hd">
+          <span class="notif-hd-t">Notifications</span>
+          <button class="notif-clear" onclick="clearAllNotif()">Mark all read</button>
+        </div>
+        <div class="notif-body" id="bellNotifBody"></div>
+      </div>
+    </div>
     <button class="hdr-backup-btn" onclick="openM('backupModal')" title="Backup or restore your data">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span>Backup</span>
@@ -1461,6 +1475,18 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
                 <option value="VAA">VAA</option>
                 <option value="VAS">VAS</option>
                 <option value="Discord Group">Discord Group</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="fl">Account</label>
+              <select class="fs" id="s-account">
+                <option value="">-- Optional --</option>
+                <option value="EU01">EU01</option>
+                <option value="EU02">EU02</option>
+                <option value="EU03">EU03</option>
+                <option value="Biz1">Biz1</option>
+                <option value="Biz2">Biz2</option>
+                <option value="Biz3">Biz3</option>
               </select>
             </div>
           </div>
@@ -1626,8 +1652,6 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
             <div class="fg"><label class="fl">Deal Type *</label>
               <select class="fs" id="pd-type" onchange="onPdayType()">
                 <option value="">-- Choose --</option>
-                <option value="early">Early Prime Day (ends 22 Jun)</option>
-                <option value="prime">Prime Day (ends 26 Jun)</option>
                 <option value="ltd">LTD (set end date)</option>
               </select>
             </div>
@@ -1793,7 +1817,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <div>
           <div class="purpose-t">Set the dates once — they roll forward every month</div>
-          <div class="purpose-s">Enter each account's monthly dates once and they roll forward automatically. Accounts needing attention sort to the top: when an add window or review is due, tick <strong>Added ✓</strong> or <strong>Reviewed ✓</strong> right here (or from the Action Center) and it won't nag again until next cycle. Anything due today also shows as a banner on the Action Center.</div>
+          <div class="purpose-s">Enter each account's monthly dates once and they roll forward automatically. Accounts needing attention sort to the top: when an add window or review is due, click <strong>Mark added</strong> or <strong>Mark reviewed</strong> right here (or from the Action Center) and it won't nag again until next cycle. Anything due today also shows as a banner on the Action Center.</div>
         </div>
       </div>
 
@@ -1805,7 +1829,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
             <tr>
               <th>Account</th>
               <th>Next Add-By</th>
-              <th>Current Order (in flight)</th>
+              <th>Delivery</th>
+              <th>Review Window</th>
               <th>Status</th>
               <th></th>
             </tr>
@@ -1937,8 +1962,15 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
           <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
         </select>
       </div>
-      <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Account</label>
+        <select class="fs" id="em-account">
+          <option value="">--</option>
+          <option value="EU01">EU01</option><option value="EU02">EU02</option><option value="EU03">EU03</option>
+          <option value="Biz1">Biz1</option><option value="Biz2">Biz2</option><option value="Biz3">Biz3</option>
+        </select>
+      </div>
     </div>
+    <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
     <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
     <div class="mbtns">
@@ -2225,7 +2257,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
       <button class="mx" onclick="closeM('snsEditModal')">×</button>
     </div>
     <input type="hidden" id="sns-edit-acc">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Current cycle will be archived to history. Enter the new dates below.</p>
+    <input type="hidden" id="sns-edit-mode">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px" id="sns-edit-hint">Editing the current cycle in place — nothing is archived.</p>
     <div class="g2">
       <div class="fg">
         <label class="fl">Last Day to Add *</label>
@@ -2246,7 +2279,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter
       <input class="fi" id="sns-new-notes" placeholder="e.g. Price changed, skipped 2 items…">
     </div>
     <div class="mbtns">
-      <button class="mbtn ok" onclick="saveSnsNextCycle()">Save New Cycle</button>
+      <button class="mbtn ok" onclick="saveSnsEdit()">Save</button>
       <button class="mbtn cancel" onclick="closeM('snsEditModal')">Cancel</button>
     </div>
   </div>
@@ -2428,7 +2461,6 @@ let inbox     = ld(IK) || [];
 let watchlist = ld(WK) || [];
 const PDK='a2a_pday_v5';
 let pdayLeads = ld(PDK) || [];
-const PDAY_TYPES={early:{label:'Early Prime Day',month:5,day:22},prime:{label:'Prime Day',month:5,day:26},ltd:{label:'LTD',month:null,day:null}};
 let editId=null,rbBoughtId=null,srcBoughtId=null,promoteId=null,wEditId=null;
 
 // ═══════════════════════════════════
@@ -3707,7 +3739,7 @@ function acRowHtml(a){
   } else if(e.t==='rebuy'){
     tiles=T('done','Bought','go')+T('snooze','Snooze 1d');
   } else if(e.t==='sns'){
-    const lbl=a.chip==='S&S REVIEW'?'Reviewed ✓':'Added ✓';
+    const lbl=a.chip==='S&S REVIEW'?'Mark reviewed':'Mark added';
     tiles=openT('Open')+T('done',lbl,'go');
   }
   return `<div class="aq-row ${COLW[a.color]}" data-k="${a.key}">
@@ -3946,7 +3978,7 @@ function renderNotif(A,U){
   if(badge){badge.textContent=active.length;badge.classList.toggle('zero',active.length===0);}
   if(bell)bell.classList.toggle('has-alerts',active.length>0);
 
-  const body=document.getElementById('notifBody');
+  const body=document.getElementById('bellNotifBody');
   if(!body)return;
   if(active.length===0&&U.length===0){
     body.innerHTML=`<div class="notif-empty">
@@ -4561,12 +4593,12 @@ let snsHandled = ld(SNSHANDK) || {};   // per-account, per-cycle "I've actioned 
 const SNS_ACCOUNTS=['EU01','EU02','EU03','Biz1','Biz2','Biz3'];
 
 const DEMO_SNS={
-  EU01:{editDay:null,deliveryDay:null},
-  EU02:{editDay:null,deliveryDay:null},
-  EU03:{editDay:null,deliveryDay:null},
-  Biz1:{editDay:null,deliveryDay:null},
-  Biz2:{editDay:null,deliveryDay:null},
-  Biz3:{editDay:null,deliveryDay:null},
+  EU01:{editDay:null,deliveryDay:null,notes:''},
+  EU02:{editDay:null,deliveryDay:null,notes:''},
+  EU03:{editDay:null,deliveryDay:null,notes:''},
+  Biz1:{editDay:null,deliveryDay:null,notes:''},
+  Biz2:{editDay:null,deliveryDay:null,notes:''},
+  Biz3:{editDay:null,deliveryDay:null,notes:''},
 };
 
 let snsData = ld(SNSK) || DEMO_SNS;
@@ -4602,6 +4634,7 @@ function calcSnsStatus(acc){
   if(inReview && !reviewHandled)          status='review';
   else if(daysToLDA===0 && !addHandled)   status='lda-today';
   else if(daysToLDA<=3 && !addHandled)    status='lda-soon';
+  else if(reviewHandled && inFlight && daysToDelivery<=4) status='reviewed';  // calm confirmation
   else if(inFlight && daysToDelivery<=4)  status='arriving';
   else if(inFlight)                       status='in-flight';
   else if(addHandled && daysToLDA<=7)     status='added';     // calm confirmation
@@ -4653,7 +4686,7 @@ function renderSns(){
   let needsCount=0;
 
   // Sort: act-now first (review / last-day), then soon, arriving, in-flight, added, idle
-  const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'added':4,'idle':5};
+  const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'reviewed':4,'added':4,'idle':5};
   const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>(SNS_ORDER[SS[a].status]??6)-(SNS_ORDER[SS[b].status]??6));
 
   const dueLbl=n=>n===0?'today':n===1?'tomorrow':`in ${n}d`;
@@ -4673,15 +4706,19 @@ function renderSns(){
     } else if(c.status==='review'){
       statusHtml=`<span class="sns-status review">Review Now</span>`;
       next='Check the in-flight order — prices, profit &amp; competition — then mark it reviewed';rowCls='sns-row-act';
-      actionHtml=actBtn(acc,'snsMarkReviewed','Reviewed ✓')+editBtn(acc);needsCount++;
+      actionHtml=actBtn(acc,'snsMarkReviewed','Mark reviewed')+editBtn(acc);needsCount++;
     } else if(c.status==='lda-today'){
       statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
       next='Final day to add or amend for this cycle — do it today, then mark added';rowCls='sns-row-act';
-      actionHtml=actBtn(acc,'snsMarkAdded','Added ✓')+editBtn(acc);needsCount++;
+      actionHtml=actBtn(acc,'snsMarkAdded','Mark added')+editBtn(acc);needsCount++;
     } else if(c.status==='lda-soon'){
       statusHtml=`<span class="sns-status soon">Add ${dueLbl(c.daysToLDA)}</span>`;
       next=`Get items in before the ${fmt(c.nextLDA)} cutoff`;
-      actionHtml=actBtn(acc,'snsMarkAdded','Added ✓')+editBtn(acc);
+      actionHtml=actBtn(acc,'snsMarkAdded','Mark added')+editBtn(acc);
+    } else if(c.status==='reviewed'){
+      statusHtml=`<span class="sns-status done">Reviewed ✓</span>`;
+      next=`Reviewed — arrives ${fmt(c.deliv)}`;
+      actionHtml=calmBtn(acc,'Undo')+editBtn(acc);
     } else if(c.status==='arriving'){
       statusHtml=`<span class="sns-status between">Arrives ${dueLbl(c.daysToDelivery)}</span>`;
       next=`Current order lands ${fmt(c.deliv)} — prep to send in`;
@@ -4699,16 +4736,22 @@ function renderSns(){
 
     const addByCell = c.status==='no-data' ? '—'
       : `<span class="sns-date">${fmt(c.nextLDA)}</span><div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</div>`;
-    const flightCell = (c.status==='no-data') ? '—'
+    const deliveryCell = (c.status==='no-data' || !c.inFlight) ? `<span class="sns-dim">—</span>`
+      : `<span class="sns-date" style="color:var(--blue)">${fmt(c.deliv)}</span><div class="sns-sub">${c.daysToDelivery===0?'today':c.daysToDelivery>0?'in '+c.daysToDelivery+'d':'overdue'}</div>`;
+    const reviewCell = (c.status==='no-data') ? '—'
       : c.inFlight
-        ? `<span class="sns-date" style="color:var(--purple)">Review ${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span><div class="sns-sub">delivers ${fmt(c.deliv)}</div>`
+        ? `<span class="sns-date" style="color:var(--purple)">${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span>`
         : `<span class="sns-dim">none in flight</span>`;
+
+    const notesTxt=(snsData[acc]&&snsData[acc].notes)?snsData[acc].notes:'';
+    const notesHtml=notesTxt?`<div class="sns-notes" title="${notesTxt.replace(/"/g,'&quot;')}">📝 ${notesTxt}</div>`:'';
 
     return`<tr class="${rowCls}">
       <td><span class="sns-acc">${acc}</span></td>
       <td>${addByCell}</td>
-      <td>${flightCell}</td>
-      <td>${statusHtml}<div class="sns-next">${next}</div></td>
+      <td>${deliveryCell}</td>
+      <td>${reviewCell}</td>
+      <td>${statusHtml}<div class="sns-next">${next}</div>${notesHtml}</td>
       <td><div class="sns-act-cell">${actionHtml}</div></td>
     </tr>`;
   }).join('');
@@ -4753,14 +4796,27 @@ function snsCheckAndDismiss(){
 
 function openSnsEdit(acc, isNextCycle){
   sv('sns-edit-acc',acc);
+  sv('sns-edit-mode', isNextCycle?'next':'edit');
   document.getElementById('sns-edit-title').textContent=isNextCycle?`${acc} — Enter Next Cycle`:`${acc} — Edit Dates`;
-  sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-review','');sv('sns-new-notes','');
+  const hint=document.getElementById('sns-edit-hint');
+  if(hint)hint.textContent=isNextCycle
+    ?'Current cycle will be archived to history. Enter the new dates below.'
+    :'Editing the current cycle in place — nothing is archived.';
+  const d=snsData[acc]||{};
+  if(isNextCycle){
+    sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-notes','');
+  } else {
+    sv('sns-new-edit', d.editDay ? isoToDM(d.editDay) : '');
+    sv('sns-new-delivery', d.deliveryDay ? isoToDM(d.deliveryDay) : '');
+    sv('sns-new-notes', d.notes||'');
+  }
   se('e-sns-edit',0);se('e-sns-del',0);
   openM('snsEditModal');
 }
 
-function saveSnsNextCycle(){
+function saveSnsEdit(){
   const acc=gv('sns-edit-acc');
+  const mode=gv('sns-edit-mode')||'next';
   const newEdit=dmToISO(gv('sns-new-edit'),'future');
   const newDel=dmToISO(gv('sns-new-delivery'),'future');
   const notes=gv('sns-new-notes');
@@ -4769,24 +4825,34 @@ function saveSnsNextCycle(){
   if(!newDel){se('e-sns-del',1);ok=false;}else se('e-sns-del',0);
   if(!ok){toast('Enter both dates','bad');return;}
 
-  // Archive current to history
-  const current=snsData[acc];
-  if(current&&current.editDay){
-    const editDObj=pd(current.editDay);
-    const cycle=editDObj?editDObj.toLocaleDateString('en-GB',{month:'long',year:'numeric'}):'Unknown';
-    snsHist.push({acc,editDay:current.editDay,deliveryDay:current.deliveryDay,
-      cycle,recorded:today().toISOString().split('T')[0],notes});
+  if(mode==='next'){
+    // Archive current to history, then set new active cycle
+    const current=snsData[acc];
+    if(current&&current.editDay){
+      const editDObj=pd(current.editDay);
+      const cycle=editDObj?editDObj.toLocaleDateString('en-GB',{month:'long',year:'numeric'}):'Unknown';
+      snsHist.push({acc,editDay:current.editDay,deliveryDay:current.deliveryDay,
+        cycle,recorded:today().toISOString().split('T')[0],notes:current.notes||''});
+    }
+    snsData[acc]={editDay:newEdit,deliveryDay:newDel,notes};
+    saveSns();
+    closeM('snsEditModal');
+    window._snsPopupDismissed=false; // re-evaluate popup
+    renderSns();
+    render();
+    toast(`${acc} updated — previous cycle archived`,'ok');
+  } else {
+    // Edit current cycle in place — no archiving
+    snsData[acc]={...(snsData[acc]||{}),editDay:newEdit,deliveryDay:newDel,notes};
+    saveSns();
+    closeM('snsEditModal');
+    renderSns();
+    render();
+    toast(`${acc} dates updated`,'ok');
   }
-
-  // Set new active
-  snsData[acc]={editDay:newEdit,deliveryDay:newDel};
-  saveSns();
-  closeM('snsEditModal');
-  window._snsPopupDismissed=false; // re-evaluate popup
-  renderSns();
-  render();
-  toast(`${acc} updated — previous cycle archived`,'ok');
 }
+// Back-compat alias in case anything else still calls the old name
+function saveSnsNextCycle(){saveSnsEdit();}
 
 const gv=id=>document.getElementById(id)?.value||'';
 const sv=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
