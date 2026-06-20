@@ -264,6 +264,8 @@ header{
 .wl-market{font-size:11px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);}
 .wl-note{flex:1;font-size:12px;color:var(--text2);font-style:italic;}
 .wl-src{font-size:10px;color:var(--muted);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border);white-space:nowrap;}
+.wl-offer{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;
+  background:color-mix(in srgb,var(--green) 16%,transparent);color:#7ee0b6;border:1px solid color-mix(in srgb,var(--green) 35%,transparent);}
 .wl-actions{display:flex;gap:6px;}
 .wb{padding:6px 11px;border:none;border-radius:6px;font-family:var(--dm);font-size:11px;
   font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
@@ -574,6 +576,12 @@ header{
 .sns-status.needs{background:rgba(255,69,96,.2);color:var(--red);font-weight:700;}
 .sns-status.review{background:rgba(162,89,255,.15);color:var(--purple);}
 .sns-status.between{background:rgba(91,142,255,.1);color:var(--blue);}
+.sns-status.done{background:rgba(0,208,132,.14);color:var(--green);}
+.sns-act-cell{display:flex;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
+.sns-act-btn.done-btn{background:var(--card2);color:var(--text2);}
+.sns-act-btn.done-btn:hover{background:var(--border);color:var(--text);}
+.sns-act-btn.act-btn{background:var(--green);color:#06121a;}
+.sns-act-btn.act-btn:hover{background:var(--green-d);}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
 .sns-act-btn{padding:5px 12px;border-radius:6px;border:none;font-family:var(--dm);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
@@ -692,6 +700,27 @@ header{
 .sns-banner-t{font-size:12.5px;font-weight:700;color:var(--text);}
 .sns-banner-s{font-size:11px;color:var(--text2);margin-top:1px;}
 .sns-banner-arr{color:var(--purple);font-size:13px;font-weight:700;flex-shrink:0;}
+
+/* LOUD variant — shown when an account needs action TODAY (review now / last day to add).
+   Subscribe & Save being missed causes the worst problems, so this is deliberately impossible to ignore. */
+.sns-banner.urgent{
+  background:color-mix(in srgb,var(--red) 18%,var(--surface));
+  border:2px solid var(--red);
+  padding:16px 18px;margin:-2px 0 18px;border-radius:12px;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 14%,transparent),0 8px 28px rgba(0,0,0,.45);
+  animation:snsPulse 1.7s ease-in-out infinite;
+}
+.sns-banner.urgent:hover{background:color-mix(in srgb,var(--red) 26%,var(--surface));border-color:var(--red);}
+@keyframes snsPulse{0%,100%{box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 14%,transparent),0 8px 28px rgba(0,0,0,.45);}
+  50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--red) 22%,transparent),0 8px 28px rgba(0,0,0,.45);}}
+.sns-banner.urgent .sns-banner-ico{width:40px;height:40px;border-radius:10px;
+  background:var(--red);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--red) 45%,transparent);}
+.sns-banner.urgent .sns-banner-ico svg{width:22px;height:22px;}
+.sns-banner.urgent .sns-banner-t{font-size:15px;color:#fff;letter-spacing:-.2px;}
+.sns-banner.urgent .sns-banner-s{font-size:12.5px;color:var(--text);margin-top:3px;}
+.sns-banner.urgent .sns-banner-arr{color:#fff;background:var(--red);padding:8px 14px;border-radius:8px;font-size:12px;
+  text-transform:uppercase;letter-spacing:.5px;box-shadow:0 3px 10px color-mix(in srgb,var(--red) 40%,transparent);}
+@media(prefers-reduced-motion:reduce){.sns-banner.urgent{animation:none;}}
 .ac-title{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
 .ac-date{font-size:12px;color:var(--text2);margin-top:3px;}
 .ac-summary{text-align:right;font-size:12.5px;color:var(--text2);max-width:320px;}
@@ -818,6 +847,12 @@ header{
 .oa-tile .oa-tile-note{color:var(--muted)!important;}
 .oa-tile .oa-tbtn{background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);}
 .oa-tile .oa-tbtn:hover{background:var(--card2)!important;color:var(--text)!important;}
+.oa-tile .oa-tbtn.sas{background:color-mix(in srgb,var(--blue) 22%,var(--bg))!important;color:#bcd6ff!important;border-color:color-mix(in srgb,var(--blue) 45%,transparent)!important;}
+.oa-tile .oa-tbtn.sas:hover{background:color-mix(in srgb,var(--blue) 38%,var(--bg))!important;color:#fff!important;}
+.oad-qlink{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;padding:7px 13px;border:1.5px solid var(--border2);border-radius:7px;background:var(--card);}
+.oad-qlink:hover{color:#fff;border-color:var(--text3);}
+.oad-qlink.sas{color:#bcd6ff;border-color:color-mix(in srgb,var(--blue) 45%,transparent);background:color-mix(in srgb,var(--blue) 14%,transparent);}
+.oad-qlink.sas:hover{background:color-mix(in srgb,var(--blue) 26%,transparent);color:#fff;}
 
 /* ── SEGMENT FILTER TABS (Sourcing) ── */
 .seg{display:flex;gap:5px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:5px;margin-bottom:18px;width:fit-content;}
@@ -1232,8 +1267,36 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .rb.snz{background:color-mix(in srgb,var(--amber) 18%,transparent)!important;color:var(--amber)!important;border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);}
 .rb.snz:hover{background:var(--amber)!important;color:#06121a!important;}
 .rb.del{background:transparent!important;color:var(--muted)!important;border:1px solid var(--border2);}
+.rb.edit{background:var(--card2)!important;color:var(--text2)!important;border:1px solid var(--border2);}
+.rb.edit:hover{background:var(--border)!important;color:var(--text)!important;}
 .rb.del:hover{color:var(--red)!important;border-color:color-mix(in srgb,var(--red) 40%,transparent);background:color-mix(in srgb,var(--red) 10%,transparent)!important;}
 @media(max-width:620px){.acc-grid{grid-template-columns:repeat(3,1fr);}.rc-acts{flex-wrap:wrap;}}
+
+/* ═══════════════════════════════════════════════════════════
+   READABILITY PASS — crisper, higher-contrast text
+   Fixes the soft / blurry feel: brighter mid-tones, full-opacity
+   coloured labels, and no text-shadow on body copy anywhere.
+   ═══════════════════════════════════════════════════════════ */
+:root{ --text2:#aab4d6; --text3:#cdd5ee; --muted:#7d88ad; }
+html{text-rendering:optimizeLegibility;}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:0;}
+
+/* Overview header + summary — sharper and easier to read */
+.logo-sub{color:var(--text2);}
+.ac-date{color:var(--text2);font-weight:500;}
+.ac-summary{color:var(--text3);}
+.aq-panel-s{color:var(--text3);}
+.aq-sub{color:var(--text3);}
+
+/* Coloured stat labels were dimmed to 95% — that's what reads as "blurry" on dark.
+   Full opacity + a touch heavier makes them crisp. */
+.ac-stat .ac-stat-lbl{opacity:1;font-weight:800;}
+.ac-stat-lbl{font-size:10px;}
+.aq-chip{font-weight:800;}
+
+/* Kill leftover text-shadows on tile/OA copy — shadows on small text look fuzzy */
+.oa-tile-asin,.oa-tile-status,.oa-tile-meta,.oa-tile-note,
+.tile-asin,.tile-status,.tile-meta,.tile-note{text-shadow:none!important;}
 </style>
 </head>
 <body>
@@ -1535,7 +1598,6 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         </div>
       </div>
       <div class="sec nt"><span class="sec-t">Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span></div>
-      <div class="rb-howto">How it works: log the date you <strong>bought</strong> on each account. 8 days later that account turns <strong style="color:var(--green)">rebuy now</strong> — that's your cue to check the price and buy again if it still works. Not ready? Snooze a day. "Arrived?" is an optional tick just to track what's landed; it doesn't change the countdown.</div>
       <div id="rebuy-list"></div>
     </div>
 
@@ -1654,8 +1716,8 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
       <div class="purpose">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         <div>
-          <div class="purpose-t">Keeping an eye on — not ready to act</div>
-          <div class="purpose-s">Products worth remembering but not tracking yet: needs more data, price isn't right, or timing's off. Write down what would make you pull the trigger. When that happens, send it to the Inbox to promote.</div>
+          <div class="purpose-t">Keeping an eye on — worth remembering, no rush to buy</div>
+          <div class="purpose-s">Products you don't want to lose track of but aren't acting on yet — the price isn't right, you need more data, or it's on offer for a while and there's no rush. Mark whether it's on offer and roughly how long, jot down what would make you pull the trigger, and when the moment comes, send it to the Inbox to promote into Sourcing.</div>
         </div>
       </div>
       <div class="fc" id="wl-fc">
@@ -1703,6 +1765,16 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
             </div>
           </div>
           <div class="fg">
+            <label class="fl">On offer right now?</label>
+            <select class="fs" id="w-offer">
+              <option value="">Not on offer — just watching</option>
+              <option value="unknown">On offer — don't know how long</option>
+              <option value="1m">On offer — about a month</option>
+              <option value="2m">On offer — about two months</option>
+              <option value="ongoing">On offer — ongoing / no end in sight</option>
+            </select>
+          </div>
+          <div class="fg">
             <label class="fl">Notes / Reason for Watching</label>
             <textarea class="fta" id="w-notes" placeholder="Why are you watching this? What would make you pull the trigger?"></textarea>
           </div>
@@ -1721,7 +1793,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <div>
           <div class="purpose-t">Set the dates once — they roll forward every month</div>
-          <div class="purpose-s">Your monthly cycle dates are fixed, so you enter them once per account and the app advances them automatically each month. Accounts needing attention sort to the top; review windows and last-add days surface on the Action Center. You only ever come here to act on a review, or to correct a date.</div>
+          <div class="purpose-s">Enter each account's monthly dates once and they roll forward automatically. Accounts needing attention sort to the top: when an add window or review is due, tick <strong>Added ✓</strong> or <strong>Reviewed ✓</strong> right here (or from the Action Center) and it won't nag again until next cycle. Anything due today also shows as a banner on the Action Center.</div>
         </div>
       </div>
 
@@ -1805,6 +1877,10 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
               <label class="fl">OA Source Link</label>
               <input class="fi" id="oa-link" type="url" placeholder="https://retailer.com/product/…">
             </div>
+          </div>
+          <div class="fg" style="max-width:240px">
+            <label class="fl">Expected Delivery (optional)</label>
+            <input class="fi dm" id="oa-deliv" placeholder="dd/mm" maxlength="5" inputmode="numeric">
           </div>
           <div class="fg">
             <label class="fl">Notes</label>
@@ -1898,6 +1974,15 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         <option value="VAS">VAS</option><option value="Discord Group">Discord Group</option>
       </select>
     </div>
+    <div class="fg"><label class="fl">On offer right now?</label>
+      <select class="fs" id="we-offer">
+        <option value="">Not on offer — just watching</option>
+        <option value="unknown">On offer — don't know how long</option>
+        <option value="1m">On offer — about a month</option>
+        <option value="2m">On offer — about two months</option>
+        <option value="ongoing">On offer — ongoing / no end in sight</option>
+      </select>
+    </div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="we-notes"></textarea></div>
     <div class="mbtns">
       <button class="mbtn ok" onclick="saveWatchEdit()">Save</button>
@@ -1947,6 +2032,40 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
     <div class="mbtns">
       <button class="mbtn ok" onclick="confirmRbBought()">Confirm</button>
       <button class="mbtn cancel" onclick="closeM('rbModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT REBUY MODAL -->
+<div class="mbg" id="rbEditModal">
+  <div class="modal">
+    <div class="mhd"><span class="mt">Edit Rebuy Item</span><button class="mx" onclick="closeM('rbEditModal')">×</button></div>
+    <input type="hidden" id="re-id">
+    <div class="fg"><label class="fl">ASIN</label><input class="fi" id="re-asin" readonly style="opacity:.5"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Marketplace</label>
+        <select class="fs" id="re-market">
+          <option value="amazon.co.uk">🇬🇧 Amazon UK</option><option value="amazon.de">🇩🇪 Amazon DE</option>
+          <option value="amazon.fr">🇫🇷 Amazon FR</option><option value="amazon.es">🇪🇸 Amazon ES</option>
+          <option value="amazon.it">🇮🇹 Amazon IT</option><option value="amazon.nl">🇳🇱 Amazon NL</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Notes</label><input class="fi" id="re-notes" placeholder="e.g. Buy max 3 units on UK1"></div>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin:2px 0 6px;line-height:1.4">Bought dates — each account turns <strong style="color:var(--green)">rebuy now</strong> 8 days after the date you set. Clear a date to reset that account.</p>
+    <div class="g3">
+      <div class="fg"><label class="fl">UK1 Date</label><input class="fi dm" id="re-uk1" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">UK2 Date</label><input class="fi dm" id="re-uk2" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">UK3 Date</label><input class="fi dm" id="re-uk3" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+    </div>
+    <div class="g3">
+      <div class="fg"><label class="fl">EU1 Date</label><input class="fi dm" id="re-eu1" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">EU2 Date</label><input class="fi dm" id="re-eu2" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">EU3 Date</label><input class="fi dm" id="re-eu3" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="saveRbEdit()">Save</button>
+      <button class="mbtn cancel" onclick="closeM('rbEditModal')">Cancel</button>
     </div>
   </div>
 </div>
@@ -2229,6 +2348,10 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         </select>
       </div>
       <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="oae-link" type="url"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Expected Delivery</label><input class="fi dm" id="oae-deliv" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Snoozed Until <span style="font-weight:400;color:var(--muted)">(blank = not snoozed)</span></label><input class="fi dm" id="oae-snooze" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
     </div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="oae-notes"></textarea></div>
     <div class="mbtns">
@@ -2912,9 +3035,9 @@ function addWatch(){
   if(!asin||asin.length<5){se('e-w-asin',1);toast('Valid ASIN required','bad');return;}
   se('e-w-asin',0);
   const doAdd=()=>{
-    watchlist.push({id:Date.now(),asin,market:gv('w-market'),type:gv('w-type'),src:gv('w-src')||null,notes:gv('w-notes').trim()});
+    watchlist.push({id:Date.now(),asin,market:gv('w-market'),type:gv('w-type'),src:gv('w-src')||null,offer:gv('w-offer')||null,notes:gv('w-notes').trim()});
     sv2(WK,watchlist);
-    ['w-asin','w-notes'].forEach(i=>sv(i,''));sv('w-src','');
+    ['w-asin','w-notes'].forEach(i=>sv(i,''));sv('w-src','');sv('w-offer','');
     render();toast(`${asin} added to watchlist`,'ok');
   };
   const dups=findDups(asin);
@@ -2928,12 +3051,12 @@ function openWatchEdit(id){
   const w=watchlist.find(x=>x.id===id);if(!w)return;
   wEditId=id;
   sv('we-id',id);sv('we-asin',w.asin);sv('we-market',w.market||'amazon.co.uk');
-  sv('we-type',w.type||'A2A');sv('we-src',w.src||'');sv('we-notes',w.notes||'');
+  sv('we-type',w.type||'A2A');sv('we-src',w.src||'');sv('we-offer',w.offer||'');sv('we-notes',w.notes||'');
   openM('wEditModal');
 }
 function saveWatchEdit(){
   const w=watchlist.find(x=>x.id===wEditId);if(!w)return;
-  w.market=gv('we-market');w.type=gv('we-type');w.src=gv('we-src')||null;w.notes=gv('we-notes');
+  w.market=gv('we-market');w.type=gv('we-type');w.src=gv('we-src')||null;w.offer=gv('we-offer')||null;w.notes=gv('we-notes');
   sv2(WK,watchlist);closeM('wEditModal');render();toast('Saved','ok');
 }
 
@@ -3134,6 +3257,27 @@ function confirmRbBought(){
   if(r){const ts=today().toISOString().split('T')[0];sel.forEach(a=>{r.accounts[a]=ts;if(r.snooze)delete r.snooze[a];});sv2(RK,rebuys);}
   closeM('rbModal');render();toast(`Bought on ${sel.map(s=>s.toUpperCase()).join(', ')} — 8-day countdown restarted`,'ok');
 }
+let rbEditId=null;
+function openRbEdit(id){
+  const r=rebuys.find(x=>x.id===id);if(!r)return;
+  rbEditId=id;
+  sv('re-id',id);sv('re-asin',r.asin);sv('re-market',r.market||'amazon.co.uk');sv('re-notes',r.notes||'');
+  ['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>sv(`re-${a}`,isoToDM(r.accounts[a])));
+  openM('rbEditModal');
+}
+function saveRbEdit(){
+  const r=rebuys.find(x=>x.id===rbEditId);if(!r)return;
+  r.market=gv('re-market');r.notes=gv('re-notes').trim();
+  if(!r.snooze)r.snooze={};
+  ['uk1','uk2','uk3','eu1','eu2','eu3'].forEach(a=>{
+    const v=gv(`re-${a}`).trim();
+    const iso=v?dmToISO(v,'past'):null;
+    // If the bought date changed, clear any old snooze so the 8-day window recalculates cleanly
+    if(iso!==r.accounts[a])delete r.snooze[a];
+    r.accounts[a]=iso||null;
+  });
+  sv2(RK,rebuys);closeM('rbEditModal');render();toast(`${r.asin} updated`,'ok');
+}
 // Snooze every account that's ready-to-rebuy on this card by one day
 function snoozeRebuy(id){
   const r=rebuys.find(x=>x.id===id);if(!r)return;
@@ -3195,7 +3339,7 @@ function buildTile(l){
       <button class="tbtn" onclick="window.open('${sasUrl(l.asin)}','_blank')">SAS</button>
       <button class="tbtn" onclick="window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>
       <button class="tbtn buy" onclick="openSrcBought(${l.id})">Bought</button>
-      <button class="tbtn" onclick="snoozeLead(${l.id})" title="Snooze 3 days">Snooze</button>
+      <button class="tbtn" onclick="snoozeLead(${l.id})" title="Snooze 3 days">Snooze 3d</button>
     </div>
   </div>`;
 }
@@ -3232,6 +3376,7 @@ function buildRC(r){
       <button class="rb sas" onclick="window.open('${sas}','_blank')">SAS</button>
       <button class="rb bought" onclick="openRbBought(${r.id})">Mark bought</button>
       ${readyCt?`<button class="rb snz" onclick="snoozeRebuy(${r.id})">Snooze 1d</button>`:''}
+      <button class="rb edit" onclick="openRbEdit(${r.id})">Edit</button>
       <button class="rb del" onclick="delRebuy(${r.id})">Delete</button>
     </div>
   </div>`;
@@ -3260,11 +3405,14 @@ function buildInboxCard(item){
 }
 
 function buildWLCard(w){
+  const OFFER_LBL={unknown:'On offer · length unknown','1m':'On offer · ~1 month','2m':'On offer · ~2 months',ongoing:'On offer · ongoing'};
+  const offerBadge=w.offer?`<span class="wl-offer">${OFFER_LBL[w.offer]||'On offer'}</span>`:'';
   return`<div class="wl-card" id="wl-${w.id}">
     <div class="wl-asin">${w.asin}</div>
     <span class="wl-badge">${w.type}</span>
     <span class="wl-market">${w.market}</span>
     ${w.src?`<span class="wl-src">${w.src}</span>`:''}
+    ${offerBadge}
     <div class="wl-note">${w.notes||'No notes'}</div>
     <div class="wl-actions">
       <button class="wb promote" onclick="promoteWatch(${w.id})">→ Inbox</button>
@@ -3290,7 +3438,7 @@ function autoArchiveExpired(){
       n++;
     }
   });
-  if(n){sv2(SK,leads);toast(`${n} expired LTD${n!==1?'s':''} auto-cleared — too late to buy`,'info');}
+  if(n){sv2(SK,leads);toast(`${n} expired LTD${n!==1?'s':''} cleared — the deal has ended, so it's gone`,'info');}
 }
 
 const emp=m=>`<div class="empty">${m}</div>`;
@@ -3393,15 +3541,9 @@ function computeActions(){
         primary:{label:'Add Date',fn:`openEdit(${l.id})`},links:leadLinks(l)});
       return;
     }
-    // LTD safety net — an LTD must never lapse without a prompt
-    if(p.isLTD&&p.status==='expired'){
-      A.push({key:'ltdx-'+l.id,cat:'buy',priority:1,color:'red',chip:'LTD EXPIRED',title:l.asin,
-        sub:`Deal ended ${fmt(p.end)} — review and clear so it stops nagging`,
-        jump:`go('sourcing');ss('sec-ltd')`,
-        primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},
-        links:leadLinks(l)+`<button class="aq-link" onclick="event.stopPropagation();dismissExpired(${l.id})">Dismiss</button>`});
-      return;
-    }
+    // Expired LTDs are auto-cleared by autoArchiveExpired() the day after they end,
+    // so they never reach the queue. Nothing to surface here — once it's gone, it's gone.
+    if(p.isLTD&&p.status==='expired')return;
     if(p.status==='buy'||p.status==='closing'){
       const stratTag=p.strategy==='speed'?'Speed':'Validate';
       if(p.isLTD){
@@ -3419,8 +3561,9 @@ function computeActions(){
       }
     } else if(p.isLTD&&p.status==='wait'&&p.end&&diff(today(),p.end)<=3){
       const dleft=diff(today(),p.end);
-      A.push({key:'ltdsoon-'+l.id,cat:'buy',priority:2,color:'red',chip:'LTD ENDING',title:l.asin,
-        sub:`Ends ${fmt(p.end)} (${dleft<=0?'today':dleft+'d left'}) — decide before it expires`,
+      const whenTxt=dleft<=0?'ends today':dleft===1?'ends tomorrow':`ends in ${dleft} days`;
+      A.push({key:'ltdsoon-'+l.id,cat:'buy',priority:dleft<=1?1:2,color:'red',chip:dleft<=0?'LTD — TODAY':'LTD ENDING',title:l.asin,
+        sub:`Deal ${whenTxt} (${fmt(p.end)}) — last chance to buy before it's gone`,
         jump:`go('sourcing');ss('sec-ltd')`,
         primary:{label:'Mark Bought',fn:`openSrcBought(${l.id})`},links:leadLinks(l)});
     }
@@ -3430,7 +3573,7 @@ function computeActions(){
     const s=calcOAStatus(i);
     if(s.status==='overdue'){
       A.push({key:'oao-'+i.id,cat:'oa',priority:1,color:'red',chip:'OA OVERDUE',title:i.asin,
-        sub:`${s.daysSince}d overdue · target £${i.target?.toFixed(2)||'—'}`,
+        sub:`${s.daysOverdue}d overdue · target £${i.target?.toFixed(2)||'—'}`,
         jump:`go('oareplen');scrollTo_('oa-${i.id}')`,
         primary:{label:'Log Check',fn:`openOACheck(${i.id})`},links:oaLinks(i)});
     } else if(s.status==='due'){
@@ -3440,22 +3583,22 @@ function computeActions(){
         primary:{label:'Log Check',fn:`openOACheck(${i.id})`},links:oaLinks(i)});
     }
   });
-  // Sub & Save
+  // Sub & Save — review-now and last-day items are the most easily-missed and most costly,
+  // so they sit at the very top of the queue in red, alongside overdue buys.
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc]; if(!d||!d.editDay)return;
-    if(snsDismiss[acc]===today().toISOString().split('T')[0])return; // cleared for today
     const s=calcSnsStatus(acc);
-    if(s.status==='lda-today'){
+    if(s.status==='review'){
+      A.push({key:'snsrev-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S REVIEW',title:acc,
+        sub:`Review window open — check prices, profit &amp; competition before delivery${s.deliv?` (~${fmt(s.deliv)})`:''}`,
+        jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
+    } else if(s.status==='lda-today'){
       A.push({key:'snse-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S LAST DAY',title:acc,
-        sub:'Last day to add or amend items for this cycle',jump:`go('sns')`,
+        sub:'Last day to add or amend items for this cycle — do it today',jump:`go('sns')`,
         primary:{label:'Open',fn:`go('sns')`},links:''});
     } else if(s.status==='lda-soon'){
       A.push({key:'snsa-'+acc,cat:'sns',priority:5,color:'amber',chip:'S&S ADD',title:acc,
         sub:`Add/amend window closes ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+' days'} · ${fmt(s.nextLDA)}`,
-        jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
-    } else if(s.inFlight && s.daysToReviewStart<=0){
-      A.push({key:'snsr-'+acc,cat:'sns',priority:6,color:'purple',chip:'S&S CHECK',title:acc,
-        sub:`Order placed — check prices & profit before delivery${s.deliv?` (~${fmt(s.deliv)})`:''}`,
         jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
     }
   });
@@ -3554,17 +3697,18 @@ function acRowHtml(a){
   let tiles='';
   if(e.t==='lead'){
     if(a.chip==='NEEDS DATE')
-      tiles=`<button class="aq-t go" onclick="event.stopPropagation();openEdit(${e.id})">Add date</button>`+T('snooze','Snooze')+T('remove','✕','danger');
+      tiles=`<button class="aq-t go" onclick="event.stopPropagation();openEdit(${e.id})">Add date</button>`+T('snooze','Snooze 3d')+T('remove','✕','danger');
     else
-      tiles=T('done','Bought','go')+T('skip','Skip')+T('snooze','Snooze')+T('remove','✕','danger');
+      tiles=T('done','Bought','go')+T('skip','Skip')+T('snooze','Snooze 3d')+T('remove','✕','danger');
   } else if(e.t==='pday'){
-    tiles=T('done','Buy','go')+T('skip','No‑buy')+T('snooze','Snooze')+T('remove','✕','danger');
+    tiles=T('done','Buy','go')+T('skip','No‑buy')+T('snooze','Snooze 1d')+T('remove','✕','danger');
   } else if(e.t==='oa'){
     tiles=T('done','Checked','go')+T('snooze','Snooze')+openT('Log…');
   } else if(e.t==='rebuy'){
-    tiles=T('done','Bought','go')+T('snooze','Snooze');
+    tiles=T('done','Bought','go')+T('snooze','Snooze 1d');
   } else if(e.t==='sns'){
-    tiles=openT('Open')+T('done','Got it','go');
+    const lbl=a.chip==='S&S REVIEW'?'Reviewed ✓':'Added ✓';
+    tiles=openT('Open')+T('done',lbl,'go');
   }
   return `<div class="aq-row ${COLW[a.color]}" data-k="${a.key}">
     <span class="aq-chip">${a.chip}</span>
@@ -3626,7 +3770,15 @@ function aqPerform(action,etype,eid){
       sv2(RK,rebuys);toast(`${r.asin} rebought (${n}) — 8‑day countdown reset`,'ok');
     } else if(action==='snooze'){snoozeRebuy(id);return;}
   } else if(etype==='sns'){
-    snsDismiss[eid]=today().toISOString().split('T')[0];sv2(SNSDK,snsDismiss);toast(`${eid} cleared for today`,'info');
+    const acc=eid, s=calcSnsStatus(acc);
+    const prev=snsHandled[acc]?{...snsHandled[acc]}:null;
+    const reviewing=s.status==='review';
+    snsHandled[acc]={...(snsHandled[acc]||{}),[reviewing?'review':'add']:reviewing?s.reviewCycleKey:s.addCycleKey};
+    sv2(SNSHANDK,snsHandled);
+    undoToast(`${acc} ${reviewing?'reviewed':'added'} ✓`,()=>{
+      if(prev)snsHandled[acc]=prev;else delete snsHandled[acc];
+      sv2(SNSHANDK,snsHandled);render();toast('Restored','ok');
+    },'ok');
   }
   render();
 }
@@ -3641,27 +3793,37 @@ function refreshActionCenter(){
   const total=A.length;
   const counts={};AC_BANDS.forEach(b=>counts[b.key]=A.filter(a=>a.band===b.key).length);
 
-  // ── Sub & Save passive heads-up banner (info only, no action to clear) ──
+  // ── Sub & Save banner ──
+  // Subscribe & Save is the easiest thing to forget and the most costly when missed,
+  // so anything needing action TODAY (review window open, or last day to add) gets a
+  // loud, pulsing red banner above the queue. Softer heads-ups get the calm version.
   const snsBan=document.getElementById('sns-banner');
   if(snsBan){
-    const upd=[];
+    const urgent=[], soft=[];
     Object.keys(snsData).forEach(acc=>{
       const d=snsData[acc];if(!d||!d.editDay)return;
       const s=calcSnsStatus(acc);
-      if(s.status==='review')         upd.push({acc,t:'prices to check'});
-      else if(s.status==='arriving')  upd.push({acc,t:`arriving ~${fmt(s.deliv)}`});
-      else if(s.status==='lda-today') upd.push({acc,t:'add window closes today'});
-      else if(s.status==='lda-soon')  upd.push({acc,t:`add window closes ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+'d'}`});
-      else if(s.status==='in-flight') upd.push({acc,t:`order in flight`});
+      if(s.status==='review')         urgent.push({acc,t:'review the in-flight order today'});
+      else if(s.status==='lda-today') urgent.push({acc,t:'last day to add / amend'});
+      else if(s.status==='lda-soon')  soft.push({acc,t:`add window closes ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+'d'}`});
+      else if(s.status==='arriving')  soft.push({acc,t:`arriving ~${fmt(s.deliv)}`});
+      else if(s.status==='in-flight') soft.push({acc,t:'order in flight'});
     });
-    if(upd.length){
-      const n=upd.length;
-      const detail=upd.slice(0,3).map(u=>`${u.acc} — ${u.t}`).join(' · ')+(n>3?` · +${n-3} more`:'');
+    if(urgent.length){
+      const n=urgent.length;
+      const detail=urgent.map(u=>`${u.acc} — ${u.t}`).join(' · ');
+      snsBan.className='sns-banner urgent show';
+      snsBan.innerHTML=`<div class="sns-banner-ico"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="sns-banner-tx"><div class="sns-banner-t">Sub &amp; Save needs you today — ${n} account${n!==1?'s':''}</div><div class="sns-banner-s">${detail}</div></div>
+        <span class="sns-banner-arr">Open now →</span>`;
+    } else if(soft.length){
+      const n=soft.length;
+      const detail=soft.slice(0,3).map(u=>`${u.acc} — ${u.t}`).join(' · ')+(n>3?` · +${n-3} more`:'');
+      snsBan.className='sns-banner show';
       snsBan.innerHTML=`<div class="sns-banner-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
         <div class="sns-banner-tx"><div class="sns-banner-t">Sub &amp; Save · ${n} update${n!==1?'s':''}</div><div class="sns-banner-s">${detail}</div></div>
         <span class="sns-banner-arr">View →</span>`;
-      snsBan.classList.add('show');
-    } else snsBan.classList.remove('show');
+    } else snsBan.className='sns-banner';
   }
 
   const dEl=document.getElementById('ac-date');
@@ -4101,11 +4263,12 @@ function addOA(){
     current:gv('oa-current')?parseFloat(gv('oa-current')):null,
     freq:parseInt(gv('oa-freq'))||7,link:gv('oa-link').trim(),
     notes:gv('oa-notes').trim(),
+    deliveryDate:gv('oa-deliv').trim()?dmToISO(gv('oa-deliv').trim(),'future'):null,
     lastChecked:todayISO,
     checkLog:[{date:todayStr(),note:'Added — initial check done'}]};
   oaItems.push(item);
   localStorage.setItem(OAK,JSON.stringify(oaItems));
-  ['oa-asin','oa-target','oa-current','oa-link','oa-notes'].forEach(i=>sv(i,''));
+  ['oa-asin','oa-target','oa-current','oa-link','oa-notes','oa-deliv'].forEach(i=>sv(i,''));
   sv('oa-freq','7');
   renderOA();toast(`${asin} added to OA Replen`,'ok');
 }
@@ -4158,6 +4321,8 @@ function openOAEdit(id){
   sv('oae-id',id);sv('oae-asin',item.asin);sv('oae-target',item.target||'');
   sv('oae-current',item.current||'');sv('oae-freq',item.freq||7);
   sv('oae-link',item.link||'');sv('oae-notes',item.notes||'');
+  sv('oae-deliv',item.deliveryDate?isoToDM(item.deliveryDate):'');
+  sv('oae-snooze',item.snoozedUntil?isoToDM(item.snoozedUntil):'');
   openM('oaEditModal');
 }
 
@@ -4168,6 +4333,11 @@ function saveOAEdit(){
   item.current=gv('oae-current')?parseFloat(gv('oae-current')):null;
   item.freq=parseInt(gv('oae-freq'))||7;
   item.link=gv('oae-link').trim();item.notes=gv('oae-notes').trim();
+  item.deliveryDate=gv('oae-deliv').trim()?dmToISO(gv('oae-deliv').trim(),'future'):null;
+  // Editable snooze: blank clears it; a past date also clears it
+  const snz=gv('oae-snooze').trim();
+  if(snz){const siso=dmToISO(snz,'future');item.snoozedUntil=(pd(siso)>today())?siso:null;}
+  else item.snoozedUntil=null;
   localStorage.setItem(OAK,JSON.stringify(oaItems));
   closeM('oaEditModal');renderOA();toast('Saved','ok');
 }
@@ -4196,11 +4366,19 @@ function calcOAStatus(item){
   const daysSince=diff(last,now);
   const freq=parseInt(item.freq)||7;
   const daysUntil=freq-daysSince;
-  if(daysSince>freq)return{status:'overdue',daysSince,daysUntil};
-  if(daysSince>=freq)return{status:'due',daysSince,daysUntil:0};
-  return{status:'ok',daysSince,daysUntil};
+  const daysOverdue=daysSince-freq;            // days PAST the review date (what every view should show)
+  const dueDate=addD(last,freq);               // the date it was/ is due
+  if(daysSince>freq)return{status:'overdue',daysSince,daysUntil,daysOverdue,dueDate};
+  if(daysSince>=freq)return{status:'due',daysSince,daysUntil:0,daysOverdue:0,dueDate};
+  return{status:'ok',daysSince,daysUntil,daysOverdue,dueDate};
 }
 
+function saveOANote(id){
+  const item=oaItems.find(x=>x.id===id);if(!item)return;
+  item.notes=gv('oad-note-edit').trim();
+  localStorage.setItem(OAK,JSON.stringify(oaItems));
+  renderOA();toast('Note saved','ok');
+}
 function snoozeOA(id,days,e){
   if(e){e.stopPropagation();}
   const item=oaItems.find(x=>x.id===id);if(!item)return;
@@ -4224,7 +4402,7 @@ function openOADetail(id){
   const nextChk=item.lastChecked?fmtLong(addD(pd(item.lastChecked),parseInt(item.freq)||7)):null;
   const freq=parseInt(item.freq)||7;
   const statusTxt={
-    overdue:`${(c.daysSince||0)-freq} days overdue — review now (was due ${nextChk||'—'})`,
+    overdue:`${c.daysOverdue||0} days overdue — review now (was due ${nextChk||'—'})`,
     due:`Due for review today — last reviewed ${fmtLong(pd(item.lastChecked))}`,
     ok:`Monitoring — next review ${nextChk||'—'} (in ${c.daysUntil} day${c.daysUntil!==1?'s':''})`,
     never:`Monitoring — review due`,
@@ -4237,11 +4415,19 @@ function openOADetail(id){
   document.getElementById('oad-fields').innerHTML=`
     <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
     <div class="oa-field"><div class="oa-field-lbl">Current COG</div><div class="oa-field-val current">${item.current?'£'+item.current.toFixed(2):'Not set'}</div></div>
-    <div class="oa-field"><div class="oa-field-lbl">Frequency</div><div class="oa-field-val">Every ${item.freq||7}d</div></div>`;
-  document.getElementById('oad-note-row').innerHTML=item.notes
-    ?`<div class="oa-note-row">${item.notes}</div>`:'';
-  document.getElementById('oad-link-row').innerHTML=item.link
-    ?`<a href="${item.link}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#7eb3ff;text-decoration:none;padding:6px 12px;border:1.5px solid rgba(45,110,223,.35);border-radius:7px;background:rgba(45,110,223,.1)">Open OA Source ↗</a>`:'';
+    <div class="oa-field"><div class="oa-field-lbl">Frequency</div><div class="oa-field-val">Every ${item.freq||7}d</div></div>
+    <div class="oa-field"><div class="oa-field-lbl">Delivery</div><div class="oa-field-val" style="${item.deliveryDate?'color:var(--blue)':''}">${item.deliveryDate?fmtLong(pd(item.deliveryDate)):'Not set'}</div></div>`;
+  // Inline-editable notes — jot something without opening Edit
+  document.getElementById('oad-note-row').innerHTML=`
+    <div class="oa-field-lbl" style="margin-bottom:5px">Notes</div>
+    <textarea class="fta" id="oad-note-edit" style="min-height:58px" placeholder="Add a note — e.g. only buy at 10% off, last promo was 6 weeks ago…">${item.notes||''}</textarea>
+    <button class="mbtn cancel" style="margin-top:6px;padding:7px 12px;font-size:12px;flex:0" onclick="saveOANote(window._oaDetailId)">Save note</button>`;
+  // Quick links — SAS first (the usual check), then Amazon, then the OA retailer source
+  document.getElementById('oad-link-row').innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a href="${sasUrl(item.asin)}" target="_blank" class="oad-qlink sas">Open in SAS ↗</a>
+    <a href="${amzUrl(item.asin)}" target="_blank" class="oad-qlink">Amazon ↗</a>
+    ${item.link?`<a href="${item.link}" target="_blank" class="oad-qlink">OA Source ↗</a>`:''}
+  </div>`;
   const log=item.checkLog&&item.checkLog.length>0
     ?item.checkLog.slice(-8).reverse().map(e=>`<div class="oa-log-entry">
         <span class="oa-log-date">${e.date}</span>
@@ -4260,7 +4446,7 @@ function buildOATile(item){
 
   let headline='', subline='';
   if(c.status==='overdue'){
-    headline=`OVERDUE · ${c.daysSince-freq}d`;
+    headline=`OVERDUE · ${c.daysOverdue}d`;
     subline=`Was due ${nextCheckDate} — review now`;
   } else if(c.status==='due'){
     headline=`REVIEW TODAY`;
@@ -4276,6 +4462,7 @@ function buildOATile(item){
   const priceHtml=item.current
     ?`<div class="oa-tile-meta">£${item.current.toFixed(2)} now · £${item.target?.toFixed(2)||'?'} target</div>`
     :`<div class="oa-tile-meta">Target £${item.target?.toFixed(2)||'—'}</div>`;
+  const delivHtml=item.deliveryDate?`<div class="oa-tile-meta" style="color:var(--blue)">📦 Delivery ${fmt(pd(item.deliveryDate))}</div>`:'';
   const noteHtml=item.notes?`<div class="oa-tile-note">${item.notes}</div>`:'';
   const oaSite=siteName(item.link);
   const oaSiteHtml=oaSite?`<span class="oa-site">${oaSite}</span>`:'';
@@ -4286,10 +4473,13 @@ function buildOATile(item){
     <div class="oa-tile-status">${headline}</div>
     <div class="oa-tile-meta">${subline}</div>
     ${priceHtml}
+    ${delivHtml}
     ${noteHtml}
     <div class="oa-tbtns" onclick="event.stopPropagation()">
       <button class="oa-tbtn buy" onclick="openOACheck(${item.id})">Check</button>
-      ${item.link?`<button class="oa-tbtn" onclick="window.open('${item.link}','_blank')">Source</button>`:''}
+      <button class="oa-tbtn sas" onclick="window.open('${sasUrl(item.asin)}','_blank')">SAS ↗</button>
+      <button class="oa-tbtn" onclick="window.open('${amzUrl(item.asin)}','_blank')">AMZ ↗</button>
+      ${item.link?`<button class="oa-tbtn" onclick="window.open('${item.link}','_blank')">Source ↗</button>`:''}
       <button class="oa-tbtn" onclick="snoozeOA(${item.id},${freq},event)" title="Push next review out by ${freq} days">Snooze ${freq}d</button>
       <button class="oa-tbtn" onclick="openOAEdit(${item.id})">Edit</button>
     </div>
@@ -4305,7 +4495,7 @@ function renderOA(){
     else if(s.status==='due')g.due.push(i);
     else if(s.status==='ok'&&(s.daysUntil||99)<=3)g.soon.push(i);
     else g.monitor.push(i);});
-  const dOver=i=>{const s=calcOAStatus(i);return (s.daysSince||0)-(parseInt(i.freq)||7);};
+  const dOver=i=>{const s=calcOAStatus(i);return s.daysOverdue||0;};
   g.overdue.sort((a,b)=>dOver(b)-dOver(a));
   g.soon.sort((a,b)=>(calcOAStatus(a).daysUntil||0)-(calcOAStatus(b).daysUntil||0));
   g.monitor.sort((a,b)=>{const sa=calcOAStatus(a),sb=calcOAStatus(b);
@@ -4364,8 +4554,9 @@ function renderOA(){
 // ═══════════════════════════════════
 // SUBSCRIBE & SAVE
 // ═══════════════════════════════════
-const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5', SNSDK='a2a_sns_dismiss_v5';
+const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5', SNSDK='a2a_sns_dismiss_v5', SNSHANDK='a2a_sns_handled_v5';
 let snsDismiss = ld(SNSDK) || {};
+let snsHandled = ld(SNSHANDK) || {};   // per-account, per-cycle "I've actioned this" flags
 
 const SNS_ACCOUNTS=['EU01','EU02','EU03','Biz1','Biz2','Biz3'];
 
@@ -4400,16 +4591,33 @@ function calcSnsStatus(acc){
   const reviewStart=addD(lda,3), reviewEnd=addD(lda,4);
   const inReview=inFlight && diff(now,reviewStart)<=0 && diff(now,reviewEnd)>=0;
   const daysToDelivery=diff(now,deliv);
+  // Per-cycle "handled" flags — once you confirm you've added or reviewed for THIS cycle,
+  // it stops nagging until the cycle rolls forward (keys change), instead of returning tomorrow.
+  const h=snsHandled[acc]||{};
+  const addCycleKey=isoOf(nextLDA);     // the add deadline you're working toward
+  const reviewCycleKey=d.editDay;       // the in-flight order's own cycle
+  const addHandled=h.add===addCycleKey;
+  const reviewHandled=h.review===reviewCycleKey;
   let status;
-  if(inReview)             status='review';
-  else if(daysToLDA===0)   status='lda-today';
-  else if(daysToLDA<=3)    status='lda-soon';
-  else if(inFlight && daysToDelivery<=4) status='arriving';
-  else if(inFlight)        status='in-flight';
-  else                     status='idle';
+  if(inReview && !reviewHandled)          status='review';
+  else if(daysToLDA===0 && !addHandled)   status='lda-today';
+  else if(daysToLDA<=3 && !addHandled)    status='lda-soon';
+  else if(inFlight && daysToDelivery<=4)  status='arriving';
+  else if(inFlight)                       status='in-flight';
+  else if(addHandled && daysToLDA<=7)     status='added';     // calm confirmation
+  else                                    status='idle';
   return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,
+    addHandled,reviewHandled,addCycleKey,reviewCycleKey,
     editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
+// Mark the current cycle handled (reversible). add = items added before cutoff; review = order checked.
+function snsMarkAdded(acc){const s=calcSnsStatus(acc);if(s.status==='no-data')return;
+  snsHandled[acc]={...(snsHandled[acc]||{}),add:s.addCycleKey};sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — added for this cycle ✓`,'ok');}
+function snsMarkReviewed(acc){const s=calcSnsStatus(acc);if(s.status==='no-data')return;
+  snsHandled[acc]={...(snsHandled[acc]||{}),review:s.reviewCycleKey};sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — order reviewed ✓`,'ok');}
+function snsUndoHandled(acc){const h=snsHandled[acc];if(!h)return;const s=calcSnsStatus(acc);
+  if(h.add===s.addCycleKey)delete h.add; if(h.review===s.reviewCycleKey)delete h.review;
+  sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — reset`,'info');}
 
 // ── Fixed monthly cycles auto-roll: dates never need re-entering ──
 function isoOf(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
@@ -4440,49 +4648,57 @@ function renderSns(){
   const tbody=document.getElementById('sns-tbody');
   if(!tbody)return;
 
-  let needsCount=0, alertAccounts=[], reviewAccounts=[];
+  // Compute every status once and reuse — no repeated recalculation while sorting/rendering.
+  const SS={}; SNS_ACCOUNTS.forEach(a=>SS[a]=calcSnsStatus(a));
+  let needsCount=0;
 
-  // Sort: act-now first (review / last-day), then soon, arriving, in-flight, idle
-  const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'idle':4};
-  const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>
-    (SNS_ORDER[calcSnsStatus(a).status]??5)-(SNS_ORDER[calcSnsStatus(b).status]??5));
+  // Sort: act-now first (review / last-day), then soon, arriving, in-flight, added, idle
+  const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'added':4,'idle':5};
+  const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>(SNS_ORDER[SS[a].status]??6)-(SNS_ORDER[SS[b].status]??6));
 
   const dueLbl=n=>n===0?'today':n===1?'tomorrow':`in ${n}d`;
+  const editBtn=acc=>`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
+  const actBtn=(acc,fn,label)=>`<button class="sns-act-btn act-btn" onclick="${fn}('${acc}')">${label}</button>`;
+  const calmBtn=(acc,label)=>`<button class="sns-act-btn done-btn" onclick="snsUndoHandled('${acc}')">${label}</button>`;
 
   tbody.innerHTML=sortedAccs.map(acc=>{
-    const c=calcSnsStatus(acc);
-    let statusHtml='',actionHtml=`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`,rowCls='',next='';
+    const c=SS[acc];
+    let statusHtml='',actionHtml=editBtn(acc),rowCls='',next='';
 
     if(c.status==='no-data'){
       statusHtml=`<span class="sns-status needs">Not Set</span>`;
       next='Set this account\u2019s monthly dates once — it rolls forward automatically after that';
       actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Set Dates</button>`;
-      needsCount++;alertAccounts.push({acc,type:'no-data'});rowCls='sns-row-act';
+      needsCount++;rowCls='sns-row-act';
     } else if(c.status==='review'){
       statusHtml=`<span class="sns-status review">Review Now</span>`;
-      next='Current order: check prices, profit &amp; competition — decide keep / cancel / amend';rowCls='sns-row-act';
-      reviewAccounts.push(acc);
+      next='Check the in-flight order — prices, profit &amp; competition — then mark it reviewed';rowCls='sns-row-act';
+      actionHtml=actBtn(acc,'snsMarkReviewed','Reviewed ✓')+editBtn(acc);needsCount++;
     } else if(c.status==='lda-today'){
       statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
-      next='Final day to add or amend for this cycle — do it today';rowCls='sns-row-act';
+      next='Final day to add or amend for this cycle — do it today, then mark added';rowCls='sns-row-act';
+      actionHtml=actBtn(acc,'snsMarkAdded','Added ✓')+editBtn(acc);needsCount++;
     } else if(c.status==='lda-soon'){
       statusHtml=`<span class="sns-status soon">Add ${dueLbl(c.daysToLDA)}</span>`;
       next=`Get items in before the ${fmt(c.nextLDA)} cutoff`;
+      actionHtml=actBtn(acc,'snsMarkAdded','Added ✓')+editBtn(acc);
     } else if(c.status==='arriving'){
       statusHtml=`<span class="sns-status between">Arrives ${dueLbl(c.daysToDelivery)}</span>`;
       next=`Current order lands ${fmt(c.deliv)} — prep to send in`;
     } else if(c.status==='in-flight'){
       statusHtml=`<span class="sns-status between">Order Placed</span>`;
       next=`Current order delivers ${fmt(c.deliv)} · next add-by ${fmt(c.nextLDA)}`;
+    } else if(c.status==='added'){
+      statusHtml=`<span class="sns-status done">Added ✓</span>`;
+      next=`Done for this cycle — next add-by ${fmt(c.nextLDA)}`;
+      actionHtml=calmBtn(acc,'Undo')+editBtn(acc);
     } else {
       statusHtml=`<span class="sns-status active">Idle</span>`;
       next=`Nothing in flight — next add-by ${fmt(c.nextLDA)}`;
     }
 
-    // Next add-by cell (what you're working toward)
     const addByCell = c.status==='no-data' ? '—'
       : `<span class="sns-date">${fmt(c.nextLDA)}</span><div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</div>`;
-    // In-flight order cell (review + delivery), only if an order is actually in flight
     const flightCell = (c.status==='no-data') ? '—'
       : c.inFlight
         ? `<span class="sns-date" style="color:var(--purple)">Review ${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span><div class="sns-sub">delivers ${fmt(c.deliv)}</div>`
@@ -4493,14 +4709,13 @@ function renderSns(){
       <td>${addByCell}</td>
       <td>${flightCell}</td>
       <td>${statusHtml}<div class="sns-next">${next}</div></td>
-      <td>${actionHtml}</td>
+      <td><div class="sns-act-cell">${actionHtml}</div></td>
     </tr>`;
   }).join('');
 
-
-  // KPIs — meaningful, action-first
+  // KPIs — action-first
   let kReview=0,kAdd=0,kArrive=0;
-  SNS_ACCOUNTS.forEach(acc=>{const s=calcSnsStatus(acc);
+  SNS_ACCOUNTS.forEach(acc=>{const s=SS[acc];
     if(s.status==='review')kReview++;
     if(s.status==='lda-today'||s.status==='lda-soon')kAdd++;
     if(s.status==='arriving')kArrive++;});
@@ -4515,11 +4730,9 @@ function renderSns(){
       <div class="sns-sum-n ${c.n===0?'dim':''}">${c.n}</div><div class="sns-sum-lbl">${c.lbl}</div></div>`).join('');
   }
 
-  // Nav badge
   const nbSns=document.getElementById('nb-sns');
   if(nbSns)nbSns.textContent=needsCount;
 
-  // Action surfacing is handled by the Action Center + notifications.
   refreshActionCenter();
 }
 
@@ -4580,7 +4793,7 @@ const sv=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
 const se=(id,show)=>{const e=document.getElementById(id);if(e)e.style.display=show?'block':'none';};
 
 window.addEventListener('click',e=>{
-  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal','oaDetailModal'].forEach(id=>{
+  ['leadModal','editModal','sbModal','rbModal','rbEditModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','oaCheckModal','oaEditModal','exportModal','oaDetailModal'].forEach(id=>{
     if(e.target===document.getElementById(id))closeM(id);
   });
   // Close notification panel when clicking outside it
