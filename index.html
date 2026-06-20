@@ -386,6 +386,11 @@ header{
 .toast.ok{background:var(--green);}
 .toast.bad{background:var(--red);}
 .toast.info{background:var(--blue);}
+.toast.has-undo{pointer-events:auto;display:flex;align-items:center;gap:13px;}
+.toast-undo{background:rgba(255,255,255,.22);border:none;color:#fff;font-weight:800;font-size:11px;
+  padding:5px 12px;border-radius:6px;cursor:pointer;font-family:var(--dm);text-transform:uppercase;
+  letter-spacing:.6px;flex-shrink:0;transition:background .12s;}
+.toast-undo:hover{background:rgba(255,255,255,.4);}
 
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -540,24 +545,7 @@ header{
 .tile-updated{font-size:9.5px;color:rgba(255,255,255,.6);margin-top:2px;}
 .t-neu .tile-updated{color:var(--muted);}
 
-.bulk-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--blue);
-  border-radius:10px;padding:11px 16px;margin-bottom:14px;}
-.bulk-bar.show{display:flex;}
-.bulk-count{font-size:13px;font-weight:700;color:var(--text);}
-.bulk-btn{padding:7px 14px;border:none;border-radius:7px;font-family:var(--dm);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;color:#fff;}
-.bulk-btn.bb-buy{background:var(--green);}
-.bulk-btn.bb-buy:hover{background:var(--green-d);}
-.bulk-btn.bb-snooze{background:var(--amber);}
-.bulk-btn.bb-snooze:hover{background:var(--amber-d);}
-.bulk-btn.bb-del{background:var(--red);}
-.bulk-btn.bb-del:hover{background:var(--red-d);}
-.bulk-btn.bb-cancel{background:var(--card2);color:var(--text2);border:1px solid var(--border);}
-.bulk-btn.bb-cancel:hover{background:var(--border);}
-.bulk-sel-all{font-size:12px;font-weight:600;color:#7eb3ff;cursor:pointer;margin-left:auto;background:none;border:none;font-family:var(--dm);}
-
-.tile-cb-wrap{position:absolute;top:8px;left:8px;z-index:10;}
-.tile-cb{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
-.tile.bulk-mode{padding-left:32px;}
+/* (bulk-select styles removed) */
 
 /* Dup modal */
 .dup-loc{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;
@@ -693,6 +681,17 @@ header{
 
 /* ── ACTION CENTER (Overview) ── */
 .ac-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.sns-banner{display:none;align-items:center;gap:11px;margin:-6px 0 16px;padding:10px 14px;border-radius:10px;cursor:pointer;
+  background:color-mix(in srgb,var(--purple) 11%,var(--surface));border:1px solid color-mix(in srgb,var(--purple) 32%,var(--border));
+  transition:background .14s,border-color .14s;}
+.sns-banner.show{display:flex;}
+.sns-banner:hover{background:color-mix(in srgb,var(--purple) 17%,var(--surface));border-color:color-mix(in srgb,var(--purple) 50%,var(--border));}
+.sns-banner-ico{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--purple) 22%,transparent);color:var(--purple);}
+.sns-banner-tx{flex:1;min-width:0;}
+.sns-banner-t{font-size:12.5px;font-weight:700;color:var(--text);}
+.sns-banner-s{font-size:11px;color:var(--text2);margin-top:1px;}
+.sns-banner-arr{color:var(--purple);font-size:13px;font-weight:700;flex-shrink:0;}
 .ac-title{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
 .ac-date{font-size:12px;color:var(--text2);margin-top:3px;}
 .ac-summary{text-align:right;font-size:12.5px;color:var(--text2);max-width:320px;}
@@ -778,6 +777,26 @@ header{
 .tile .tbtn.buy{background:color-mix(in srgb,var(--tcol) 20%,transparent)!important;color:var(--tcol)!important;border-color:color-mix(in srgb,var(--tcol) 40%,transparent);font-weight:800;}
 .tile .tbtn.buy:hover{background:var(--tcol)!important;color:#06121a!important;}
 .tile .tbtns{gap:5px;margin-top:9px;}
+
+/* ── TILE HEADER ROW: type chip · site · found-by ── */
+.tile-top{display:flex;align-items:center;gap:5px;margin-bottom:1px;}
+.tile-top-sp{flex:1;}
+.tile-top .tile-src{position:static!important;top:auto!important;right:auto!important;}
+.tile .tile-type{font-size:9px;font-weight:800;letter-spacing:.6px;padding:2px 7px;border-radius:5px;
+  text-transform:uppercase;line-height:1.4;flex-shrink:0;}
+.tile .tt-A2A{background:color-mix(in srgb,var(--blue) 22%,transparent);color:#9fb6ff;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 40%,transparent);}
+.tile .tt-OA{background:color-mix(in srgb,var(--orange) 22%,transparent);color:#ffb38c;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--orange) 42%,transparent);}
+.tile .tile-site{font-size:9.5px;font-weight:700;letter-spacing:.2px;padding:2px 7px;border-radius:5px;
+  background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);line-height:1.4;
+  max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;}
+.tile .tile-top .tile-src{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;
+  text-transform:uppercase;letter-spacing:.3px;line-height:1.4;}
+.tile .tile-asin{padding:0!important;}
+/* OA replen tile — show retailer name */
+.oa-tile .oa-site{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;
+  background:var(--bg)!important;color:var(--text2)!important;border:1px solid var(--border2);margin-bottom:3px;}
 
 /* competition indicator */
 .tile-comp.comp-low{color:var(--green)!important;border-color:color-mix(in srgb,var(--green) 35%,transparent)!important;}
@@ -1296,6 +1315,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         </div>
         <div class="ac-summary" id="ac-summary"></div>
       </div>
+      <div class="sns-banner" id="sns-banner" onclick="go('sns')"></div>
       <div class="ac-stats" id="ac-stats"></div>
       <div class="ac-grid">
         <div class="ac-main">
@@ -1446,15 +1466,6 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
             </button>
           </div>
         </div>
-      </div>
-
-      <div class="bulk-bar" id="bulk-bar">
-        <span class="bulk-count" id="bulk-count">0 selected</span>
-        <button class="bulk-btn bb-buy" onclick="bulkBought()">Mark Bought</button>
-        <button class="bulk-btn bb-snooze" onclick="bulkSnooze()">Snooze 3d</button>
-        <button class="bulk-btn bb-del" onclick="bulkDelete()">Delete</button>
-        <button class="bulk-sel-all" onclick="bulkSelectAll()">Select All</button>
-        <button class="bulk-btn bb-cancel" onclick="clearBulk()">Cancel</button>
       </div>
 
       <div class="src-group" data-group="ready">
@@ -2309,6 +2320,29 @@ const fmtLong=d=>d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long'}):'�
 const fmtEnd=d=>{if(!d)return'—';const s=d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});return d.getFullYear()!==(new Date()).getFullYear()?s+' '+d.getFullYear():s;};
 const amzUrl=(asin,mkt)=>`https://www.${mkt||'amazon.co.uk'}/dp/${asin}`;
 const sasUrl=asin=>`https://sas.selleramp.com/sas/lookup?SasLookup%5Bsearch_term%5D=${asin}`;
+// Auto-derive a clean retailer name from an OA source URL (argos.co.uk → Argos)
+const SITE_NAMES={argos:'Argos',amazon:'Amazon',tesco:'Tesco',asda:'Asda',sainsburys:"Sainsbury's",
+  morrisons:'Morrisons',boots:'Boots',superdrug:'Superdrug',wilko:'Wilko',bmstores:'B&M',therange:'The Range',
+  homebargains:'Home Bargains',aldi:'Aldi',lidl:'Lidl',currys:'Currys',very:'Very',ao:'AO',johnlewis:'John Lewis',
+  wickes:'Wickes',screwfix:'Screwfix',toolstation:'Toolstation','b&q':'B&Q',diy:'B&Q',ebay:'eBay',
+  thetoyshop:'The Entertainer',smythstoys:'Smyths',hobbycraft:'Hobbycraft',waterstones:'Waterstones',
+  whsmith:'WHSmith',hmv:'HMV',game:'GAME',matalan:'Matalan',next:'Next',debenhams:'Debenhams'};
+function siteName(url){
+  if(!url)return null;
+  try{
+    let u=url.trim(); if(!/^https?:\/\//i.test(u))u='https://'+u;
+    let h=new URL(u).hostname.replace(/^www\d?\./i,'').toLowerCase();
+    const parts=h.split('.');
+    // pick the brand label: handle multi-part suffixes like co.uk, com.au, org.uk
+    const multi=['co','com','org','net','gov','ac','ltd','plc'];
+    let key;
+    if(parts.length>=3&&multi.includes(parts[parts.length-2]))key=parts[parts.length-3];
+    else if(parts.length>=2)key=parts[parts.length-2];
+    else key=parts[0];
+    if(SITE_NAMES[key])return SITE_NAMES[key];
+    return key.charAt(0).toUpperCase()+key.slice(1);
+  }catch{return null;}
+}
 
 // ═══════════════════════════════════
 // SETTINGS — buy-timing model
@@ -2690,61 +2724,7 @@ function isSnoozed(l){
 // ═══════════════════════════════════
 // BULK ACTIONS
 // ═══════════════════════════════════
-let bulkSelected=new Set();
-
-function toggleBulk(id,cb){
-  if(cb.checked)bulkSelected.add(id);
-  else bulkSelected.delete(id);
-  updateBulkBar();
-}
-
-function updateBulkBar(){
-  const bar=document.getElementById('bulk-bar');
-  const cnt=document.getElementById('bulk-count');
-  if(bulkSelected.size>0){bar.classList.add('show');cnt.textContent=`${bulkSelected.size} selected`;}
-  else{bar.classList.remove('show');}
-}
-
-function bulkSelectAll(){
-  document.querySelectorAll('.tile-cb').forEach(cb=>{
-    cb.checked=true;
-    const id=parseInt(cb.dataset.id);
-    if(id)bulkSelected.add(id);
-  });
-  updateBulkBar();
-}
-
-function clearBulk(){
-  bulkSelected.clear();
-  document.querySelectorAll('.tile-cb').forEach(cb=>cb.checked=false);
-  updateBulkBar();
-}
-
-function bulkBought(){
-  if(!bulkSelected.size)return;
-  if(!confirm(`Mark ${bulkSelected.size} lead${bulkSelected.size!==1?'s':''} as bought?`))return;
-  bulkSelected.forEach(id=>{const l=leads.find(x=>x.id===id);if(l)l.bought=true;});
-  sv2(SK,leads);bulkSelected.clear();render();toast(`${bulkSelected.size||'All selected'} marked as bought`,'ok');
-}
-
-function bulkSnooze(){
-  if(!bulkSelected.size)return;
-  const wakeDate=addD(today(),3).toISOString().split('T')[0];
-  bulkSelected.forEach(id=>{
-    const l=leads.find(x=>x.id===id);
-    if(l){l.snoozed=true;l.snoozeUntil=wakeDate;l.updatedAt=todayStr();}
-  });
-  sv2(SK,leads);const n=bulkSelected.size;bulkSelected.clear();render();
-  toast(`${n} lead${n!==1?'s':''} snoozed for 3 days`,'info');
-}
-
-function bulkDelete(){
-  if(!bulkSelected.size)return;
-  if(!confirm(`Delete ${bulkSelected.size} lead${bulkSelected.size!==1?'s':''}? This cannot be undone.`))return;
-  const n=bulkSelected.size;
-  leads=leads.filter(l=>!bulkSelected.has(l.id));
-  sv2(SK,leads);bulkSelected.clear();render();toast(`${n} lead${n!==1?'s':''} deleted`,'info');
-}
+// (bulk-select feature removed)
 
 // ═══════════════════════════════════
 // LAST UPDATED HELPER
@@ -2846,7 +2826,7 @@ function openLead(id){
     ${p.status!=='expired'?`<button class="ld-buy-btn" onclick="closeM('leadModal');openSrcBought(${l.id})">I Bought This — Mark as Done</button>`:''}
     <div style="display:flex;gap:8px">
       <button class="mbtn cancel" style="flex:1" onclick="closeM('leadModal');openEdit(${l.id})">Edit</button>
-      <button class="mbtn danger" style="flex:1" onclick="if(confirm('Delete?')){leads=leads.filter(x=>x.id!==${l.id});sv2(SK,leads);closeM('leadModal');render();toast('Deleted','info')}">Delete</button>
+      <button class="mbtn danger" style="flex:1" onclick="delLead(${l.id})">Delete</button>
     </div>`;
   openM('leadModal');
 }
@@ -2988,8 +2968,16 @@ function calcAcc(ds,snoozeUntil){
   if(snoozeUntil&&diff(today(),pd(snoozeUntil))>0)return{type:'snoozed',wake:pd(snoozeUntil),readyDate:rd};
   return{type:'ready',readyDate:rd};
 }
-function skipRebuy(id){if(!confirm('Remove?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Skipped','info');}
-function delRebuy(id){if(!confirm('Delete?'))return;rebuys=rebuys.filter(r=>r.id!==id);sv2(RK,rebuys);render();toast('Deleted','info');}
+function skipRebuy(id){
+  const i=rebuys.findIndex(r=>r.id===id);if(i<0)return;
+  const item=rebuys[i];rebuys.splice(i,1);sv2(RK,rebuys);render();
+  undoToast(`${item.asin} skipped`,()=>{rebuys.splice(i,0,item);sv2(RK,rebuys);render();toast('Restored','ok');});
+}
+function delRebuy(id){
+  const i=rebuys.findIndex(r=>r.id===id);if(i<0)return;
+  const item=rebuys[i];rebuys.splice(i,1);sv2(RK,rebuys);render();
+  undoToast(`${item.asin} deleted`,()=>{rebuys.splice(i,0,item);sv2(RK,rebuys);render();toast('Restored','ok');});
+}
 
 // ═══════════════ PRIME DAY ═══════════════
 function pdayDeadline(l){
@@ -3025,7 +3013,11 @@ function decidePday(id,decision){
   toast(`${l.asin} — ${decision==='buy'?'marked BUY':'marked No-buy'}`,decision==='buy'?'ok':'info');
 }
 function undoPday(id){const l=pdayLeads.find(x=>x.id===id);if(!l)return;l.decision=null;l.decidedAt=null;sv2(PDK,pdayLeads);render();}
-function delPday(id){if(!confirm('Remove this Prime Day lead?'))return;pdayLeads=pdayLeads.filter(x=>x.id!==id);sv2(PDK,pdayLeads);render();toast('Removed','info');}
+function delPday(id){
+  const i=pdayLeads.findIndex(x=>x.id===id);if(i<0)return;
+  const item=pdayLeads[i];pdayLeads.splice(i,1);sv2(PDK,pdayLeads);render();
+  undoToast(`${item.asin} removed`,()=>{pdayLeads.splice(i,0,item);sv2(PDK,pdayLeads);render();toast('Restored','ok');});
+}
 function openPdaySettings(){
   document.getElementById('pds-master').checked=settings.pday.master!==false;
   document.getElementById('pds-rows').innerHTML=['early','prime','event'].map(t=>{
@@ -3109,11 +3101,16 @@ function renderPday(){
     else {bn.className='pd-banner none';bn.innerHTML='No Prime Day leads yet — add deals above as you find them.';}
   }
 }
+function delLead(id){
+  const i=leads.findIndex(x=>x.id===id);if(i<0)return;
+  const item=leads[i];leads.splice(i,1);sv2(SK,leads);closeM('leadModal');render();
+  undoToast(`${item.asin} deleted`,()=>{leads.splice(i,0,item);sv2(SK,leads);render();toast('Restored','ok');});
+}
 function dismissExpired(id){
   const l=leads.find(x=>x.id===id);if(!l)return;
-  if(!confirm('Dismiss this expired LTD? It leaves your action list but stays under Sourcing.'))return;
   l.rejectedAt=todayStr();l.rejectReason='LTD expired';l.updatedAt=todayStr();
-  sv2(SK,leads);render();toast(`${l.asin} dismissed`,'info');
+  sv2(SK,leads);render();
+  undoToast(`${l.asin} dismissed`,()=>{l.rejectedAt=null;l.rejectReason=null;sv2(SK,leads);render();toast('Restored','ok');});
 }
 
 function markDelivered(id,acc){
@@ -3178,15 +3175,19 @@ function buildTile(l){
     st = p.isLTD ? `BUY ${fmt(p.recBuy)}` : `BUY IN ${p.daysToBuy}D`;
     meta = `${stratTag} → ${fmt(p.recBuy)}${p.isLTD?` · ends ${fmtEnd(p.end)}`:''}${cog?' · '+cog:''}`;
   }
-  const srcBadge=l.src?`<div class="tile-src">${l.src}</div>`:'';
+  const typeChip=l.type?`<span class="tile-type tt-${l.type}">${l.type}</span>`:'';
+  const site=(l.type==='OA')?siteName(l.oaLink):null;
+  const siteBadge=site?`<span class="tile-site">${site}</span>`:'';
+  const srcBadge=l.src?`<span class="tile-src">${l.src}</span>`:'';
+  const topRow=`<div class="tile-top">${typeChip}${siteBadge}<span class="tile-top-sp"></span>${srcBadge}</div>`;
   const compBadge=l.comp!=null?(()=>{const lvl=l.comp<=2?'low':l.comp<=5?'med':'high';const lbl=lvl==='low'?'Low comp':lvl==='med'?'Med comp':'High comp';return`<div class="tile-comp comp-${lvl}">${lbl} · ${l.comp} FBA</div>`;})():'';
   const noteHtml=l.notes?`<div class="tile-note">${l.notes.substring(0,48)}${l.notes.length>48?'…':''}</div>`:'';
   const snoozeBadge=l.snoozed&&l.snoozeUntil?`<div class="tile-snooze-badge">Was snoozed</div>`:'';
   const updatedFmt=l.updatedAt?fmtShort(l.updatedAt):null;
   const updatedHtml=updatedFmt?`<div class="tile-updated">Updated ${updatedFmt}</div>`:'';
-  const cbHtml=`<div class="tile-cb-wrap" onclick="event.stopPropagation()"><input type="checkbox" class="tile-cb" data-id="${l.id}" onchange="toggleBulk(${l.id},this)"></div>`;
-  return`<div class="tile ${cls}" id="tile-${l.id}" onclick="openLead(${l.id})">${cbHtml}${srcBadge}
-    <div class="tile-asin" style="padding-right:${l.src?'52px':'0'};padding-left:22px">${l.asin}</div>
+  const cbHtml='';
+  return`<div class="tile ${cls}" id="tile-${l.id}" onclick="openLead(${l.id})">${topRow}
+    <div class="tile-asin">${l.asin}</div>
     <div class="tile-status">${st}</div>
     <div class="tile-meta">${meta}</div>
     ${compBadge}${noteHtml}${updatedHtml}${snoozeBadge}
@@ -3273,11 +3274,31 @@ function buildWLCard(w){
   </div>`;
 }
 
+// LTD deals that have passed their end date are too late to buy — clear them
+// automatically so they stop nagging. Kept in storage (rejected, not deleted) so
+// a Backup still has the record and nothing is lost.
+function autoArchiveExpired(){
+  let n=0;
+  leads.forEach(l=>{
+    if(l.bought||l.rejectedAt||!l.endDate)return;
+    const end=pd(l.endDate);
+    if(end&&end<today()){
+      l.rejectedAt=todayStr();
+      l.rejectReason='LTD expired — auto-cleared';
+      l.autoCleared=true;
+      l.updatedAt=todayStr();
+      n++;
+    }
+  });
+  if(n){sv2(SK,leads);toast(`${n} expired LTD${n!==1?'s':''} auto-cleared — too late to buy`,'info');}
+}
+
 const emp=m=>`<div class="empty">${m}</div>`;
 const set=(id,h)=>{const e=document.getElementById(id);if(e)e.innerHTML=h;};
 const setN=(id,n)=>{const e=document.getElementById(id);if(e)e.textContent=n;};
 
 function render(){
+  autoArchiveExpired();
   const watching=[],readyBuy=[],ltdOpen=[],ltdWait=[],ltdRev=[],expired=[];
   leads.forEach(l=>{
     if(l.bought)return;
@@ -3564,17 +3585,33 @@ function aqAct(ev,action,etype,eid){
 }
 function aqPerform(action,etype,eid){
   if(etype==='lead'){
-    const id=parseInt(eid),l=leads.find(x=>x.id===id);if(!l)return;
-    if(action==='done'){l.bought=true;l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} bought ✓`,'ok');}
-    else if(action==='skip'){l.rejectedAt=todayStr();l.rejectReason='Skipped from queue';l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} skipped`,'info');}
-    else if(action==='snooze'){l.snoozed=true;l.snoozeUntil=addD(today(),3).toISOString().split('T')[0];l.updatedAt=todayStr();sv2(SK,leads);toast(`${l.asin} snoozed 3 days`,'info');}
-    else if(action==='remove'){leads=leads.filter(x=>x.id!==id);sv2(SK,leads);toast(`${l.asin} removed`,'info');}
+    const id=parseInt(eid);
+    if(action==='remove'){
+      const i=leads.findIndex(x=>x.id===id);if(i<0)return;
+      const item=leads[i];leads.splice(i,1);sv2(SK,leads);
+      undoToast(`${item.asin} removed`,()=>{leads.splice(i,0,item);sv2(SK,leads);render();toast('Restored','ok');});
+    } else {
+      const l=leads.find(x=>x.id===id);if(!l)return;
+      const prev={bought:l.bought,rejectedAt:l.rejectedAt,rejectReason:l.rejectReason,snoozed:l.snoozed,snoozeUntil:l.snoozeUntil,updatedAt:l.updatedAt};
+      const undo=()=>{Object.assign(l,prev);sv2(SK,leads);render();toast('Restored','ok');};
+      if(action==='done'){l.bought=true;l.updatedAt=todayStr();sv2(SK,leads);undoToast(`${l.asin} bought ✓`,undo,'ok');}
+      else if(action==='skip'){l.rejectedAt=todayStr();l.rejectReason='Skipped from queue';l.updatedAt=todayStr();sv2(SK,leads);undoToast(`${l.asin} skipped`,undo);}
+      else if(action==='snooze'){l.snoozed=true;l.snoozeUntil=addD(today(),3).toISOString().split('T')[0];l.updatedAt=todayStr();sv2(SK,leads);undoToast(`${l.asin} snoozed 3 days`,undo);}
+    }
   } else if(etype==='pday'){
-    const id=parseInt(eid),l=pdayLeads.find(x=>x.id===id);if(!l)return;
-    if(action==='done'){l.decision='buy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);toast(`${l.asin} — BUY ✓`,'ok');}
-    else if(action==='skip'){l.decision='nobuy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);toast(`${l.asin} — No‑buy`,'info');}
-    else if(action==='snooze'){l.snoozeUntil=addD(today(),1).toISOString().split('T')[0];sv2(PDK,pdayLeads);toast(`${l.asin} snoozed 1 day`,'info');}
-    else if(action==='remove'){pdayLeads=pdayLeads.filter(x=>x.id!==id);sv2(PDK,pdayLeads);toast(`${l.asin} removed`,'info');}
+    const id=parseInt(eid);
+    if(action==='remove'){
+      const i=pdayLeads.findIndex(x=>x.id===id);if(i<0)return;
+      const item=pdayLeads[i];pdayLeads.splice(i,1);sv2(PDK,pdayLeads);
+      undoToast(`${item.asin} removed`,()=>{pdayLeads.splice(i,0,item);sv2(PDK,pdayLeads);render();toast('Restored','ok');});
+    } else {
+      const l=pdayLeads.find(x=>x.id===id);if(!l)return;
+      const prev={decision:l.decision,decidedAt:l.decidedAt,snoozeUntil:l.snoozeUntil};
+      const undo=()=>{Object.assign(l,prev);sv2(PDK,pdayLeads);render();toast('Restored','ok');};
+      if(action==='done'){l.decision='buy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);undoToast(`${l.asin} — BUY ✓`,undo,'ok');}
+      else if(action==='skip'){l.decision='nobuy';l.decidedAt=todayStr();sv2(PDK,pdayLeads);undoToast(`${l.asin} — No‑buy`,undo);}
+      else if(action==='snooze'){l.snoozeUntil=addD(today(),1).toISOString().split('T')[0];sv2(PDK,pdayLeads);undoToast(`${l.asin} snoozed 1 day`,undo);}
+    }
   } else if(etype==='oa'){
     const id=parseInt(eid),it=oaItems.find(x=>x.id===id);if(!it)return;
     it.lastChecked=today().toISOString().split('T')[0];
@@ -3603,6 +3640,29 @@ function refreshActionCenter(){
   const U=computeUpcoming();
   const total=A.length;
   const counts={};AC_BANDS.forEach(b=>counts[b.key]=A.filter(a=>a.band===b.key).length);
+
+  // ── Sub & Save passive heads-up banner (info only, no action to clear) ──
+  const snsBan=document.getElementById('sns-banner');
+  if(snsBan){
+    const upd=[];
+    Object.keys(snsData).forEach(acc=>{
+      const d=snsData[acc];if(!d||!d.editDay)return;
+      const s=calcSnsStatus(acc);
+      if(s.status==='review')         upd.push({acc,t:'prices to check'});
+      else if(s.status==='arriving')  upd.push({acc,t:`arriving ~${fmt(s.deliv)}`});
+      else if(s.status==='lda-today') upd.push({acc,t:'add window closes today'});
+      else if(s.status==='lda-soon')  upd.push({acc,t:`add window closes ${s.daysToLDA===1?'tomorrow':'in '+s.daysToLDA+'d'}`});
+      else if(s.status==='in-flight') upd.push({acc,t:`order in flight`});
+    });
+    if(upd.length){
+      const n=upd.length;
+      const detail=upd.slice(0,3).map(u=>`${u.acc} — ${u.t}`).join(' · ')+(n>3?` · +${n-3} more`:'');
+      snsBan.innerHTML=`<div class="sns-banner-ico"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+        <div class="sns-banner-tx"><div class="sns-banner-t">Sub &amp; Save · ${n} update${n!==1?'s':''}</div><div class="sns-banner-s">${detail}</div></div>
+        <span class="sns-banner-arr">View →</span>`;
+      snsBan.classList.add('show');
+    } else snsBan.classList.remove('show');
+  }
 
   const dEl=document.getElementById('ac-date');
   if(dEl)dEl.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -3747,9 +3807,26 @@ function renderNotif(A,U){
 // ═══════════════════════════════════
 // SOURCING FILTER
 // ═══════════════════════════════════
+// ── Remembers tab, sourcing filter/view/sort and scroll across actions & reloads ──
+const UISK='a2a_ui_v5';
+let uiState=Object.assign({tab:'overview',srcFilter:'all',srcView:'cards',srcSort:'buy',scroll:0},ld(UISK)||{});
+function saveUI(){sv2(UISK,uiState);}
+const _scrollEl=()=>document.querySelector('.main')||document.scrollingElement||document.documentElement;
+let _scrollSaveT;
+function trackScroll(){
+  clearTimeout(_scrollSaveT);
+  _scrollSaveT=setTimeout(()=>{
+    uiState.scroll=Math.max(window.scrollY||0,_scrollEl().scrollTop||0);saveUI();
+  },200);
+}
+function restoreScroll(){
+  const y=uiState.scroll||0;
+  window.scrollTo(0,y); const m=_scrollEl(); if(m)m.scrollTop=y;
+}
+
 let _srcFilter='all';
 function setSrcFilter(seg){
-  _srcFilter=seg;
+  _srcFilter=seg;uiState.srcFilter=seg;saveUI();
   document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===seg));
   applySrcFilter();
 }
@@ -3760,9 +3837,10 @@ function applySrcFilter(){
 }
 
 // ── View (cards/table) + sort ──
-let _srcView='cards', _srcSort='buy';
-function setSrcView(v){_srcView=v;document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));render();}
-function setSrcSort(s){_srcSort=s;render();}
+let _srcView=uiState.srcView||'cards', _srcSort=uiState.srcSort||'buy';
+_srcFilter=uiState.srcFilter||'all';
+function setSrcView(v){_srcView=v;uiState.srcView=v;saveUI();document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));render();}
+function setSrcSort(s){_srcSort=s;uiState.srcSort=s;saveUI();render();}
 function srcSorter(a,b){
   const pa=a._p||calcBuyPlan(a),pb=b._p||calcBuyPlan(b);
   switch(_srcSort){
@@ -3816,12 +3894,13 @@ function runSearch(q){
 // ═══════════════════════════════════
 // NAV
 // ═══════════════════════════════════
-function go(name){
+function go(name,skipScroll){
   document.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById(name)?.classList.add('active');
   document.querySelectorAll('.nb').forEach(b=>{if((b.getAttribute('onclick')||'').includes(`go('${name}')`))b.classList.add('active');});
-  window.scrollTo({top:0,behavior:'smooth'});
+  uiState.tab=name;uiState.scroll=0;saveUI();
+  if(!skipScroll)window.scrollTo({top:0,behavior:'smooth'});
 }
 function ss(id){setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}),130);}
 
@@ -3844,6 +3923,21 @@ function toast(msg,type='info'){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className=`toast ${type} show`;
   clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);
+}
+let _undoFn=null,_undoTimer=null;
+// Optimistic action with a 6-second Undo — replaces blocking confirm() dialogs.
+function undoToast(msg,undoFn,type='info'){
+  const t=document.getElementById('toast');
+  _undoFn=undoFn;
+  t.innerHTML=`<span>${msg}</span><button class="toast-undo" onclick="doUndo()">Undo</button>`;
+  t.className=`toast ${type} show has-undo`;
+  clearTimeout(_tt);clearTimeout(_undoTimer);
+  _undoTimer=setTimeout(()=>{t.classList.remove('show');_undoFn=null;},6000);
+}
+function doUndo(){
+  const f=_undoFn;_undoFn=null;clearTimeout(_undoTimer);
+  document.getElementById('toast').classList.remove('show');
+  if(f)f();
 }
 
 // ═══════════════════════════════════
@@ -3877,10 +3971,10 @@ function addNote(){
 }
 
 function deleteNote(id){
-  if(!confirm('Delete this note?'))return;
-  notes=notes.filter(n=>n.id!==id);
+  const i=notes.findIndex(n=>n.id===id);if(i<0)return;
+  const item=notes[i];notes.splice(i,1);
   saveNotes();renderNotes();updateNoteBadge();
-  toast('Note deleted','info');
+  undoToast('Note deleted',()=>{notes.splice(i,0,item);saveNotes();renderNotes();updateNoteBadge();toast('Restored','ok');});
 }
 
 function updateNoteTitle(id,val){
@@ -4079,10 +4173,11 @@ function saveOAEdit(){
 }
 
 function delOA(id){
-  if(!confirm('Remove from OA Replen?'))return;
-  oaItems=oaItems.filter(x=>x.id!==id);
+  const i=oaItems.findIndex(x=>x.id===id);if(i<0)return;
+  const item=oaItems[i];oaItems.splice(i,1);
   localStorage.setItem(OAK,JSON.stringify(oaItems));
-  renderOA();toast('Removed','info');
+  renderOA();
+  undoToast(`${item.asin} removed`,()=>{oaItems.splice(i,0,item);localStorage.setItem(OAK,JSON.stringify(oaItems));renderOA();toast('Restored','ok');});
 }
 
 function isOASnoozed(item){
@@ -4182,8 +4277,11 @@ function buildOATile(item){
     ?`<div class="oa-tile-meta">£${item.current.toFixed(2)} now · £${item.target?.toFixed(2)||'?'} target</div>`
     :`<div class="oa-tile-meta">Target £${item.target?.toFixed(2)||'—'}</div>`;
   const noteHtml=item.notes?`<div class="oa-tile-note">${item.notes}</div>`:'';
+  const oaSite=siteName(item.link);
+  const oaSiteHtml=oaSite?`<span class="oa-site">${oaSite}</span>`:'';
 
   return`<div class="${cls}" id="oa-${item.id}" onclick="openOADetail(${item.id})">
+    ${oaSiteHtml}
     <div class="oa-tile-asin">${item.asin}</div>
     <div class="oa-tile-status">${headline}</div>
     <div class="oa-tile-meta">${subline}</div>
@@ -4519,6 +4617,14 @@ function toggleSidebar(){
   renderNotes();
   renderSns();
   renderOA();
+  // Restore last tab, sourcing filter/view, and scroll position
+  if(uiState.tab&&uiState.tab!=='overview')go(uiState.tab,true);
+  document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===(_srcFilter||'all')));
+  document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===_srcView));
+  applySrcFilter();
+  setTimeout(restoreScroll,60);
+  window.addEventListener('scroll',trackScroll,{passive:true});
+  _scrollEl().addEventListener('scroll',trackScroll,{passive:true});
 })();
 </script>
 </body>
