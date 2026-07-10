@@ -1088,6 +1088,30 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .sns-note-in:hover{border-color:var(--border2);}
 .sns-note-in:focus{outline:none;border:1px solid var(--blue);background:var(--bg);color:var(--text);}
 
+/* sortable table headers */
+th.sortable{cursor:pointer;user-select:none;transition:color var(--tr);white-space:nowrap;}
+th.sortable:hover{color:var(--text)!important;}
+.th-arr{font-size:8px;margin-left:3px;color:var(--blue);display:inline-block;min-width:8px;}
+/* status pills (solid) */
+.st-pill{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--card2);color:var(--text2);white-space:nowrap;}
+.st-pill.red{background:var(--red);color:#fff;}
+.st-pill.amber{background:var(--amber);color:#241500;}
+.st-pill.purple{background:var(--purple);color:#fff;}
+.st-pill.green{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green);}
+/* price gap */
+.gap-good{color:var(--green);font-weight:800;}
+.gap-close{color:var(--amber);font-weight:700;}
+.gap-far{color:var(--red);font-weight:700;}
+.oa-note-cell{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--muted);font-style:italic;}
+/* S&S insight strip + badges */
+.sns-insight{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--teal);border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:12px;color:var(--text2);}
+.sns-insight b{color:#fff;}
+.sns-badge{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:4px;margin-left:6px;text-transform:uppercase;white-space:nowrap;}
+.sns-badge.fast{background:var(--green);color:#06210f;}
+.sns-badge.slow{background:var(--blue);color:#fff;}
+.sns-insight .sns-badge{margin-left:0;margin-right:2px;}
+
 /* small helper button inside modals */
 .sr-mini{display:inline-block;background:var(--card2);border:1px solid var(--border2);color:var(--text2);
   font-size:10.5px;font-weight:700;padding:6px 11px;border-radius:7px;cursor:pointer;margin-top:10px;
@@ -1389,6 +1413,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
             <option value="comp">Sort: Competition</option>
             <option value="cog">Sort: COG</option>
             <option value="added">Sort: Newest</option>
+            <option value="asin">Sort: ASIN</option>
           </select>
           <div class="view-toggle" id="view-toggle">
             <button class="vt-btn active" data-v="cards" onclick="setSrcView('cards')" title="Card view">
@@ -1673,16 +1698,17 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
         <button class="set-btn" onclick="openSnsAccounts()">Manage accounts</button>
       </div>
       <div class="sns-summary" id="sns-summary"></div>
+      <div id="sns-insight"></div>
 
       <div class="sns-table-wrap">
         <table class="sns-table" id="sns-main-table">
           <thead>
             <tr>
-              <th>Account</th>
-              <th>Next Add-By</th>
-              <th>Delivery</th>
+              <th class="sortable" onclick="setSnsSort('acc')">Account<span class="th-arr" id="arr-sns-acc"></span></th>
+              <th class="sortable" onclick="setSnsSort('addby')">Next Add-By<span class="th-arr" id="arr-sns-addby"></span></th>
+              <th class="sortable" onclick="setSnsSort('deliv')">Next Delivery<span class="th-arr" id="arr-sns-deliv"></span></th>
               <th>Review Window</th>
-              <th>Status</th>
+              <th class="sortable" onclick="setSnsSort('status')">Status<span class="th-arr" id="arr-sns-status"></span></th>
               <th></th>
             </tr>
           </thead>
@@ -2247,8 +2273,9 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
       <div id="oad-log"></div>
     </div>
     <div class="mbtns">
-      <button class="mbtn ok" style="background:var(--green)" onclick="closeM('oaDetailModal');openOACheck(window._oaDetailId)">Log Check</button>
-      <button class="mbtn cancel" onclick="closeM('oaDetailModal');openOAEdit(window._oaDetailId)">Edit</button>
+      <button class="mbtn ok" onclick="closeM('oaDetailModal');oaQuickCheck(window._oaDetailId,null)" title="Checked, no change">✓ Checked</button>
+      <button class="mbtn cancel" onclick="closeM('oaDetailModal');openOACheck(window._oaDetailId)">Log…</button>
+      <button class="mbtn cancel" style="flex:0.6" onclick="closeM('oaDetailModal');openOAEdit(window._oaDetailId)">Edit</button>
       <button class="mbtn danger" style="flex:0.5" onclick="closeM('oaDetailModal');delOA(window._oaDetailId)">Delete</button>
     </div>
   </div>
@@ -3553,10 +3580,12 @@ function render(){
   // Sourcing — cards or table
   const renderList=(arr,emptyMsg)=>{
     if(!arr.length)return emp(emptyMsg);
-    if(_srcView==='table')
+    if(_srcView==='table'){
+      const sth=(k,lbl)=>`<th class="sortable" onclick="setSrcSort('${k}');document.getElementById('src-sort').value='${k}'">${lbl}<span class="th-arr">${_srcSort===k?'▲':''}</span></th>`;
       return `<div class="ltbl-wrap"><table class="ltbl"><thead><tr>
-        <th></th><th>ASIN</th><th>Type</th><th>Plan</th><th>Buy</th><th>When</th><th>Live ~</th><th>COG</th><th>Comp</th><th></th>
+        <th></th>${sth('asin','ASIN')}<th>Type</th><th>Plan</th>${sth('buy','Buy')}${sth('countdown','When')}<th>Live ~</th>${sth('cog','COG')}${sth('comp','Comp')}<th></th>
         </tr></thead><tbody>${arr.map(buildLeadRow).join('')}</tbody></table></div>`;
+    }
     return `<div class="tg">${arr.map(buildTile).join('')}</div>`;
   };
   if(tabActive('sourcing')){
@@ -4214,6 +4243,7 @@ _srcFilter=uiState.srcFilter||'all';
 function setSrcView(v){_srcView=v;uiState.srcView=v;saveUI();document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));render();}
 function setSrcSort(s){_srcSort=s;uiState.srcSort=s;saveUI();render();}
 function srcSorter(a,b){
+  if(_srcSort==='asin')return a.asin.localeCompare(b.asin);
   const pa=a._p||calcBuyPlan(a),pb=b._p||calcBuyPlan(b);
   switch(_srcSort){
     case 'countdown': return pa.daysToBuy-pb.daysToBuy;
@@ -4734,7 +4764,8 @@ function openOADetail(id){
   const item=oaItems.find(x=>x.id===id);if(!item)return;
   window._oaDetailId=id;
   const c=calcOAStatus(item);
-  document.getElementById('oad-asin-title').textContent=item.asin;
+  const siteChip=siteName(item.link);
+  document.getElementById('oad-asin-title').innerHTML=escS(item.asin)+(siteChip?` <span class="tile-site" style="vertical-align:middle">${escS(siteChip)}</span>`:'');
   const statusBg={overdue:'var(--red)',due:'var(--amber)',ok:'var(--green)',never:'var(--green)',snoozed:'var(--purple)'};
   const nextChk=item.lastChecked?fmtLong(addD(pd(item.lastChecked),parseInt(item.freq)||7)):null;
   const freq=parseInt(item.freq)||7;
@@ -4749,9 +4780,16 @@ function openOADetail(id){
   bar.style.background=statusBg[c.status]||'var(--border2)';
   bar.style.color='#fff';
   bar.textContent=statusTxt[c.status]||'';
+  let gapHtml='<span style="color:var(--muted)">—</span>';
+  if(item.current!=null&&item.target!=null){
+    const g=item.current-item.target;
+    gapHtml=g<=0?`<span class="gap-good">${g===0?'AT TARGET':'£'+Math.abs(g).toFixed(2)+' UNDER — BUY'}</span>`
+           :`<span class="${g<=1?'gap-close':'gap-far'}">£${g.toFixed(2)} over</span>`;
+  }
   document.getElementById('oad-fields').innerHTML=`
     <div class="oa-field"><div class="oa-field-lbl">Target COG</div><div class="oa-field-val target">£${item.target?.toFixed(2)||'—'}</div></div>
     <div class="oa-field"><div class="oa-field-lbl">Current COG</div><div class="oa-field-val current">${item.current?'£'+item.current.toFixed(2):'Not set'}</div></div>
+    <div class="oa-field"><div class="oa-field-lbl">Gap</div><div class="oa-field-val">${gapHtml}</div></div>
     <div class="oa-field"><div class="oa-field-lbl">Frequency</div><div class="oa-field-val">Every ${item.freq||7}d</div></div>
     <div class="oa-field"><div class="oa-field-lbl">Delivery</div><div class="oa-field-val" style="${item.deliveryDate?'color:var(--blue)':''}">${item.deliveryDate?fmtLong(pd(item.deliveryDate)):'Not set'}</div></div>`;
   // Inline-editable notes — jot something without opening Edit
@@ -4831,6 +4869,12 @@ function buildOATile(item){
   </div>`;
 }
 
+let _oaSort={key:'due',dir:1};
+function setOaSort(key){
+  if(_oaSort.key===key)_oaSort.dir*=-1;
+  else _oaSort={key,dir:1};
+  renderOA();
+}
 function renderOA(){
   const wrap=document.getElementById('oa-sections');
   // group
@@ -4884,18 +4928,65 @@ function renderOA(){
     } else alertEl.innerHTML='';
   }
 
-  // sections
-  const sec=(id,title,cv,arr)=>arr.length
-    ?`<div class="oa-sec ${cv}" id="${id}"><span class="oa-sec-dot"></span><span class="oa-sec-t">${title}</span><span class="oa-sec-n">${arr.length}</span></div><div class="oa-grid">${arr.map(buildOATile).join('')}</div>`
-    :'';
+  // one dense table — sorted by urgency by default, headers clickable
   if(wrap){
-    const html=[
-      sec('oa-grp-overdue','Overdue — review now','cv-red',g.overdue),
-      sec('oa-grp-due','Due for review today','cv-amber',g.due),
-      sec('oa-grp-soon','Due soon','cv-blue',g.soon),
-      sec('oa-grp-monitor','Monitoring','cv-green',g.monitor),
-    ].join('');
-    wrap.innerHTML=html||emp('No OA Replen items yet. Add one above — its first check is logged automatically.');
+    if(!oaItems.length){
+      wrap.innerHTML=emp('No OA Replen items yet. Add one above — its first check is logged automatically.');
+    } else {
+      const rows=oaItems.map(i=>({i,s:calcOAStatus(i)}));
+      const dueVal=r=>r.s.status==='overdue'?-(r.s.daysOverdue||0):r.s.status==='due'?0:r.s.status==='snoozed'?1000+(r.s.daysLeft||0):(r.s.daysUntil??999);
+      const gapOf=r=>(r.i.current!=null&&r.i.target!=null)?r.i.current-r.i.target:9999;
+      const val=r=>{
+        switch(_oaSort.key){
+          case 'site':return siteName(r.i.link)||'zzz';
+          case 'asin':return r.i.asin;
+          case 'target':return r.i.target??9999;
+          case 'current':return r.i.current??9999;
+          case 'gap':return gapOf(r);
+          default:return dueVal(r);
+        }
+      };
+      rows.sort((a,b)=>{const va=val(a),vb=val(b);return (va<vb?-1:va>vb?1:0)*_oaSort.dir;});
+      const arr=k=>_oaSort.key===k?(_oaSort.dir===1?'▲':'▼'):'';
+      const th=(k,lbl)=>`<th class="sortable" onclick="setOaSort('${k}')">${lbl}<span class="th-arr">${arr(k)}</span></th>`;
+      const body=rows.map(r=>{
+        const i=r.i,st=r.s,freq=parseInt(i.freq)||7;
+        const cv=st.status==='overdue'?'cv-red':st.status==='due'?'cv-amber':st.status==='snoozed'?'cv-purple':'cv-green';
+        let pill,sub;
+        if(st.status==='overdue'){pill=`<span class="st-pill red">Overdue · ${st.daysOverdue}d</span>`;sub=`was due ${fmt(st.dueDate)}`;}
+        else if(st.status==='due'){pill=`<span class="st-pill amber">Due today</span>`;sub=`last ${i.lastChecked?fmt(pd(i.lastChecked)):'—'}`;}
+        else if(st.status==='snoozed'){pill=`<span class="st-pill purple">Snoozed</span>`;sub=`wakes ${fmt(pd(i.snoozedUntil))} · ${st.daysLeft}d`;}
+        else{pill=`<span class="st-pill green">In ${st.daysUntil}d</span>`;sub=`next ${i.lastChecked?fmt(addD(pd(i.lastChecked),freq)):'—'}`;}
+        let gapHtml='<span class="ltbl-dim">—</span>';
+        if(i.current!=null&&i.target!=null){
+          const g=i.current-i.target;
+          gapHtml=g<=0?`<span class="gap-good">BUY · ${g===0?'at target':('£'+Math.abs(g).toFixed(2)+' under')}</span>`
+                 :`<span class="${g<=1?'gap-close':'gap-far'}">£${g.toFixed(2)} over</span>`;
+        }
+        const site=siteName(i.link);
+        const notes=escS(i.notes||'');
+        return `<tr class="ltbl-row ${cv}" id="oa-${i.id}" onclick="openOADetail(${i.id})">
+          <td><span class="ltbl-dot"></span></td>
+          <td>${site?`<span class="tile-site">${escS(site)}</span>`:'<span class="ltbl-dim">—</span>'}</td>
+          <td class="ltbl-asin">${i.asin}</td>
+          <td>${pill}<div class="sns-sub">${sub}</div></td>
+          <td>${i.target!=null?'£'+Number(i.target).toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
+          <td>${i.current!=null?'£'+Number(i.current).toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
+          <td>${gapHtml}</td>
+          <td class="oa-note-cell" title="${notes}">${notes||''}</td>
+          <td class="ltbl-act" onclick="event.stopPropagation()">
+            <button class="ltbl-btn buy" onclick="oaQuickCheck(${i.id},event)" title="Checked, no change — resets the countdown">✓</button>
+            <button class="ltbl-btn" onclick="openOACheck(${i.id})" title="Log price / bought">Log</button>
+            <button class="ltbl-btn" onclick="window.open('${sasUrl(i.asin)}','_blank')">SAS</button>
+            ${i.link?`<button class="ltbl-btn" onclick="window.open('${escS(i.link)}','_blank')">Src</button>`:''}
+            <button class="ltbl-btn" onclick="snoozeOA(${i.id},${freq},event)" title="Push out ${freq} days">Zzz</button>
+          </td>
+        </tr>`;
+      }).join('');
+      wrap.innerHTML=`<div class="ltbl-wrap"><table class="ltbl"><thead><tr>
+        <th></th>${th('site','Retailer')}${th('asin','ASIN')}${th('due','Status')}${th('target','Target')}${th('current','Current')}${th('gap','Gap')}<th>Notes</th><th></th>
+        </tr></thead><tbody>${body}</tbody></table></div>`;
+    }
   }
 
   // badges
@@ -5019,7 +5110,14 @@ function calcSnsStatus(acc){
   else if(inFlight)                       status='in-flight';
   else if(addHandled && daysToLDA<=7)     status='added';     // calm confirmation
   else                                    status='idle';
-  return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,
+  // If you add items before the next cutoff, when does that order arrive?
+  let addDeliv=null,daysToAddDeliv=null;
+  if(deliv){
+    const dayD=deliv.getDate();
+    addDeliv=monthDate(nextLDA.getFullYear(),nextLDA.getMonth()+(dayD>=nextLDA.getDate()?0:1),dayD);
+    daysToAddDeliv=diff(now,addDeliv);
+  }
+  return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,addDeliv,daysToAddDeliv,
     addHandled,reviewHandled,addCycleKey,reviewCycleKey,
     editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
@@ -5056,6 +5154,12 @@ function advanceSnsCycles(){
   if(changed)sv2(SNSK,snsData);
 }
 
+let _snsSort={key:'urgency',dir:1};
+function setSnsSort(key){
+  if(_snsSort.key===key)_snsSort.dir*=-1;
+  else _snsSort={key,dir:1};
+  renderSns();
+}
 function renderSns(){
   advanceSnsCycles();
   const tbody=document.getElementById('sns-tbody');
@@ -5074,9 +5178,44 @@ function renderSns(){
     return;
   }
 
-  // Sort: act-now first (review / last-day), then soon, arriving, in-flight, added, idle
+  // Sorting — urgency by default, or whatever header was clicked
   const SNS_ORDER={'no-data':0,'review':0,'lda-today':0,'lda-soon':1,'arriving':2,'in-flight':3,'reviewed':4,'added':4,'idle':5};
-  const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>(SNS_ORDER[SS[a].status]??6)-(SNS_ORDER[SS[b].status]??6));
+  const delivDaysOf=c=>c.status==='no-data'?9999:(c.inFlight?c.daysToDelivery:c.daysToAddDeliv)??9999;
+  const sortVal=a=>{
+    const c=SS[a];
+    switch(_snsSort.key){
+      case 'acc':return a;
+      case 'addby':return c.status==='no-data'?9999:c.daysToLDA;
+      case 'deliv':return delivDaysOf(c);
+      case 'status':return SNS_ORDER[c.status]??6;
+      default:return SNS_ORDER[c.status]??6;
+    }
+  };
+  const sortedAccs=[...SNS_ACCOUNTS].sort((a,b)=>{
+    const va=sortVal(a),vb=sortVal(b);
+    return (va<vb?-1:va>vb?1:0)*_snsSort.dir;
+  });
+  ['acc','addby','deliv','status'].forEach(k=>{
+    const el=document.getElementById('arr-sns-'+k);
+    if(el)el.textContent=_snsSort.key===k?(_snsSort.dir===1?'▲':'▼'):'';
+  });
+  // Fastest / longest arrival if you add today
+  let fastAcc=null,slowAcc=null;
+  SNS_ACCOUNTS.forEach(a=>{
+    const c=SS[a];if(c.status==='no-data'||c.daysToAddDeliv==null)return;
+    if(!fastAcc||c.daysToAddDeliv<SS[fastAcc].daysToAddDeliv)fastAcc=a;
+    if(!slowAcc||c.daysToAddDeliv>SS[slowAcc].daysToAddDeliv)slowAcc=a;
+  });
+  const insEl=document.getElementById('sns-insight');
+  if(insEl){
+    if(fastAcc&&slowAcc&&fastAcc!==slowAcc){
+      const f=SS[fastAcc],l=SS[slowAcc];
+      insEl.innerHTML=`<div class="sns-insight">
+        <span><span class="sns-badge fast">Fastest stock</span> add to <b>${fastAcc}</b> by ${fmt(f.nextLDA)} — arrives ${fmt(f.addDeliv)} (${f.daysToAddDeliv}d)</span>
+        <span><span class="sns-badge slow">Longest float</span> add to <b>${slowAcc}</b> by ${fmt(l.nextLDA)} — arrives ${fmt(l.addDeliv)} (${l.daysToAddDeliv}d)</span>
+      </div>`;
+    } else insEl.innerHTML='';
+  }
 
   const dueLbl=n=>n===0?'today':n===1?'tomorrow':`in ${n}d`;
   const editBtn=acc=>`<button class="sns-act-btn edit-btn" onclick="openSnsEdit('${acc}',false)">Edit</button>`;
@@ -5125,8 +5264,15 @@ function renderSns(){
 
     const addByCell = c.status==='no-data' ? '—'
       : `<span class="sns-date">${fmt(c.nextLDA)}</span><div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</div>`;
-    const deliveryCell = (c.status==='no-data' || !c.inFlight) ? `<span class="sns-dim">—</span>`
-      : `<span class="sns-date" style="color:var(--blue)">${fmt(c.deliv)}</span><div class="sns-sub">${c.daysToDelivery===0?'today':c.daysToDelivery>0?'in '+c.daysToDelivery+'d':'overdue'}</div>`;
+    let deliveryCell;
+    if(c.status==='no-data')deliveryCell=`<span class="sns-dim">set dates first</span>`;
+    else{
+      const dDate=c.inFlight?c.deliv:c.addDeliv;
+      const dDays=c.inFlight?c.daysToDelivery:c.daysToAddDeliv;
+      const badge=(acc===fastAcc&&fastAcc!==slowAcc?'<span class="sns-badge fast">soonest</span>':'')+(acc===slowAcc&&fastAcc!==slowAcc?'<span class="sns-badge slow">longest</span>':'');
+      deliveryCell=`<span class="sns-date" style="color:var(--blue)">${fmt(dDate)}</span>
+        <div class="sns-sub">${dDays===0?'today':dDays>0?'in '+dDays+'d':'overdue'} · ${c.inFlight?'in-flight order':'if you add by cutoff'}${badge}</div>`;
+    }
     const reviewCell = (c.status==='no-data') ? '—'
       : c.inFlight
         ? `<span class="sns-date" style="color:var(--purple)">${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span>`
