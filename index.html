@@ -1112,6 +1112,21 @@ th.sortable:hover{color:var(--text)!important;}
 .sns-badge.slow{background:var(--blue);color:#fff;}
 .sns-insight .sns-badge{margin-left:0;margin-right:2px;}
 
+.wh-row{padding:11px 0;border-bottom:1px solid var(--border);}
+.wh-row:first-child{padding-top:2px;}
+.wh-row-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:9px;}
+.wh-inputs{display:flex;gap:8px;}
+.wh-inputs .fi{font-family:var(--mono);font-size:11.5px;}
+.wh-inputs .set-btn{flex-shrink:0;}
+.wh-req,.wh-opt{font-size:8.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;}
+.wh-req{background:var(--blue);color:#fff;}
+.wh-opt{background:var(--card2);color:var(--muted);}
+.wh-msg{font-size:11px;line-height:1.5;margin-top:6px;}
+.wh-msg:empty{display:none;}
+.wh-msg.ok{color:var(--green);font-weight:700;}
+.wh-msg.bad{color:var(--amber);}
+.wh-msg.bad b{color:#fff;}
+
 /* small helper button inside modals */
 .sr-mini{display:inline-block;background:var(--card2);border:1px solid var(--border2);color:var(--text2);
   font-size:10.5px;font-weight:700;padding:6px 11px;border-radius:7px;cursor:pointer;margin-top:10px;
@@ -1268,6 +1283,7 @@ th.sortable:hover{color:var(--text)!important;}
               </div>
               <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
                 <button class="aq-link" onclick="copyQueueAsins()" title="Copy every ASIN in the queue (current filter) for KPF">Copy ASINs</button>
+                <button class="aq-link" onclick="whSendBrief(true)" title="Push this list to Discord now">→ Discord</button>
                 <span class="aq-panel-pill" id="aq-pill">0 to action</span>
               </div>
             </div>
@@ -1871,6 +1887,64 @@ th.sortable:hover{color:var(--text)!important;}
               </div>
               <label class="set-btn" style="cursor:pointer">Import…<input type="file" accept="application/json,.json" style="display:none" onchange="importDataFile(this)"></label>
             </div>
+          </div>
+        </div>
+
+        <div class="set-card accent-blue" style="grid-column:1/-1">
+          <div class="set-hd">
+            <div class="set-hd-t"><svg width="14" height="14" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Discord Notifications</div>
+            <div class="set-hd-s">Get the day's jobs pushed to your phone. The brief sends itself the first time you open the app each day; alerts fire when something turns critical after that. Nothing sends while the app is closed — see the note below.</div>
+          </div>
+          <div class="set-body">
+            <div class="wh-row">
+              <div class="wh-row-head">
+                <div>
+                  <div class="set-row-t">Daily brief channel <span class="wh-req">required</span></div>
+                  <div class="set-row-s">Everything needing you today, grouped exactly like the Action Queue — plus a tap-to-copy ASIN list for KPF.</div>
+                </div>
+                <label class="tgl"><input type="checkbox" id="wh-tg-brief" onchange="whToggle('brief',this.checked)"><span class="tgl-track"></span></label>
+              </div>
+              <div class="wh-inputs">
+                <input class="fi" id="wh-in-brief" placeholder="https://discord.com/api/webhooks/…" oninput="whInput('main',this)" spellcheck="false">
+                <button class="set-btn primary" onclick="whTest('brief')">Send test</button>
+              </div>
+              <div class="wh-msg ok" id="wh-ok-main"></div>
+              <div class="wh-msg bad" id="wh-bad-main"></div>
+            </div>
+
+            <div class="wh-row">
+              <div class="wh-row-head">
+                <div>
+                  <div class="set-row-t">Urgent alerts channel <span class="wh-opt">optional</span></div>
+                  <div class="set-row-s">Only fires for things that turn critical <b>after</b> the brief went out, so it never repeats what you've already been told. Leave blank to use the same channel.</div>
+                </div>
+                <label class="tgl"><input type="checkbox" id="wh-tg-urgent" onchange="whToggle('urgent',this.checked)"><span class="tgl-track"></span></label>
+              </div>
+              <div class="wh-inputs">
+                <input class="fi" id="wh-in-urgent" placeholder="Same as above unless you set one" oninput="whInput('urgent',this)" spellcheck="false">
+                <button class="set-btn" onclick="whTest('urgent')">Send test</button>
+              </div>
+              <div class="wh-msg ok" id="wh-ok-urgent"></div>
+              <div class="wh-msg bad" id="wh-bad-urgent"></div>
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Your Discord user ID</div>
+                <div class="set-row-s">So overdue items actually @ you. In Discord: Settings → Advanced → Developer Mode on, then right-click your name → Copy User ID.</div>
+              </div>
+              <input class="fi" id="wh-user" style="max-width:190px;font-family:var(--mono)" placeholder="123456789012345678" onchange="whSaveUser(this.value)">
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Send today's brief now</div>
+                <div class="set-row-s" id="wh-last">—</div>
+              </div>
+              <button class="set-btn primary" onclick="whSendBrief(true)">Send now</button>
+            </div>
+
+            <div class="set-note"><b>How the timing works:</b> this app runs entirely in your browser, so it can only post while it's open. The brief goes out on your first open of the day — open it with your morning coffee and you'll have the list on your phone all day. For pings that arrive with the app closed, the data would need to live on a server; say the word and I'll wire that up separately.</div>
           </div>
         </div>
 
@@ -2533,7 +2607,8 @@ function siteName(url){
 // SETTINGS — buy-timing model
 // ═══════════════════════════════════
 const SETK='a2a_settings_v5';
-let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{}},ld(SETK)||{});
+let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{},
+  whMain:'',whUrgent:'',discordUserId:'',nBrief:1,nUrgent:1},ld(SETK)||{});
 if(!settings.leadTimes)settings.leadTimes={};
 // ── Prime Day phases: editable dates + on/off, managed in Settings ──
 const PDAY_DEF={
@@ -5409,6 +5484,198 @@ window.addEventListener('click',e=>{
 // ═══════════════════════════════════
 // SETTINGS PAGE
 // ═══════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// DISCORD WEBHOOKS
+// The app has no server, so pings fire from the browser while it's open:
+// the daily brief goes out the first time you open it each day, and anything
+// that turns critical AFTER that brief gets its own alert. Sending the brief
+// marks everything in it as "already told you", so nothing double-pings.
+// ═══════════════════════════════════════════════════════════
+const WHSENT='a2a_wh_sent_v5';       // {actionKey: 'YYYY-MM-DD'} — dedupe
+const WHBRIEF='a2a_wh_brief_v5';     // last date the brief was sent
+const WH_COL={red:16724821,amber:16755243,green:2089087};
+
+// A Discord CHANNEL link and a WEBHOOK url look almost identical but do
+// completely different things — say which one was pasted.
+function whBadMsg(v){
+  v=String(v||'').trim();
+  if(!v)return'';
+  if(/^https?:\/\/(www\.)?discord(app)?\.com\/api\/webhooks\/\d+\/[\w-]+/i.test(v))return'';
+  if(/^https?:\/\/(www\.)?discord(app)?\.com\/channels\//i.test(v))
+    return'⚠️ That\'s the <b>channel link</b>, not a webhook. In Discord: right-click the channel → <b>Edit Channel</b> → <b>Integrations</b> → <b>Webhooks</b> → <b>New Webhook</b> → <b>Copy Webhook URL</b>.';
+  if(/^\d{5,}$/.test(v))return'⚠️ That\'s just the channel <b>ID</b>. You need the full webhook URL — Edit Channel → Integrations → Webhooks → Copy Webhook URL.';
+  return'⚠️ Doesn\'t look like a Discord webhook URL. It should start <b>https://discord.com/api/webhooks/</b>';
+}
+// urgent falls back to main so one URL is enough to get going
+const whUrl=kind=>((kind==='urgent'?settings.whUrgent:'')||settings.whMain||'').trim();
+const whOn=kind=>kind==='urgent'?settings.nUrgent!==0:settings.nBrief!==0;
+const whTime=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+const whLongDate=()=>today().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+const whMention=()=>{const id=(settings.discordUserId||'').trim();return id?'<@'+id+'>':'';};
+// action subs are HTML strings — Discord renders plain text, so unescape and de-markdown
+function whClean(t,max){
+  let v=String(t||'').replace(/<[^>]+>/g,'');
+  const d=document.createElement('textarea');d.innerHTML=v;v=d.value;
+  v=v.replace(/[*_`~|]/g,'').replace(/\s+/g,' ').trim();
+  if(max&&v.length>max){
+    const cut=v.slice(0,max);
+    const sp=cut.lastIndexOf(' ');
+    v=(sp>max*0.6?cut.slice(0,sp):cut);
+    if(v.lastIndexOf('(')>v.lastIndexOf(')'))v=v.slice(0,v.lastIndexOf('('));   // no dangling "(30…"
+    v=v.replace(/[·,\-—(]\s*$/,'').trim()+'…';
+  }
+  return v;
+}
+const whLine=a=>'• `'+whClean(a.title)+'` — '+whClean(a.sub,76);
+
+function whPost(url,body,okMsg){
+  return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(r=>{
+      if(!r.ok){toast(r.status===404?'Discord rejected it — webhook deleted or URL wrong':'Discord rejected it — check the URL',true);return false;}
+      if(okMsg)toast(okMsg,'ok');
+      return true;
+    })
+    .catch(()=>{toast('Could not reach Discord — check your connection',true);return false;});
+}
+
+// ── dedupe ledger ──
+function whSentMap(){try{return JSON.parse(localStorage.getItem(WHSENT))||{};}catch{return{};}}
+function whMarkNotified(keys){
+  const m=whSentMap(),d=isoOf(today());
+  keys.forEach(k=>m[k]=d);
+  // drop anything older than a week so the ledger can't grow forever
+  const cut=isoOf(addD(today(),-7));
+  Object.keys(m).forEach(k=>{if(m[k]<cut)delete m[k];});
+  localStorage.setItem(WHSENT,JSON.stringify(m));
+}
+const whAlreadyToldToday=key=>whSentMap()[key]===isoOf(today());
+
+// ── the daily brief ──
+function whBuildBrief(){
+  const A=computeActions();
+  A.forEach(a=>a.band=bandOf(a));
+  const total=A.length,overdue=A.filter(a=>a.band==='overdue').length;
+  const ICON={overdue:'🔴',buy:'🟢',checks:'🟡',sns:'🟣',rebuy:'🔵'};
+  const fields=[];
+  AC_BANDS.forEach(b=>{
+    const items=A.filter(a=>a.band===b.key);
+    if(!items.length)return;
+    const shown=items.slice(0,8);
+    let v=shown.map(whLine).join('\n');
+    if(items.length>shown.length)v+='\n_+'+(items.length-shown.length)+' more in the app_';
+    fields.push({name:(ICON[b.key]||'')+' '+b.lbl+' ('+items.length+')',value:v.slice(0,1020)});
+  });
+  // ASIN list for the KPF viewer — tap-to-copy on mobile
+  const asins=[...new Set(A.map(a=>a.title).filter(t=>/^B[0-9A-Z]{9}$/.test(t)))];
+  if(asins.length)fields.push({name:'📋 ASINs for KPF',value:'```'+asins.slice(0,60).join(',')+'```'});
+  const clear=total===0;
+  return{
+    content:(overdue&&whMention())?whMention()+' — '+overdue+' overdue':undefined,
+    allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
+    embeds:[{
+      title:'A2AOA — '+whLongDate(),
+      description:clear?'**All clear.** Nothing needs you today.'
+        :'**'+total+' thing'+(total!==1?'s':'')+' need'+(total===1?'s':'')+' you today**'+(overdue?' · **'+overdue+' overdue**':''),
+      color:clear?WH_COL.green:(overdue?WH_COL.red:WH_COL.amber),
+      fields:fields.slice(0,24),
+      footer:{text:'A2AOA · daily brief · '+whTime()},
+      timestamp:new Date().toISOString()
+    }]
+  };
+}
+
+function whSendBrief(manual){
+  const url=whUrl('brief');
+  if(!url){if(manual)toast('Add your Discord webhook in Settings first',true);return Promise.resolve(false);}
+  const A=computeActions();
+  return whPost(url,whBuildBrief(),manual?'Brief sent to Discord ✓':null).then(ok=>{
+    if(ok){
+      localStorage.setItem(WHBRIEF,isoOf(today()));
+      whMarkNotified(A.map(a=>a.key));   // everything in the brief is now "told"
+      if(uiState.tab==='settings')renderSettings();
+    }
+    return ok;
+  });
+}
+
+// ── alerts for things that turn critical after the brief went out ──
+function whSendUrgent(){
+  const url=whUrl('urgent');
+  if(!url||!whOn('urgent'))return;
+  const A=computeActions();
+  A.forEach(a=>a.band=bandOf(a));
+  const fresh=A.filter(a=>a.band==='overdue'&&!whAlreadyToldToday(a.key));
+  if(!fresh.length)return;
+  const lines=fresh.slice(0,10).map(whLine).join('\n');
+  whPost(url,{
+    content:whMention()?whMention()+' — needs you now':undefined,
+    allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
+    embeds:[{
+      title:'⚠️ '+fresh.length+' item'+(fresh.length!==1?'s':'')+' need'+(fresh.length===1?'s':'')+' action now',
+      description:lines+(fresh.length>10?'\n_+'+(fresh.length-10)+' more_':''),
+      color:WH_COL.red,
+      footer:{text:'A2AOA · alert · '+whTime()},
+      timestamp:new Date().toISOString()
+    }]
+  }).then(ok=>{if(ok)whMarkNotified(fresh.map(a=>a.key));});
+}
+
+// runs once per app load
+function whAutoRun(){
+  if(!whUrl('brief'))return;
+  if(whOn('brief')&&localStorage.getItem(WHBRIEF)!==isoOf(today())){
+    whSendBrief(false).then(ok=>{if(ok)setTimeout(whSendUrgent,1500);});
+  } else setTimeout(whSendUrgent,1200);
+}
+
+// A test that just says "connected" teaches you nothing — send the real thing.
+function whTest(kind){
+  const inp=document.getElementById('wh-in-'+kind);
+  const url=(inp&&inp.value.trim())||whUrl(kind);
+  if(!url){toast('No URL set for this webhook',true);return;}
+  const bad=whBadMsg(url);
+  if(bad){toast(bad.replace(/<[^>]+>/g,''),true);return;}
+  toast('Sending a real preview to Discord…','info');
+  if(kind==='brief'){
+    const b=whBuildBrief();
+    b.embeds[0].footer={text:'A2AOA · TEST of your daily brief · this is exactly what lands each morning'};
+    whPost(url,b,'Sent ✓ — that\'s your daily brief');
+  } else {
+    whPost(url,{
+      content:whMention()?whMention()+' — testing that mentions reach you here':undefined,
+      allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
+      embeds:[{title:'⚠️ Example alert',
+        description:'Alerts like this land here the moment something turns critical — an OA check going overdue, an S&S review window opening, an LTD about to end.'
+          +(whMention()?'\n\nThe @ above confirms mentions reach you in this channel.':'\n\n⚠️ No Discord user ID set, so alerts won\'t @ you — add it in Settings.'),
+        color:WH_COL.red,footer:{text:'A2AOA · TEST alert'}}]
+    },'Sent ✓ — that\'s an alert');
+  }
+}
+
+// Webhook fields save AS YOU TYPE — a valid URL sitting unsaved in a box that
+// still tests fine is the classic way this silently never works.
+function whInput(kind,el){
+  const key=kind==='urgent'?'whUrgent':'whMain';
+  const val=String(el.value||'').trim();
+  const box=document.getElementById('wh-bad-'+kind);
+  if(box)box.innerHTML=whBadMsg(val);
+  clearTimeout(window['_whT_'+kind]);
+  window['_whT_'+kind]=setTimeout(()=>{
+    if(val&&whBadMsg(val))return;            // never store something invalid
+    settings[key]=val;saveSettings();
+    const ok=document.getElementById('wh-ok-'+kind);
+    if(ok){ok.textContent=val?'Saved ✓':'';setTimeout(()=>{if(ok)ok.textContent='';},2000);}
+  },450);
+}
+function whSaveUser(v){
+  settings.discordUserId=String(v||'').trim().replace(/[<@!>]/g,'');
+  saveSettings();
+}
+function whToggle(kind,on){
+  if(kind==='brief')settings.nBrief=on?1:0;else settings.nUrgent=on?1:0;
+  saveSettings();renderSettings();
+}
+
 function renderSettings(){
   const on=pdayEnabled();
   const cb=document.getElementById('set-pday-master');if(cb)cb.checked=on;
@@ -5438,6 +5705,20 @@ function renderSettings(){
       value="${settings.leadTimes[a]||''}" onchange="setAccountLeadTime('${a}',this.value)">
     <span class="lt-unit">days</span>
   </div>`).join('');
+  // Discord
+  const wb=document.getElementById('wh-in-brief');if(wb&&document.activeElement!==wb)wb.value=settings.whMain||'';
+  const wu=document.getElementById('wh-in-urgent');if(wu&&document.activeElement!==wu)wu.value=settings.whUrgent||'';
+  const wus=document.getElementById('wh-user');if(wus&&document.activeElement!==wus)wus.value=settings.discordUserId||'';
+  const tb=document.getElementById('wh-tg-brief');if(tb)tb.checked=settings.nBrief!==0;
+  const tu=document.getElementById('wh-tg-urgent');if(tu)tu.checked=settings.nUrgent!==0;
+  const wl=document.getElementById('wh-last');
+  if(wl){
+    const last=localStorage.getItem(WHBRIEF);
+    wl.textContent=!settings.whMain?'Add a webhook above first'
+      :last===isoOf(today())?'Today\'s brief already went out — this sends a fresh one'
+      :last?'Last sent '+fmt(pd(last))+' — sends automatically on your first open each day'
+      :'Never sent yet — it will go out automatically on your next first-open of the day';
+  }
   const ds=document.getElementById('set-data-stats');
   if(ds){
     let bytes=0;
@@ -5578,6 +5859,7 @@ function toggleSidebar(){
   renderSns();
   renderOA();
   if(_pdayAutoOffMsg)setTimeout(()=>toast(_pdayAutoOffMsg,'info'),800);
+  setTimeout(whAutoRun,1400);   // let the first render settle before anything posts
   // Restore last tab, sourcing filter/view, and scroll position
   if(uiState.tab&&uiState.tab!=='overview')go(uiState.tab,true);
   document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===(_srcFilter||'all')));
