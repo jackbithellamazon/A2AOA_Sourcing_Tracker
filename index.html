@@ -880,7 +880,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .sns-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:6px;font-size:10.5px;font-weight:800;white-space:nowrap;letter-spacing:.3px;color:#0a0b0d;}
 .sns-status.active{background:var(--green);}
 .sns-status.soon{background:var(--amber);}
-.sns-status.edit-today{background:var(--red);color:#fff;animation:pulse 1.5s infinite;}
+.sns-status.edit-today{background:var(--red);color:#fff;}
 .sns-status.needs{background:var(--red);color:#fff;}
 .sns-status.review{background:var(--purple);color:#fff;}
 .sns-status.between{background:var(--blue);color:#fff;}
@@ -889,8 +889,8 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .sns-act-btn{padding:6px 12px;border-radius:7px;border:none;font-size:11px;font-weight:700;cursor:pointer;color:#fff;transition:background var(--tr),color var(--tr),border-color var(--tr);}
 .sns-act-btn.edit-btn{background:var(--bg);color:var(--text2);border:1px solid var(--border2);font-weight:600;}
 .sns-act-btn.edit-btn:hover{color:var(--text);border-color:var(--blue);}
-.sns-act-btn.next-btn{background:var(--red);animation:pulse 1.5s infinite;}
-.sns-act-btn.next-btn:hover{background:var(--red-d);animation:none;}
+.sns-act-btn.next-btn{background:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 22%,transparent);}
+.sns-act-btn.next-btn:hover{background:var(--red-d);}
 .sns-act-btn.done-btn{background:var(--card2);color:var(--text2);}
 .sns-act-btn.done-btn:hover{background:var(--border);color:var(--text);}
 .sns-act-btn.act-btn{background:var(--green);color:#081018;}
@@ -1127,6 +1127,95 @@ th.sortable:hover{color:var(--text)!important;}
 .wh-msg.bad{color:var(--amber);}
 .wh-msg.bad b{color:#fff;}
 
+.sns-tl-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px 10px;margin-bottom:12px;}
+.sns-tl-empty{font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;padding:4px 0;}
+.sns-tl-note{font-size:11.5px;color:var(--text2);text-align:center;margin-top:9px;padding-top:9px;border-top:1px solid var(--border);line-height:1.5;}
+.sns-tl-note b{color:#fff;}
+
+
+.sns-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--purple);
+  border-radius:13px;padding:14px 17px;margin-bottom:12px;}
+.sns-hero.urgent{border-left-color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface));
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 25%,transparent);}
+.sns-hero.amber{border-left-color:var(--amber);}
+.sns-hero.clear{border-left-color:var(--green);}
+.sns-hero-kick{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--purple);margin-bottom:3px;}
+.sns-hero.urgent .sns-hero-kick{color:var(--red);}
+.sns-hero.amber .sns-hero-kick{color:var(--amber);}
+.sns-hero.clear .sns-hero-kick{color:var(--green);}
+.sns-hero-t{font-family:var(--mono);font-size:21px;font-weight:700;color:#fff;line-height:1.1;}
+.sns-hero-s{font-size:12.5px;color:var(--text2);margin-top:4px;line-height:1.5;}
+.sns-hero-s b{color:#fff;}
+.sns-hero-r{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sns-hero-more{font-size:11px;font-weight:700;color:var(--text2);}
+.sns-hero-btn{padding:10px 20px;border:none;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;
+  background:var(--green);color:#06210f;box-shadow:0 3px 14px color-mix(in srgb,var(--green) 32%,transparent);
+  transition:filter var(--tr),transform var(--tr);white-space:nowrap;}
+.sns-hero-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.sns-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+.sns-sum-inline{display:flex;gap:7px;flex-wrap:wrap;}
+.sns-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text2);
+  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--cv,var(--border2));
+  border-radius:8px;padding:5px 11px;}
+.sns-chip b{font-size:14px;font-weight:800;color:var(--cv,var(--text));font-variant-numeric:tabular-nums;}
+.sns-chip.zero{opacity:.45;}
+.sns-chip.zero b{color:var(--muted);}
+@media(max-width:640px){.sns-hero{flex-direction:column;align-items:flex-start;}.sns-hero-r{width:100%;justify-content:flex-end;}}
+
+.home-warn{display:flex;align-items:center;gap:13px;background:color-mix(in srgb,var(--amber) 11%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--amber) 42%,transparent);border-left:4px solid var(--amber);
+  border-radius:12px;padding:12px 16px;margin-bottom:16px;}
+.home-warn.dev{background:var(--surface);border-color:var(--border);border-left-color:var(--muted);}
+.home-warn-ico{font-size:19px;line-height:1;flex-shrink:0;}
+.home-warn-tx{flex:1;min-width:0;}
+.home-warn-t{font-size:13px;font-weight:800;color:#fff;}
+.home-warn-s{font-size:11.5px;color:var(--text2);margin-top:3px;line-height:1.5;}
+.home-warn-s b{color:var(--amber);}
+.home-warn-acts{display:flex;gap:8px;flex-shrink:0;align-items:center;}
+.home-warn-acts .set-btn{text-decoration:none;display:inline-flex;align-items:center;white-space:nowrap;}
+@media(max-width:700px){.home-warn{flex-wrap:wrap;}.home-warn-acts{width:100%;justify-content:flex-end;}}
+
+.setup-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px 18px;margin-bottom:14px;}
+.setup-t{font-size:17px;font-weight:800;color:#fff;}
+.setup-s{font-size:12.5px;color:var(--text2);margin-top:5px;line-height:1.55;max-width:640px;}
+.setup-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0;}
+.setup-step{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--cv,var(--border2));border-radius:10px;padding:10px 12px;}
+.setup-num{width:19px;height:19px;border-radius:50%;background:var(--cv,var(--muted));color:#06070a;
+  font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.setup-step b{display:block;font-size:12.5px;color:#fff;font-weight:700;}
+.setup-step span:not(.setup-num){display:block;font-size:10.5px;color:var(--text2);margin-top:2px;line-height:1.45;}
+.setup-accs{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;}
+.setup-acc{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);
+  border:1px solid var(--border2);border-radius:10px;padding:11px 13px;cursor:pointer;text-align:left;
+  transition:border-color var(--tr),background var(--tr),transform var(--tr);}
+.setup-acc:hover{border-color:var(--blue);background:var(--card2);transform:translateY(-1px);}
+.setup-acc-n{font-family:var(--mono);font-size:13.5px;font-weight:700;color:#fff;}
+.setup-acc-b{font-size:10.5px;font-weight:700;color:var(--blue);white-space:nowrap;}
+.setup-foot{font-size:11.5px;color:var(--muted);margin-top:14px;padding-top:13px;border-top:1px solid var(--border);}
+.lnk{background:none;border:none;color:var(--blue);font-size:11.5px;font-weight:700;cursor:pointer;padding:0;font-family:var(--dm);}
+.lnk:hover{text-decoration:underline;}
+@media(max-width:820px){.setup-steps{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.setup-steps{grid-template-columns:1fr;}}
+
+/* an account with no dates isn't an emergency — it's just not set up */
+.sns-status.idle-set{background:var(--card2);color:var(--text2);}
+tr.sns-row-unset td{background:transparent;opacity:.72;}
+tr.sns-row-unset:hover td{opacity:1;}
+tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
+.sns-act-btn.set-btn-alt{background:var(--card2);color:var(--text);border:1px solid var(--border2);font-weight:700;}
+.sns-act-btn.set-btn-alt:hover{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,var(--card2));}
+
+.sns-table th.col-grp{color:var(--text2);}
+.col-sub{display:block;font-size:8.5px;font-weight:600;letter-spacing:.3px;color:var(--muted);text-transform:none;margin-top:2px;}
+
+.rv{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:5px;}
+.rv.ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);}
+.rv.wait{background:var(--card2);color:var(--muted);}
+.rv.now{background:var(--purple);color:#fff;}
+.rv.missed{background:var(--red);color:#fff;}
+
 /* small helper button inside modals */
 .sr-mini{display:inline-block;background:var(--card2);border:1px solid var(--border2);color:var(--text2);
   font-size:10.5px;font-weight:700;padding:6px 11px;border-radius:7px;cursor:pointer;margin-top:10px;
@@ -1283,7 +1372,6 @@ th.sortable:hover{color:var(--text)!important;}
               </div>
               <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
                 <button class="aq-link" onclick="copyQueueAsins()" title="Copy every ASIN in the queue (current filter) for KPF">Copy ASINs</button>
-                <button class="aq-link" onclick="whSendBrief(true)" title="Push this list to Discord now">→ Discord</button>
                 <span class="aq-panel-pill" id="aq-pill">0 to action</span>
               </div>
             </div>
@@ -1581,7 +1669,7 @@ th.sortable:hover{color:var(--text)!important;}
     <!-- ══════════════ INBOX ══════════════ -->
     <div id="inbox" class="tc">
       <div class="pg-title">Inbox</div>
-      <div class="purpose">
+      <div class="purpose" id="sns-purpose">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
         <div>
           <div class="purpose-t">Triage pile — capture now, decide later</div>
@@ -1705,15 +1793,18 @@ th.sortable:hover{color:var(--text)!important;}
       <div class="purpose">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <div>
-          <div class="purpose-t">Set the dates once — they roll forward every month</div>
-          <div class="purpose-s">Enter each account's monthly dates once and they roll forward automatically. Accounts needing attention sort to the top: when an add window or review is due, click <strong>Mark added</strong> or <strong>Mark reviewed</strong> right here (or from the Action Center) and it won't nag again until next cycle. Anything due today also shows as a banner on the Action Center.</div>
+          <div class="purpose-t">Set three dates once — they roll forward every month</div>
+        <div class="purpose-s"><b>Add by</b> → last day to put items in. <b>Review</b> → worked out for you, a set number of days before the cutoff; this is when Discord pings you and it keeps pinging daily until you hit <b>✓ Checked</b>. <b>Cutoff</b> → the supplier locks the order, nothing can be changed after it. <b>Delivery</b> → when it lands.</div>
         </div>
       </div>
 
-      <div class="mini-tools">
+      <div id="sns-setup"></div>
+      <div id="sns-live-wrap">
+      <div id="sns-hero"></div>
+      <div class="sns-toolbar">
+        <div class="sns-sum-inline" id="sns-summary"></div>
         <button class="set-btn" onclick="openSnsAccounts()">Manage accounts</button>
       </div>
-      <div class="sns-summary" id="sns-summary"></div>
       <div id="sns-insight"></div>
 
       <div class="sns-table-wrap">
@@ -1721,15 +1812,17 @@ th.sortable:hover{color:var(--text)!important;}
           <thead>
             <tr>
               <th class="sortable" onclick="setSnsSort('acc')">Account<span class="th-arr" id="arr-sns-acc"></span></th>
-              <th class="sortable" onclick="setSnsSort('addby')">Next Add-By<span class="th-arr" id="arr-sns-addby"></span></th>
-              <th class="sortable" onclick="setSnsSort('deliv')">Next Delivery<span class="th-arr" id="arr-sns-deliv"></span></th>
-              <th>Review Window</th>
+
+              <th class="col-grp">This order<span class="col-sub">already placed — on its way</span></th>
+              <th class="col-grp">Next order<span class="col-sub">still open to add to</span></th>
               <th class="sortable" onclick="setSnsSort('status')">Status<span class="th-arr" id="arr-sns-status"></span></th>
               <th></th>
             </tr>
           </thead>
           <tbody id="sns-tbody"></tbody>
         </table>
+      </div>
+      <div id="sns-log"></div>
       </div>
     </div>
 
@@ -1892,59 +1985,61 @@ th.sortable:hover{color:var(--text)!important;}
 
         <div class="set-card accent-blue" style="grid-column:1/-1">
           <div class="set-hd">
-            <div class="set-hd-t"><svg width="14" height="14" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Discord Notifications</div>
-            <div class="set-hd-s">Get the day's jobs pushed to your phone. The brief sends itself the first time you open the app each day; alerts fire when something turns critical after that. Nothing sends while the app is closed — see the note below.</div>
+            <div class="set-hd-t"><svg width="14" height="14" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Discord — Sub &amp; Save reminders</div>
+            <div class="set-hd-s">One job: never miss the review before a supplier dispatches. It pings on the review date and once a day after that until you hit <b>✓ Checked</b> — then it stops. Nothing else notifies.</div>
           </div>
           <div class="set-body">
             <div class="wh-row">
               <div class="wh-row-head">
                 <div>
-                  <div class="set-row-t">Daily brief channel <span class="wh-req">required</span></div>
-                  <div class="set-row-s">Everything needing you today, grouped exactly like the Action Queue — plus a tap-to-copy ASIN list for KPF.</div>
+                  <div class="set-row-t">Review reminders</div>
+                  <div class="set-row-s">Goes to your <b>Important</b> channel. Clear the box to stop everything.</div>
                 </div>
-                <label class="tgl"><input type="checkbox" id="wh-tg-brief" onchange="whToggle('brief',this.checked)"><span class="tgl-track"></span></label>
+                <label class="tgl"><input type="checkbox" id="wh-tg-sns" onchange="whToggle(this.checked)"><span class="tgl-track"></span></label>
               </div>
               <div class="wh-inputs">
-                <input class="fi" id="wh-in-brief" placeholder="https://discord.com/api/webhooks/…" oninput="whInput('main',this)" spellcheck="false">
-                <button class="set-btn primary" onclick="whTest('brief')">Send test</button>
+                <input class="fi" id="wh-in-sns" placeholder="https://discord.com/api/webhooks/…" oninput="whInput(this)" spellcheck="false">
+                <button class="set-btn primary" onclick="whTest()">Send test</button>
               </div>
-              <div class="wh-msg ok" id="wh-ok-main"></div>
-              <div class="wh-msg bad" id="wh-bad-main"></div>
+              <div class="wh-msg ok" id="wh-ok-sns"></div>
+              <div class="wh-msg bad" id="wh-bad-sns"></div>
             </div>
 
-            <div class="wh-row">
-              <div class="wh-row-head">
-                <div>
-                  <div class="set-row-t">Urgent alerts channel <span class="wh-opt">optional</span></div>
-                  <div class="set-row-s">Only fires for things that turn critical <b>after</b> the brief went out, so it never repeats what you've already been told. Leave blank to use the same channel.</div>
-                </div>
-                <label class="tgl"><input type="checkbox" id="wh-tg-urgent" onchange="whToggle('urgent',this.checked)"><span class="tgl-track"></span></label>
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Remind me this many days before the supplier cutoff</div>
+                <div class="set-row-s">Your review date is worked out from this. 2 days is the default — enough time to actually go through the order.</div>
               </div>
-              <div class="wh-inputs">
-                <input class="fi" id="wh-in-urgent" placeholder="Same as above unless you set one" oninput="whInput('urgent',this)" spellcheck="false">
-                <button class="set-btn" onclick="whTest('urgent')">Send test</button>
+              <input class="fi" id="wh-lead" type="number" min="1" max="10" style="max-width:80px;text-align:center" onchange="whSaveLead(this.value)">
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Send reminders at</div>
+                <div class="set-row-s">Reminders hold until this time. If the app is already open they fire on the hour; otherwise on your first open after it.</div>
               </div>
-              <div class="wh-msg ok" id="wh-ok-urgent"></div>
-              <div class="wh-msg bad" id="wh-bad-urgent"></div>
+              <select class="fs" id="wh-hour" style="max-width:110px" onchange="settings.snsPingHour=parseInt(this.value);saveSettings();renderSettings();toast('Reminders will send from '+this.value+':00','ok')">
+                ${[7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(h=>`<option value="${h}">${h}:00</option>`).join('')}
+              </select>
             </div>
 
             <div class="set-row">
               <div class="set-row-tx">
                 <div class="set-row-t">Your Discord user ID</div>
-                <div class="set-row-s">So overdue items actually @ you. In Discord: Settings → Advanced → Developer Mode on, then right-click your name → Copy User ID.</div>
+                <div class="set-row-s">So the reminder @s you. Discord → Settings → Advanced → Developer Mode on, then right-click your name → Copy User ID.</div>
               </div>
               <input class="fi" id="wh-user" style="max-width:190px;font-family:var(--mono)" placeholder="123456789012345678" onchange="whSaveUser(this.value)">
             </div>
 
             <div class="set-row">
               <div class="set-row-tx">
-                <div class="set-row-t">Send today's brief now</div>
-                <div class="set-row-s" id="wh-last">—</div>
+                <div class="set-row-t">App link in the reminder</div>
+                <div class="set-row-s" id="wh-applink-note">—</div>
               </div>
-              <button class="set-btn primary" onclick="whSendBrief(true)">Send now</button>
+              <input class="fi" id="wh-appurl" style="max-width:250px;font-size:11px" placeholder="auto-detected" onchange="settings.appUrl=this.value.trim();saveSettings();renderSettings()">
             </div>
 
-            <div class="set-note"><b>How the timing works:</b> this app runs entirely in your browser, so it can only post while it's open. The brief goes out on your first open of the day — open it with your morning coffee and you'll have the list on your phone all day. For pings that arrive with the app closed, the data would need to live on a server; say the word and I'll wire that up separately.</div>
+            <div class="set-note" id="wh-status">—</div>
           </div>
         </div>
 
@@ -2288,21 +2383,24 @@ th.sortable:hover{color:var(--text)!important;}
     <input type="hidden" id="sns-edit-acc">
     <input type="hidden" id="sns-edit-mode">
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px" id="sns-edit-hint">Editing the current cycle in place — nothing is archived.</p>
-    <div class="g2">
+    <div class="g3">
       <div class="fg">
-        <label class="fl">Last Day to Add *</label>
-        <input class="fi dm" id="sns-new-edit" placeholder="dd/mm" maxlength="5" inputmode="numeric">
+        <label class="fl">Add By *</label>
+        <input class="fi dm" id="sns-new-edit" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="snsPreview()">
         <div class="ferr" id="e-sns-edit">Required</div>
       </div>
       <div class="fg">
-        <label class="fl">Delivery Day *</label>
-        <input class="fi dm" id="sns-new-delivery" placeholder="dd/mm" maxlength="5" inputmode="numeric">
+        <label class="fl">Supplier Cutoff *</label>
+        <input class="fi dm" id="sns-new-cutoff" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="snsPreview()">
+        <div class="ferr" id="e-sns-cut">Required</div>
+      </div>
+      <div class="fg">
+        <label class="fl">Delivery *</label>
+        <input class="fi dm" id="sns-new-delivery" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="snsPreview()">
         <div class="ferr" id="e-sns-del">Required</div>
       </div>
     </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:12px;color:var(--muted)">
-      Review window auto-calculated: Last Day to Add +3 to +4 days
-    </div>
+    <div id="sns-preview" class="sns-tl-box"></div>
     <div class="fg">
       <label class="fl">Notes (optional)</label>
       <input class="fi" id="sns-new-notes" placeholder="e.g. Price changed, skipped 2 items…">
@@ -2487,9 +2585,10 @@ th.sortable:hover{color:var(--text)!important;}
 <div class="mbg" id="snsAccModal">
   <div class="modal" style="max-width:430px">
     <div class="mhd"><span class="mt">Sub &amp; Save Accounts</span><button class="mx" onclick="closeM('snsAccModal')">×</button></div>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Rename an account to keep its dates and history. Removing one deletes its S&amp;S dates (backups still hold them). These names also drive the Account dropdowns and per-account lead times.</p>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Rename an account and it keeps its dates and history. <b>Archive</b> hides it from the board but keeps everything — restore it any time from the list below. These names also drive the Account dropdowns and per-account lead times.</p>
     <div id="snsacc-rows"></div>
     <button class="sr-mini" onclick="snsAccAdd()">+ Add account</button>
+    <div id="snsacc-archived"></div>
     <div class="mbtns">
       <button class="mbtn ok" onclick="saveSnsAccounts()">Save accounts</button>
       <button class="mbtn cancel" onclick="closeM('snsAccModal')">Cancel</button>
@@ -2606,9 +2705,22 @@ function siteName(url){
 // ═══════════════════════════════════
 // SETTINGS — buy-timing model
 // ═══════════════════════════════════
+// Your data lives in the browser and is tied to the ADDRESS you open the app from —
+// a local file and the hosted site are two separate buckets. This is the one true home;
+// open it anywhere else and the app says so loudly instead of looking empty.
+const CANON_HOME='https://jackbithellamazon.github.io/A2AOA_Sourcing_Tracker/';
+const hereUrl=()=>location.protocol.startsWith('http')?(location.origin+location.pathname).replace(/index\.html$/,''):'';
+const atHome=()=>hereUrl()===CANON_HOME;
+const DEFAULT_DISCORD_USER='1255883029637763154';
+const DEFAULT_SNS_WEBHOOK='https://discord.com/api/webhooks/1530703716519379014/3Ddq7AjRNEd7-YjLHudI9pgjSlDB1NBJt0n4nAJdfVJfDttUKvUo07lqcj4BpmHIX-zS';
+const SNSPINGK='a2a_sns_ping_v5';   // {acc+cycle: 'YYYY-MM-DD'} — one ping per account per day
+// A copy running on a dev server must never post to the real channel — test data would
+// land in your Important channel looking like genuine reminders.
+const IS_LOCAL=/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/i.test(location.hostname);
+
 const SETK='a2a_settings_v5';
 let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{},
-  whMain:'',whUrgent:'',discordUserId:'',nBrief:1,nUrgent:1},ld(SETK)||{});
+  discordUserId:DEFAULT_DISCORD_USER,nSns:1,snsReviewLead:2,snsPingHour:13,appUrl:''},ld(SETK)||{});
 if(!settings.leadTimes)settings.leadTimes={};
 // ── Prime Day phases: editable dates + on/off, managed in Settings ──
 const PDAY_DEF={
@@ -5076,6 +5188,8 @@ function renderOA(){
 // SUBSCRIBE & SAVE
 // ═══════════════════════════════════
 const SNSK='a2a_sns_v5', SNSHK='a2a_snsh_v5', SNSDK='a2a_sns_dismiss_v5', SNSHANDK='a2a_sns_handled_v5';
+const SNSLOGK='a2a_sns_log_v5', SNSARCHK='a2a_sns_arch_v5';
+let snsLog=ld(SNSLOGK)||[], snsArch=ld(SNSARCHK)||[];
 let snsDismiss = ld(SNSDK) || {};
 let snsHandled = ld(SNSHANDK) || {};   // per-account, per-cycle "I've actioned this" flags
 
@@ -5086,7 +5200,7 @@ function snsAccRowHtml(name,info){
   return `<div class="lt-row" data-orig="${escA(name)}">
     <input class="fi" style="max-width:150px" value="${escA(name)}" maxlength="12" placeholder="name">
     <span class="lt-unit" style="flex:1">${info}</span>
-    <button class="aq-t danger" onclick="this.closest('.lt-row').remove()" title="Remove account">✕</button>
+    <button class="aq-t" onclick="this.closest('.lt-row').remove()" title="Archive this account — its dates and history are kept, it just stops showing on the board">Archive</button>
   </div>`;
 }
 const escA=x=>String(x??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
@@ -5096,7 +5210,31 @@ function openSnsAccounts(){
     const d=snsData[a];
     return snsAccRowHtml(a,d&&d.editDay?'dates set — cycle active':'no dates yet');
   }).join('');
+  const arch=document.getElementById('snsacc-archived');
+  if(arch){
+    arch.innerHTML=!snsArch.length?'':`<div class="fl" style="margin:14px 0 7px">Archived (${snsArch.length})</div>`
+      +snsArch.map((a,i)=>`<div class="lt-row">
+        <span class="lt-acc" style="width:auto;min-width:70px">${escA(a.name)}</span>
+        <span class="lt-unit" style="flex:1">archived ${a.at?fmt(pd(a.at)):''}${a.data&&a.data.editDay?' · dates kept':''}</span>
+        <button class="aq-t" onclick="snsRestoreAcc(${i})">Restore</button>
+      </div>`).join('');
+  }
   openM('snsAccModal');
+}
+// Archiving keeps everything — dates, notes, lead times, review history — it just
+// stops the account appearing on the board.
+function snsRestoreAcc(i){
+  const a=snsArch[i];if(!a)return;
+  let name=a.name;
+  while(SNS_ACCOUNTS.includes(name))name=name+'-2';
+  SNS_ACCOUNTS.push(name);
+  if(a.data)snsData[name]=a.data;
+  if(a.handled)snsHandled[name]=a.handled;
+  if(a.leadTime!=null)settings.leadTimes[name]=a.leadTime;
+  snsArch.splice(i,1);
+  sv2('a2a_sns_accts_v5',SNS_ACCOUNTS);sv2(SNSK,snsData);sv2(SNSHANDK,snsHandled);sv2(SNSARCHK,snsArch);saveSettings();
+  fillAccountSelects();openSnsAccounts();renderSns();render();
+  toast(`${name} restored`,'ok');
 }
 function snsAccAdd(){
   document.getElementById('snsacc-rows').insertAdjacentHTML('beforeend',snsAccRowHtml('','new account'));
@@ -5117,8 +5255,16 @@ function saveSnsAccounts(){
     }
   });
   if(!newList.length){toast('Keep at least one account','bad');return;}
+  // anything dropped from the list is archived, never destroyed
+  const kept=new Set(rows.map(r=>r.dataset.orig).filter(Boolean));
+  SNS_ACCOUNTS.forEach(old=>{
+    if(kept.has(old))return;
+    snsArch.unshift({name:old,at:isoOf(today()),data:snsData[old]||null,
+      handled:snsHandled[old]||null,leadTime:settings.leadTimes?settings.leadTimes[old]:null});
+  });
+  snsArch=snsArch.slice(0,60);
   SNS_ACCOUNTS=newList;snsData=newData;snsHandled=newHandled;
-  sv2('a2a_sns_accts_v5',SNS_ACCOUNTS);sv2(SNSK,snsData);sv2(SNSHANDK,snsHandled);saveSettings();
+  sv2('a2a_sns_accts_v5',SNS_ACCOUNTS);sv2(SNSK,snsData);sv2(SNSHANDK,snsHandled);sv2(SNSARCHK,snsArch);saveSettings();
   fillAccountSelects();
   closeM('snsAccModal');renderSns();render();
   if(uiState.tab==='settings')renderSettings();
@@ -5158,16 +5304,26 @@ function nextDayOfMonth(day,now){
   for(let m=0;m<13;m++){const dt=monthDate(now.getFullYear(),now.getMonth()+m,day);if(diff(now,dt)>=0)return dt;}
   return monthDate(now.getFullYear(),now.getMonth(),day);
 }
+// Days before the SUPPLIER CUTOFF that the review reminder fires. The review has to
+// land while the order can still be amended — once the supplier dispatches, it's locked.
+const snsReviewLead=()=>{const n=parseInt(settings.snsReviewLead);return(n>=1&&n<=10)?n:2;};
+
 function calcSnsStatus(acc){
   const d=snsData[acc];
   if(!d||!d.editDay)return{status:'no-data'};
   const now=today(), lda=pd(d.editDay), deliv=pd(d.deliveryDay);
+  // Supplier cutoff: the real point of no return. Older data only had add-by + delivery,
+  // so fall back to the midpoint between them rather than inventing a date.
+  const cutoff=d.cutoffDay?pd(d.cutoffDay):addD(lda,Math.max(1,Math.round(diff(lda,deliv)/2)));
   const nextLDA=nextDayOfMonth(lda.getDate(),now);
   const daysToLDA=diff(now,nextLDA);
   const ldaPassed=diff(now,lda)<0;                 // stored add-cutoff is before today
   const inFlight=ldaPassed && diff(now,deliv)>=0;   // order placed, not yet delivered
-  const reviewStart=addD(lda,3), reviewEnd=addD(lda,4);
+  // Review opens N days before the cutoff and stays open right up to it — miss it and
+  // the order ships as-is.
+  const reviewStart=addD(cutoff,-snsReviewLead()), reviewEnd=cutoff;
   const inReview=inFlight && diff(now,reviewStart)<=0 && diff(now,reviewEnd)>=0;
+  const daysToCutoff=diff(now,cutoff), daysToReview=diff(now,reviewStart);
   const daysToDelivery=diff(now,deliv);
   // Per-cycle "handled" flags — once you confirm you've added or reviewed for THIS cycle,
   // it stops nagging until the cycle rolls forward (keys change), instead of returning tomorrow.
@@ -5178,6 +5334,7 @@ function calcSnsStatus(acc){
   const reviewHandled=h.review===reviewCycleKey;
   let status;
   if(inReview && !reviewHandled)          status='review';
+  else if(inFlight && !reviewHandled && daysToCutoff<0 && daysToDelivery>=0) status='locked'; // cutoff gone, never reviewed
   else if(daysToLDA===0 && !addHandled)   status='lda-today';
   else if(daysToLDA<=3 && !addHandled)    status='lda-soon';
   else if(reviewHandled && inFlight && daysToDelivery<=4) status='reviewed';  // calm confirmation
@@ -5193,6 +5350,7 @@ function calcSnsStatus(acc){
     daysToAddDeliv=diff(now,addDeliv);
   }
   return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,addDeliv,daysToAddDeliv,
+    cutoff,daysToCutoff,daysToReview,
     addHandled,reviewHandled,addCycleKey,reviewCycleKey,
     editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
@@ -5200,19 +5358,32 @@ function calcSnsStatus(acc){
 function snsMarkAdded(acc){const s=calcSnsStatus(acc);if(s.status==='no-data')return;
   snsHandled[acc]={...(snsHandled[acc]||{}),add:s.addCycleKey};sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — added for this cycle ✓`,'ok');}
 function snsMarkReviewed(acc){const s=calcSnsStatus(acc);if(s.status==='no-data')return;
-  snsHandled[acc]={...(snsHandled[acc]||{}),review:s.reviewCycleKey};sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — order reviewed ✓`,'ok');}
+  snsHandled[acc]={...(snsHandled[acc]||{}),review:s.reviewCycleKey};sv2(SNSHANDK,snsHandled);
+  // completed history — proof every delivery was checked before dispatch
+  snsLog.unshift({acc,cycle:s.reviewCycleKey,doneAt:isoOf(today()),
+    cutoff:s.cutoff?isoOf(s.cutoff):null,deliv:s.deliv?isoOf(s.deliv):null,
+    onTime:s.daysToCutoff>=0});
+  snsLog=snsLog.slice(0,120);sv2(SNSLOGK,snsLog);
+  renderSns();render();toast(`${acc} — order reviewed ✓`,'ok');}
 function snsUndoHandled(acc){const h=snsHandled[acc];if(!h)return;const s=calcSnsStatus(acc);
-  if(h.add===s.addCycleKey)delete h.add; if(h.review===s.reviewCycleKey)delete h.review;
+  if(h.add===s.addCycleKey)delete h.add;
+  if(h.review===s.reviewCycleKey){delete h.review;
+    snsLog=snsLog.filter(x=>!(x.acc===acc&&x.cycle===s.reviewCycleKey));sv2(SNSLOGK,snsLog);}
   sv2(SNSHANDK,snsHandled);renderSns();render();toast(`${acc} — reset`,'info');}
 
 // ── Fixed monthly cycles auto-roll: dates never need re-entering ──
 function isoOf(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
 function monthDate(y,m,day){const dim=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(day,dim));}
-function snsCurrentCycle(dayE,dayD,now){
+function snsCurrentCycle(dayE,dayD,now,dayC){
   for(let m=-1;m<14;m++){
     const ed=monthDate(now.getFullYear(),now.getMonth()+m,dayE);
     const dl=monthDate(ed.getFullYear(),ed.getMonth()+(dayD>=dayE?0:1),dayD);
-    if(diff(now,dl)>=-1)return{editDay:isoOf(ed),deliveryDay:isoOf(dl)};
+    if(diff(now,dl)>=-1){
+      const out={editDay:isoOf(ed),deliveryDay:isoOf(dl)};
+      // cutoff sits between add-by and delivery — same month-walk rule
+      if(dayC)out.cutoffDay=isoOf(monthDate(ed.getFullYear(),ed.getMonth()+(dayC>=dayE?0:1),dayC));
+      return out;
+    }
   }
   return null;
 }
@@ -5221,9 +5392,11 @@ function advanceSnsCycles(){
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc];if(!d||!d.editDay||!d.deliveryDay)return;
     const ed=pd(d.editDay),dl=pd(d.deliveryDay);if(!ed||!dl)return;
-    const cur=snsCurrentCycle(ed.getDate(),dl.getDate(),today());
-    if(cur&&(cur.editDay!==d.editDay||cur.deliveryDay!==d.deliveryDay)){
-      snsData[acc]={...d,editDay:cur.editDay,deliveryDay:cur.deliveryDay};changed=true;
+    const co=d.cutoffDay?pd(d.cutoffDay):null;
+    const cur=snsCurrentCycle(ed.getDate(),dl.getDate(),today(),co?co.getDate():null);
+    if(cur&&(cur.editDay!==d.editDay||cur.deliveryDay!==d.deliveryDay||(cur.cutoffDay&&cur.cutoffDay!==d.cutoffDay))){
+      snsData[acc]={...d,editDay:cur.editDay,deliveryDay:cur.deliveryDay,
+        ...(cur.cutoffDay?{cutoffDay:cur.cutoffDay}:{})};changed=true;
     }
   });
   if(changed)sv2(SNSK,snsData);
@@ -5261,6 +5434,7 @@ function renderSns(){
     switch(_snsSort.key){
       case 'acc':return a;
       case 'addby':return c.status==='no-data'?9999:c.daysToLDA;
+      case 'review':return c.status==='no-data'?9999:(c.daysToReview??9999);
       case 'deliv':return delivDaysOf(c);
       case 'status':return SNS_ORDER[c.status]??6;
       default:return SNS_ORDER[c.status]??6;
@@ -5270,7 +5444,7 @@ function renderSns(){
     const va=sortVal(a),vb=sortVal(b);
     return (va<vb?-1:va>vb?1:0)*_snsSort.dir;
   });
-  ['acc','addby','deliv','status'].forEach(k=>{
+  ['acc','addby','review','deliv','status'].forEach(k=>{
     const el=document.getElementById('arr-sns-'+k);
     if(el)el.textContent=_snsSort.key===k?(_snsSort.dir===1?'▲':'▼'):'';
   });
@@ -5302,14 +5476,24 @@ function renderSns(){
     let statusHtml='',actionHtml=editBtn(acc),rowCls='',next='';
 
     if(c.status==='no-data'){
-      statusHtml=`<span class="sns-status needs">Not Set</span>`;
-      next='Set this account\u2019s monthly dates once — it rolls forward automatically after that';
-      actionHtml=`<button class="sns-act-btn next-btn" onclick="openSnsEdit('${acc}',true)">Set Dates</button>`;
-      needsCount++;rowCls='sns-row-act';
+      statusHtml=`<span class="sns-status idle-set">Not set up</span>`;
+      next='';
+      actionHtml=`<button class="sns-act-btn set-btn-alt" onclick="openSnsEdit('${acc}',true)">Set dates</button>`;
+      rowCls='sns-row-unset';   // calm, not alarming — nothing is wrong, it just isn't configured
     } else if(c.status==='review'){
+      const left=c.daysToCutoff;
       statusHtml=`<span class="sns-status review">Review Now</span>`;
-      next='Check the in-flight order — prices, profit &amp; competition — then mark it reviewed';rowCls='sns-row-act';
-      actionHtml=actBtn(acc,'snsMarkReviewed','Mark reviewed')+editBtn(acc);needsCount++;
+      next=left<=0?'Supplier locks it <b>today</b> — last chance to amend or cancel.'
+                  :`Amend or cancel before it locks in <b>${left} day${left!==1?'s':''}</b> (${fmt(c.cutoff)}).`;
+      rowCls='sns-row-act';
+      actionHtml=`<button class="sns-act-btn act-btn" onclick="snsMarkReviewed('${acc}')">✓ Checked</button>`+editBtn(acc);
+      needsCount++;
+    } else if(c.status==='locked'){
+      statusHtml=`<span class="sns-status needs">Not Reviewed</span>`;
+      next=`Locked ${fmt(c.cutoff)} unreviewed — arrives ${fmt(c.deliv)} as-is.`;
+      rowCls='sns-row-act';
+      actionHtml=`<button class="sns-act-btn act-btn" onclick="snsMarkReviewed('${acc}')">✓ Checked</button>`+editBtn(acc);
+      needsCount++;
     } else if(c.status==='lda-today'){
       statusHtml=`<span class="sns-status edit-today">Last Day to Add</span>`;
       next='Final day to add or amend for this cycle — do it today, then mark added';rowCls='sns-row-act';
@@ -5320,14 +5504,15 @@ function renderSns(){
       actionHtml=actBtn(acc,'snsMarkAdded','Mark added')+editBtn(acc);
     } else if(c.status==='reviewed'){
       statusHtml=`<span class="sns-status done">Reviewed ✓</span>`;
-      next=`Reviewed — arrives ${fmt(c.deliv)}`;
+      next=`Checked and locked in — arrives ${fmt(c.deliv)}`;
       actionHtml=calmBtn(acc,'Undo')+editBtn(acc);
     } else if(c.status==='arriving'){
       statusHtml=`<span class="sns-status between">Arrives ${dueLbl(c.daysToDelivery)}</span>`;
       next=`Current order lands ${fmt(c.deliv)} — prep to send in`;
     } else if(c.status==='in-flight'){
       statusHtml=`<span class="sns-status between">Order Placed</span>`;
-      next=`Current order delivers ${fmt(c.deliv)} · next add-by ${fmt(c.nextLDA)}`;
+      next=c.daysToReview>0?`Review opens ${fmt(c.reviewStart)} (${c.daysToReview}d) — you'll get a Discord ping that morning`
+        :`Delivers ${fmt(c.deliv)} · next add-by ${fmt(c.nextLDA)}`;
     } else if(c.status==='added'){
       statusHtml=`<span class="sns-status done">Added ✓</span>`;
       next=`Done for this cycle — next add-by ${fmt(c.nextLDA)}`;
@@ -5337,21 +5522,25 @@ function renderSns(){
       next=`Nothing in flight — next add-by ${fmt(c.nextLDA)}`;
     }
 
-    const addByCell = c.status==='no-data' ? '—'
-      : `<span class="sns-date">${fmt(c.nextLDA)}</span><div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</div>`;
-    let deliveryCell;
-    if(c.status==='no-data')deliveryCell=`<span class="sns-dim">set dates first</span>`;
+    const badge=(acc===fastAcc&&fastAcc!==slowAcc?'<span class="sns-badge fast">soonest</span>':'')
+      +(acc===slowAcc&&fastAcc!==slowAcc?'<span class="sns-badge slow">longest</span>':'');
+    // THIS order = the one already placed and heading to you.
+    let thisCell;
+    if(c.status==='no-data')thisCell='—';
+    else if(!c.inFlight)thisCell=`<span class="sns-dim">nothing placed</span>`;
     else{
-      const dDate=c.inFlight?c.deliv:c.addDeliv;
-      const dDays=c.inFlight?c.daysToDelivery:c.daysToAddDeliv;
-      const badge=(acc===fastAcc&&fastAcc!==slowAcc?'<span class="sns-badge fast">soonest</span>':'')+(acc===slowAcc&&fastAcc!==slowAcc?'<span class="sns-badge slow">longest</span>':'');
-      deliveryCell=`<span class="sns-date" style="color:var(--blue)">${fmt(dDate)}</span>
-        <div class="sns-sub">${dDays===0?'today':dDays>0?'in '+dDays+'d':'overdue'} · ${c.inFlight?'in-flight order':'if you add by cutoff'}${badge}</div>`;
+      const rev=c.reviewHandled?`<span class="rv ok">✓ reviewed</span>`
+        :c.daysToReview>0?`<span class="rv wait">review ${fmt(c.reviewStart)}</span>`
+        :c.daysToCutoff>=0?`<span class="rv now">review now</span>`
+        :`<span class="rv missed">not reviewed</span>`;
+      thisCell=`<span class="sns-date" style="color:var(--teal)">lands ${fmt(c.deliv)}</span>
+        <div class="sns-sub">${c.daysToDelivery===0?'today':c.daysToDelivery>0?'in '+c.daysToDelivery+'d':'due'} · ${c.daysToCutoff<0?'edits closed':'edit until '+fmt(c.cutoff)}</div>
+        <div style="margin-top:4px">${rev}</div>`;
     }
-    const reviewCell = (c.status==='no-data') ? '—'
-      : c.inFlight
-        ? `<span class="sns-date" style="color:var(--purple)">${fmt(c.reviewStart)}–${fmt(c.reviewEnd)}</span>`
-        : `<span class="sns-dim">none in flight</span>`;
+    // NEXT order = the cycle that's already open for adding to.
+    const nextCell = c.status==='no-data' ? '—'
+      : `<span class="sns-date">add by ${fmt(c.nextLDA)}</span>
+         <div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}${c.addDeliv?' · lands '+fmt(c.addDeliv):''}${badge}</div>`;
 
     const notesTxt=(snsData[acc]&&snsData[acc].notes)?snsData[acc].notes:'';
     const notesHtml=`<input class="sns-note-in" value="${escA(notesTxt)}" placeholder="+ add note" maxlength="120"
@@ -5359,9 +5548,8 @@ function renderSns(){
 
     return`<tr class="${rowCls}">
       <td><span class="sns-acc">${acc}</span></td>
-      <td>${addByCell}</td>
-      <td>${deliveryCell}</td>
-      <td>${reviewCell}</td>
+      <td>${thisCell}</td>
+      <td>${nextCell}</td>
       <td>${statusHtml}<div class="sns-next">${next}</div>${notesHtml}</td>
       <td><div class="sns-act-cell">${actionHtml}</div></td>
     </tr>`;
@@ -5370,22 +5558,116 @@ function renderSns(){
   // KPIs — action-first
   let kReview=0,kAdd=0,kArrive=0;
   SNS_ACCOUNTS.forEach(acc=>{const s=SS[acc];
-    if(s.status==='review')kReview++;
+    if(s.status==='review'||s.status==='locked')kReview++;
     if(s.status==='lda-today'||s.status==='lda-soon')kAdd++;
-    if(s.status==='arriving')kArrive++;});
+    if(s.status==='arriving'||s.status==='reviewed')kArrive++;});
   const snsSumEl=document.getElementById('sns-summary');
   if(snsSumEl){
     const cards=[
-      {cv:'cv-purple',n:kReview,lbl:'Review Now'},
-      {cv:'cv-amber',n:kAdd,lbl:'Add Soon'},
+      {cv:'cv-purple',n:kReview,lbl:'To review'},
+      {cv:'cv-amber',n:kAdd,lbl:'Add soon'},
       {cv:'cv-teal',n:kArrive,lbl:'Arriving'},
     ];
-    snsSumEl.innerHTML=cards.map(c=>`<div class="sns-sum ${c.cv}">
-      <div class="sns-sum-n ${c.n===0?'dim':''}">${c.n}</div><div class="sns-sum-lbl">${c.lbl}</div></div>`).join('');
+    snsSumEl.innerHTML=cards.map(c=>`<span class="sns-chip ${c.cv} ${c.n?'':'zero'}">
+      <b>${c.n}</b> ${c.lbl}</span>`).join('');
+  }
+
+  // ── Nothing configured yet: onboarding instead of a wall of empty rows ──
+  const unset=SNS_ACCOUNTS.filter(a=>SS[a].status==='no-data');
+  const setupEl=document.getElementById('sns-setup');
+  const allUnset=unset.length===SNS_ACCOUNTS.length;
+  document.getElementById('sns-live-wrap').style.display=allUnset?'none':'';
+    const pz=document.getElementById('sns-purpose');if(pz)pz.style.display=allUnset?'none':'';
+  if(setupEl){
+    setupEl.innerHTML=!allUnset?'':`<div class="setup-panel">
+      <div class="setup-hd">
+        <div class="setup-t">Set your dates once — then it runs itself</div>
+        <div class="setup-s">Each account repeats on the same days every month, so you only ever do this once. Add the three dates below and the app works out the rest — including when to remind you.</div>
+      </div>
+      <div class="setup-steps">
+        <div class="setup-step cv-blue"><span class="setup-num">1</span><div><b>Add by</b><span>Last day you can put items in</span></div></div>
+        <div class="setup-step cv-purple"><span class="setup-num">2</span><div><b>Review</b><span>Worked out for you — ${snsReviewLead()} days before cutoff. Discord pings you</span></div></div>
+        <div class="setup-step cv-amber"><span class="setup-num">3</span><div><b>Cutoff</b><span>Supplier locks it — no changes after this</span></div></div>
+        <div class="setup-step cv-teal"><span class="setup-num">4</span><div><b>Delivery</b><span>When it lands</span></div></div>
+      </div>
+      <div class="setup-accs">
+        ${SNS_ACCOUNTS.map(a=>`<button class="setup-acc" onclick="openSnsEdit('${escA(a)}',true)">
+          <span class="setup-acc-n">${escA(a)}</span><span class="setup-acc-b">Set dates →</span></button>`).join('')}
+      </div>
+      <div class="setup-foot">Wrong accounts listed? <button class="lnk" onclick="openSnsAccounts()">Manage accounts</button></div>
+    </div>`;
+  }
+
+  // ── Hero: the single thing that matters right now ──
+  const heroEl=document.getElementById('sns-hero');
+  if(heroEl&&allUnset){heroEl.innerHTML='';}
+  else if(heroEl){
+    const due=sortedAccs.map(a=>({a,c:SS[a]})).filter(x=>['review','locked'].includes(x.c.status));
+    const addNow=sortedAccs.map(a=>({a,c:SS[a]})).filter(x=>['lda-today','no-data'].includes(x.c.status));
+    const nextUp=sortedAccs.map(a=>({a,c:SS[a]}))
+      .filter(x=>x.c.inFlight&&x.c.daysToReview>0).sort((x,y)=>x.c.daysToReview-y.c.daysToReview)[0];
+    if(due.length){
+      const x=due[0],urgent=x.c.daysToCutoff<=1;
+      heroEl.innerHTML=`<div class="sns-hero ${urgent?'urgent':''}">
+        <div class="sns-hero-l">
+          <div class="sns-hero-kick">${x.c.status==='locked'?'Cutoff missed':'Review before dispatch'}</div>
+          <div class="sns-hero-t">${escA(x.a)}</div>
+          <div class="sns-hero-s">${x.c.status==='locked'
+            ? `Locked ${fmt(x.c.cutoff)} — can't be amended. Lands ${fmt(x.c.deliv)}.`
+            : `${x.c.daysToCutoff<=0?'<b>Supplier locks it today</b>':x.c.daysToCutoff===1?'<b>Locks tomorrow</b>':'Locks in <b>'+x.c.daysToCutoff+' days</b>'} (${fmt(x.c.cutoff)}) · lands ${fmt(x.c.deliv)}`}</div>
+        </div>
+        <div class="sns-hero-r">
+          ${due.length>1?`<span class="sns-hero-more">+${due.length-1} more</span>`:''}
+          <button class="sns-hero-btn" onclick="snsMarkReviewed('${escA(x.a)}')">✓ Checked</button>
+        </div>
+      </div>`;
+    } else if(addNow.length){
+      const x=addNow[0];
+      heroEl.innerHTML=`<div class="sns-hero amber">
+        <div class="sns-hero-l">
+          <div class="sns-hero-kick">${x.c.status==='no-data'?'Needs setting up':'Last day to add'}</div>
+          <div class="sns-hero-t">${escA(x.a)}</div>
+          <div class="sns-hero-s">${x.c.status==='no-data'?'Set this account\'s three dates once and it runs itself.'
+            :`Get items in today — the add window closes tonight.`}</div>
+        </div>
+        <div class="sns-hero-r">
+          <button class="sns-hero-btn" onclick="${x.c.status==='no-data'?`openSnsEdit('${escA(x.a)}',true)`:`snsMarkAdded('${escA(x.a)}')`}">${x.c.status==='no-data'?'Set dates':'✓ Added'}</button>
+        </div>
+      </div>`;
+    } else {
+      heroEl.innerHTML=unset.length?`<div class="sns-hero amber">
+        <div class="sns-hero-l">
+          <div class="sns-hero-kick">Not finished setting up</div>
+          <div class="sns-hero-t">${unset.length} account${unset.length!==1?'s':''} without dates</div>
+          <div class="sns-hero-s">${unset.map(escA).join(', ')} won't be tracked or remind you until their dates are in.</div>
+        </div>
+        <div class="sns-hero-r"><button class="sns-hero-btn" onclick="openSnsEdit('${escA(unset[0])}',true)">Set ${escA(unset[0])} →</button></div>
+      </div>`:`<div class="sns-hero clear">
+        <div class="sns-hero-l">
+          <div class="sns-hero-kick">Nothing to do</div>
+          <div class="sns-hero-t">All clear</div>
+          <div class="sns-hero-s">${nextUp?`Next review: <b>${escA(nextUp.a)}</b> on ${fmt(nextUp.c.reviewStart)} — ${nextUp.c.daysToReview} days away. Discord will tell you.`
+            :'Nothing in flight. You\'ll be pinged when the next order needs reviewing.'}</div>
+        </div>
+      </div>`;
+    }
   }
 
   const nbSns=document.getElementById('nb-sns');
   if(nbSns)nbSns.textContent=needsCount;
+
+  // Completed reviews — the audit trail that every delivery was checked before dispatch
+  const logEl=document.getElementById('sns-log');
+  if(logEl){
+    logEl.innerHTML=!snsLog.length?'':`<div class="sec"><span class="sec-t">Completed Reviews</span><span class="sec-pill">${snsLog.length}</span></div>
+      <div class="ltbl-wrap"><table class="ltbl"><thead><tr><th>Account</th><th>Reviewed</th><th>Cutoff was</th><th>Delivery</th><th></th></tr></thead><tbody>
+      ${snsLog.slice(0,25).map(r=>`<tr class="ltbl-row"><td class="ltbl-asin">${escA(r.acc)}</td>
+        <td>${fmt(pd(r.doneAt))}</td>
+        <td class="ltbl-dim">${r.cutoff?fmt(pd(r.cutoff)):'—'}</td>
+        <td class="ltbl-dim">${r.deliv?fmt(pd(r.deliv)):'—'}</td>
+        <td class="ltbl-act">${r.onTime?'<span class="st-pill green">In time</span>':'<span class="st-pill amber">After cutoff</span>'}</td></tr>`).join('')}
+      </tbody></table></div>`;
+  }
 
   refreshActionCenter();
 }
@@ -5415,26 +5697,49 @@ function openSnsEdit(acc, isNextCycle){
     :'Editing the current cycle in place — nothing is archived.';
   const d=snsData[acc]||{};
   if(isNextCycle){
-    sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-notes','');
+    sv('sns-new-edit','');sv('sns-new-cutoff','');sv('sns-new-delivery','');sv('sns-new-notes','');
   } else {
     sv('sns-new-edit', d.editDay ? isoToDM(d.editDay) : '');
+    sv('sns-new-cutoff', d.cutoffDay ? isoToDM(d.cutoffDay) : '');
     sv('sns-new-delivery', d.deliveryDay ? isoToDM(d.deliveryDay) : '');
     sv('sns-new-notes', d.notes||'');
   }
-  se('e-sns-edit',0);se('e-sns-del',0);
+  se('e-sns-edit',0);se('e-sns-cut',0);se('e-sns-del',0);
+  snsPreview();
   openM('snsEditModal');
 }
 
+// Live 4-stage preview so the timeline is obvious while typing the dates
+function snsPreview(){
+  const box=document.getElementById('sns-preview');if(!box)return;
+  const a=dmToISO(gv('sns-new-edit'),'future'),c=dmToISO(gv('sns-new-cutoff'),'future'),d=dmToISO(gv('sns-new-delivery'),'future');
+  if(!a||!c||!d){box.innerHTML='<div class="sns-tl-empty">Enter all three dates to see the timeline. The review reminder is worked out for you — '+snsReviewLead()+' days before the supplier cutoff.</div>';return;}
+  const rev=addD(pd(c),-snsReviewLead());
+  const bad=diff(pd(a),pd(c))<0||diff(pd(c),pd(d))<0;
+  const node=(lbl,dt,cv,tag)=>`<div class="tl-node ${tag?'tl-hl':''} ${cv}"><div class="tl-dot"></div><div class="tl-lbl">${lbl}</div><div class="tl-date">${fmt(dt)}</div></div>`;
+  box.innerHTML=`<div class="tl">
+      ${node('Add by',pd(a),'cv-blue')}<div class="tl-line"></div>
+      ${node('Review',rev,'cv-purple',1)}<div class="tl-line"></div>
+      ${node('Cutoff',pd(c),'cv-amber')}<div class="tl-line"></div>
+      ${node('Delivery',pd(d),'cv-teal')}
+    </div>
+    <div class="sns-tl-note">${bad?'<span style="color:var(--red);font-weight:700">Dates are out of order — add-by, then cutoff, then delivery.</span>'
+      :'You\'ll get the Discord reminder on <b>'+fmt(rev)+'</b> — '+snsReviewLead()+' days before the supplier locks the order.'}</div>`;
+}
 function saveSnsEdit(){
   const acc=gv('sns-edit-acc');
   const mode=gv('sns-edit-mode')||'next';
   const newEdit=dmToISO(gv('sns-new-edit'),'future');
+  const newCut=dmToISO(gv('sns-new-cutoff'),'future');
   const newDel=dmToISO(gv('sns-new-delivery'),'future');
   const notes=gv('sns-new-notes');
   let ok=true;
   if(!newEdit){se('e-sns-edit',1);ok=false;}else se('e-sns-edit',0);
+  if(!newCut){se('e-sns-cut',1);ok=false;}else se('e-sns-cut',0);
   if(!newDel){se('e-sns-del',1);ok=false;}else se('e-sns-del',0);
-  if(!ok){toast('Enter both dates','bad');return;}
+  if(!ok){toast('Enter all three dates','bad');return;}
+  if(diff(pd(newEdit),pd(newCut))<0){toast('Supplier cutoff must be on or after the add-by date','bad');return;}
+  if(diff(pd(newCut),pd(newDel))<0){toast('Delivery must be on or after the supplier cutoff','bad');return;}
 
   if(mode==='next'){
     // Archive current to history, then set new active cycle
@@ -5445,7 +5750,7 @@ function saveSnsEdit(){
       snsHist.push({acc,editDay:current.editDay,deliveryDay:current.deliveryDay,
         cycle,recorded:isoOf(today()),notes:current.notes||''});
     }
-    snsData[acc]={editDay:newEdit,deliveryDay:newDel,notes};
+    snsData[acc]={editDay:newEdit,cutoffDay:newCut,deliveryDay:newDel,notes};
     saveSns();
     closeM('snsEditModal');
     window._snsPopupDismissed=false; // re-evaluate popup
@@ -5454,7 +5759,7 @@ function saveSnsEdit(){
     toast(`${acc} updated — previous cycle archived`,'ok');
   } else {
     // Edit current cycle in place — no archiving
-    snsData[acc]={...(snsData[acc]||{}),editDay:newEdit,deliveryDay:newDel,notes};
+    snsData[acc]={...(snsData[acc]||{}),editDay:newEdit,cutoffDay:newCut,deliveryDay:newDel,notes};
     saveSns();
     closeM('snsEditModal');
     renderSns();
@@ -5485,195 +5790,152 @@ window.addEventListener('click',e=>{
 // SETTINGS PAGE
 // ═══════════════════════════════════
 // ═══════════════════════════════════════════════════════════
-// DISCORD WEBHOOKS
-// The app has no server, so pings fire from the browser while it's open:
-// the daily brief goes out the first time you open it each day, and anything
-// that turns critical AFTER that brief gets its own alert. Sending the brief
-// marks everything in it as "already told you", so nothing double-pings.
+// DISCORD — SUB & SAVE ONLY
+// One job: never miss the review before a supplier dispatches. It nags once a day
+// from the review date until you tick ✓ Checked in the app, then goes quiet.
 // ═══════════════════════════════════════════════════════════
-const WHSENT='a2a_wh_sent_v5';       // {actionKey: 'YYYY-MM-DD'} — dedupe
-const WHBRIEF='a2a_wh_brief_v5';     // last date the brief was sent
-const WH_COL={red:16724821,amber:16755243,green:2089087};
+// Prefilled so it works out of the box. NOTE: if this file sits in a PUBLIC GitHub repo,
+// anyone reading the source can post to that channel — clear the field in Settings to
+// keep it in your browser only, or regenerate the webhook in Discord.
 
-// A Discord CHANNEL link and a WEBHOOK url look almost identical but do
-// completely different things — say which one was pasted.
 function whBadMsg(v){
   v=String(v||'').trim();
   if(!v)return'';
   if(/^https?:\/\/(www\.)?discord(app)?\.com\/api\/webhooks\/\d+\/[\w-]+/i.test(v))return'';
   if(/^https?:\/\/(www\.)?discord(app)?\.com\/channels\//i.test(v))
     return'⚠️ That\'s the <b>channel link</b>, not a webhook. In Discord: right-click the channel → <b>Edit Channel</b> → <b>Integrations</b> → <b>Webhooks</b> → <b>New Webhook</b> → <b>Copy Webhook URL</b>.';
-  if(/^\d{5,}$/.test(v))return'⚠️ That\'s just the channel <b>ID</b>. You need the full webhook URL — Edit Channel → Integrations → Webhooks → Copy Webhook URL.';
+  if(/^\d{5,}$/.test(v))return'⚠️ That\'s just the channel <b>ID</b>. You need the full webhook URL.';
   return'⚠️ Doesn\'t look like a Discord webhook URL. It should start <b>https://discord.com/api/webhooks/</b>';
 }
-// urgent falls back to main so one URL is enough to get going
-const whUrl=kind=>((kind==='urgent'?settings.whUrgent:'')||settings.whMain||'').trim();
-const whOn=kind=>kind==='urgent'?settings.nUrgent!==0:settings.nBrief!==0;
-const whTime=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-const whLongDate=()=>today().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+const snsWhUrl=()=>(settings.whSns!==undefined?settings.whSns:DEFAULT_SNS_WEBHOOK||'').trim();
 const whMention=()=>{const id=(settings.discordUserId||'').trim();return id?'<@'+id+'>':'';};
-// action subs are HTML strings — Discord renders plain text, so unescape and de-markdown
-function whClean(t,max){
-  let v=String(t||'').replace(/<[^>]+>/g,'');
-  const d=document.createElement('textarea');d.innerHTML=v;v=d.value;
-  v=v.replace(/[*_`~|]/g,'').replace(/\s+/g,' ').trim();
-  if(max&&v.length>max){
-    const cut=v.slice(0,max);
-    const sp=cut.lastIndexOf(' ');
-    v=(sp>max*0.6?cut.slice(0,sp):cut);
-    if(v.lastIndexOf('(')>v.lastIndexOf(')'))v=v.slice(0,v.lastIndexOf('('));   // no dangling "(30…"
-    v=v.replace(/[·,\-—(]\s*$/,'').trim()+'…';
-  }
-  return v;
-}
-const whLine=a=>'• `'+whClean(a.title)+'` — '+whClean(a.sub,76);
-
+const whTime=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+// The app knows its own address when it's hosted, so the ping can link straight back to it
+const appLink=()=>((settings.appUrl||'').trim())||CANON_HOME;
 function whPost(url,body,okMsg){
   return fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
     .then(r=>{
       if(!r.ok){toast(r.status===404?'Discord rejected it — webhook deleted or URL wrong':'Discord rejected it — check the URL',true);return false;}
       if(okMsg)toast(okMsg,'ok');
       return true;
-    })
-    .catch(()=>{toast('Could not reach Discord — check your connection',true);return false;});
+    }).catch(()=>{toast('Could not reach Discord — check your connection',true);return false;});
 }
+function snsPingMap(){try{return JSON.parse(localStorage.getItem(SNSPINGK))||{};}catch{return{};}}
 
-// ── dedupe ledger ──
-function whSentMap(){try{return JSON.parse(localStorage.getItem(WHSENT))||{};}catch{return{};}}
-function whMarkNotified(keys){
-  const m=whSentMap(),d=isoOf(today());
-  keys.forEach(k=>m[k]=d);
-  // drop anything older than a week so the ledger can't grow forever
-  const cut=isoOf(addD(today(),-7));
-  Object.keys(m).forEach(k=>{if(m[k]<cut)delete m[k];});
-  localStorage.setItem(WHSENT,JSON.stringify(m));
-}
-const whAlreadyToldToday=key=>whSentMap()[key]===isoOf(today());
-
-// ── the daily brief ──
-function whBuildBrief(){
-  const A=computeActions();
-  A.forEach(a=>a.band=bandOf(a));
-  const total=A.length,overdue=A.filter(a=>a.band==='overdue').length;
-  const ICON={overdue:'🔴',buy:'🟢',checks:'🟡',sns:'🟣',rebuy:'🔵'};
-  const fields=[];
-  AC_BANDS.forEach(b=>{
-    const items=A.filter(a=>a.band===b.key);
-    if(!items.length)return;
-    const shown=items.slice(0,8);
-    let v=shown.map(whLine).join('\n');
-    if(items.length>shown.length)v+='\n_+'+(items.length-shown.length)+' more in the app_';
-    fields.push({name:(ICON[b.key]||'')+' '+b.lbl+' ('+items.length+')',value:v.slice(0,1020)});
-  });
-  // ASIN list for the KPF viewer — tap-to-copy on mobile
-  const asins=[...new Set(A.map(a=>a.title).filter(t=>/^B[0-9A-Z]{9}$/.test(t)))];
-  if(asins.length)fields.push({name:'📋 ASINs for KPF',value:'```'+asins.slice(0,60).join(',')+'```'});
-  const clear=total===0;
+// One message, however many accounts are due. Short enough to action from a phone
+// without opening anything: what, how long left, and a link.
+const C_PURPLE=10509567, C_RED=16724821;
+function snsUrgent(c){return c.daysToCutoff<=1;}   // locks today/tomorrow, or already gone
+function snsReviewPayload(list,isTest){
+  const anyUrgent=list.some(x=>snsUrgent(x.c));
+  const one=list.length===1;
+  const link=appLink();
+  const whenTxt=c=>{const l=c.daysToCutoff;
+    return l<0?'missed — locked '+fmt(c.cutoff):l===0?'**today**':l===1?'**tomorrow**':'in '+l+' days';};
+  const noteOf=a=>(snsData[a]&&snsData[a].notes)?String(snsData[a].notes).slice(0,60):'';
+  // one account = big scannable fields; several = one compact line each
+  const fieldsFor=()=>{
+    if(one){
+      const x=list[0],n=noteOf(x.acc);
+      return[
+        {name:'Locks',value:whenTxt(x.c)+'\n'+fmt(x.c.cutoff),inline:true},
+        {name:'Lands',value:x.c.deliv?fmt(x.c.deliv):'—',inline:true},
+        ...(n?[{name:'Note',value:n,inline:true}]:[])
+      ];
+    }
+    return list.map(x=>({name:x.acc,value:'locks '+whenTxt(x.c)+' · lands '+(x.c.deliv?fmt(x.c.deliv):'—'),inline:true}));
+  };
   return{
-    content:(overdue&&whMention())?whMention()+' — '+overdue+' overdue':undefined,
+    content:(anyUrgent&&whMention())?whMention():undefined,
     allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
     embeds:[{
-      title:'A2AOA — '+whLongDate(),
-      description:clear?'**All clear.** Nothing needs you today.'
-        :'**'+total+' thing'+(total!==1?'s':'')+' need'+(total===1?'s':'')+' you today**'+(overdue?' · **'+overdue+' overdue**':''),
-      color:clear?WH_COL.green:(overdue?WH_COL.red:WH_COL.amber),
-      fields:fields.slice(0,24),
-      footer:{text:'A2AOA · daily brief · '+whTime()},
-      timestamp:new Date().toISOString()
+      author:{name:'Sub & Save'},
+      title:(isTest?'TEST · ':'')+(one
+        ?`Review ${list[0].acc} before it locks`
+        :`${list.length} orders need reviewing`),
+      description:one
+        ?`Amend or cancel now — once the supplier cuts off, it ships as-is.`
+        :`Amend or cancel now — once each supplier cuts off, it ships as-is.`,
+      color:anyUrgent?C_RED:C_PURPLE,
+      fields:[...fieldsFor(),
+        ...(link?[{name:'​',value:`**[Open Sub & Save →](${link})** · hit ✓ Checked to stop the reminders`}]:[])],
+      footer:{text:isTest?'Test — this is exactly what a real reminder looks like':'Repeats daily until ticked off'}
     }]
   };
 }
 
-function whSendBrief(manual){
-  const url=whUrl('brief');
-  if(!url){if(manual)toast('Add your Discord webhook in Settings first',true);return Promise.resolve(false);}
-  const A=computeActions();
-  return whPost(url,whBuildBrief(),manual?'Brief sent to Discord ✓':null).then(ok=>{
-    if(ok){
-      localStorage.setItem(WHBRIEF,isoOf(today()));
-      whMarkNotified(A.map(a=>a.key));   // everything in the brief is now "told"
-      if(uiState.tab==='settings')renderSettings();
-    }
-    return ok;
+// Fires on app open: any account whose review is open (or whose cutoff was missed and
+// still hasn't been checked) gets one ping per day until it's ticked off.
+function snsWhRun(){
+  const url=snsWhUrl();
+  if(!url||settings.nSns===0||whBadMsg(url))return;
+  if(IS_LOCAL){console.info('[A2AOA] Local copy — Discord reminders suppressed.');return;}
+  // He wants these at 1pm, not the moment he happens to open the app. Before then we
+  // wait; if the tab is left open it fires on the hour by itself.
+  const hour=(settings.snsPingHour!=null?settings.snsPingHour:13);
+  const now=new Date();
+  if(now.getHours()<hour){
+    const at=new Date();at.setHours(hour,0,5,0);
+    clearTimeout(window._snsPingTimer);
+    window._snsPingTimer=setTimeout(snsWhRun,Math.max(1000,at-now));
+    return;
+  }
+  const map=snsPingMap(),d=isoOf(today());
+  const due=[];
+  SNS_ACCOUNTS.forEach(acc=>{
+    const c=calcSnsStatus(acc);
+    if(c.status!=='review'&&c.status!=='locked')return;
+    if(map[acc+'|'+c.reviewCycleKey]===d)return;    // already told him today
+    due.push({acc,c});
+  });
+  if(!due.length)return;
+  whPost(url,snsReviewPayload(due,false)).then(ok=>{
+    if(!ok)return;                                   // failed? try again next open
+    due.forEach(x=>map[x.acc+'|'+x.c.reviewCycleKey]=d);
+    const cut=isoOf(addD(today(),-60));
+    Object.keys(map).forEach(k=>{if(map[k]<cut)delete map[k];});
+    localStorage.setItem(SNSPINGK,JSON.stringify(map));
   });
 }
 
-// ── alerts for things that turn critical after the brief went out ──
-function whSendUrgent(){
-  const url=whUrl('urgent');
-  if(!url||!whOn('urgent'))return;
-  const A=computeActions();
-  A.forEach(a=>a.band=bandOf(a));
-  const fresh=A.filter(a=>a.band==='overdue'&&!whAlreadyToldToday(a.key));
-  if(!fresh.length)return;
-  const lines=fresh.slice(0,10).map(whLine).join('\n');
-  whPost(url,{
-    content:whMention()?whMention()+' — needs you now':undefined,
-    allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
-    embeds:[{
-      title:'⚠️ '+fresh.length+' item'+(fresh.length!==1?'s':'')+' need'+(fresh.length===1?'s':'')+' action now',
-      description:lines+(fresh.length>10?'\n_+'+(fresh.length-10)+' more_':''),
-      color:WH_COL.red,
-      footer:{text:'A2AOA · alert · '+whTime()},
-      timestamp:new Date().toISOString()
-    }]
-  }).then(ok=>{if(ok)whMarkNotified(fresh.map(a=>a.key));});
-}
-
-// runs once per app load
-function whAutoRun(){
-  if(!whUrl('brief'))return;
-  if(whOn('brief')&&localStorage.getItem(WHBRIEF)!==isoOf(today())){
-    whSendBrief(false).then(ok=>{if(ok)setTimeout(whSendUrgent,1500);});
-  } else setTimeout(whSendUrgent,1200);
-}
-
-// A test that just says "connected" teaches you nothing — send the real thing.
-function whTest(kind){
-  const inp=document.getElementById('wh-in-'+kind);
-  const url=(inp&&inp.value.trim())||whUrl(kind);
-  if(!url){toast('No URL set for this webhook',true);return;}
+function whTest(){
+  const inp=document.getElementById('wh-in-sns');
+  const url=(inp&&inp.value.trim())||snsWhUrl();
+  if(!url){toast('No webhook URL set',true);return;}
   const bad=whBadMsg(url);
   if(bad){toast(bad.replace(/<[^>]+>/g,''),true);return;}
-  toast('Sending a real preview to Discord…','info');
-  if(kind==='brief'){
-    const b=whBuildBrief();
-    b.embeds[0].footer={text:'A2AOA · TEST of your daily brief · this is exactly what lands each morning'};
-    whPost(url,b,'Sent ✓ — that\'s your daily brief');
-  } else {
-    whPost(url,{
-      content:whMention()?whMention()+' — testing that mentions reach you here':undefined,
-      allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
-      embeds:[{title:'⚠️ Example alert',
-        description:'Alerts like this land here the moment something turns critical — an OA check going overdue, an S&S review window opening, an LTD about to end.'
-          +(whMention()?'\n\nThe @ above confirms mentions reach you in this channel.':'\n\n⚠️ No Discord user ID set, so alerts won\'t @ you — add it in Settings.'),
-        color:WH_COL.red,footer:{text:'A2AOA · TEST alert'}}]
-    },'Sent ✓ — that\'s an alert');
+  // use a real account in review if there is one, otherwise the soonest — so the test
+  // shows real dates rather than made-up ones
+  let list=SNS_ACCOUNTS.map(a=>({acc:a,c:calcSnsStatus(a)})).filter(x=>['review','locked'].includes(x.c.status));
+  if(!list.length){
+    const soon=SNS_ACCOUNTS.map(a=>({acc:a,c:calcSnsStatus(a)}))
+      .filter(x=>x.c.status!=='no-data'&&x.c.cutoff)
+      .sort((x,y)=>(x.c.daysToReview??999)-(y.c.daysToReview??999))[0];
+    if(!soon){toast('Set an account\'s dates first so the test can show real ones',true);return;}
+    list=[soon];
   }
+  if(IS_LOCAL){toast('Local copy — test pings are blocked so they can\'t hit your real channel',true);return;}
+  toast('Sending a real preview…','info');
+  whPost(url,snsReviewPayload(list,true),'Sent ✓ — that\'s the reminder you\'ll get');
 }
-
-// Webhook fields save AS YOU TYPE — a valid URL sitting unsaved in a box that
-// still tests fine is the classic way this silently never works.
-function whInput(kind,el){
-  const key=kind==='urgent'?'whUrgent':'whMain';
+function whInput(el){
   const val=String(el.value||'').trim();
-  const box=document.getElementById('wh-bad-'+kind);
+  const box=document.getElementById('wh-bad-sns');
   if(box)box.innerHTML=whBadMsg(val);
-  clearTimeout(window['_whT_'+kind]);
-  window['_whT_'+kind]=setTimeout(()=>{
-    if(val&&whBadMsg(val))return;            // never store something invalid
-    settings[key]=val;saveSettings();
-    const ok=document.getElementById('wh-ok-'+kind);
-    if(ok){ok.textContent=val?'Saved ✓':'';setTimeout(()=>{if(ok)ok.textContent='';},2000);}
+  clearTimeout(window._whT);
+  window._whT=setTimeout(()=>{
+    if(val&&whBadMsg(val))return;
+    settings.whSns=val;saveSettings();
+    const ok=document.getElementById('wh-ok-sns');
+    if(ok){ok.textContent=val?'Saved ✓':'Cleared — no reminders will send';setTimeout(()=>{if(ok)ok.textContent='';},2400);}
   },450);
 }
-function whSaveUser(v){
-  settings.discordUserId=String(v||'').trim().replace(/[<@!>]/g,'');
-  saveSettings();
-}
-function whToggle(kind,on){
-  if(kind==='brief')settings.nBrief=on?1:0;else settings.nUrgent=on?1:0;
-  saveSettings();renderSettings();
+function whSaveUser(v){settings.discordUserId=String(v||'').trim().replace(/[<@!>]/g,'');saveSettings();}
+function whToggle(on){settings.nSns=on?1:0;saveSettings();renderSettings();}
+function whSaveLead(v){
+  const n=parseInt(v);
+  if(n>=1&&n<=10){settings.snsReviewLead=n;saveSettings();renderSns();renderSettings();
+    toast('Review reminder now '+n+' day'+(n!==1?'s':'')+' before cutoff','ok');}
 }
 
 function renderSettings(){
@@ -5705,19 +5967,31 @@ function renderSettings(){
       value="${settings.leadTimes[a]||''}" onchange="setAccountLeadTime('${a}',this.value)">
     <span class="lt-unit">days</span>
   </div>`).join('');
-  // Discord
-  const wb=document.getElementById('wh-in-brief');if(wb&&document.activeElement!==wb)wb.value=settings.whMain||'';
-  const wu=document.getElementById('wh-in-urgent');if(wu&&document.activeElement!==wu)wu.value=settings.whUrgent||'';
+  // Discord — S&S only
+  const wb=document.getElementById('wh-in-sns');if(wb&&document.activeElement!==wb)wb.value=snsWhUrl();
   const wus=document.getElementById('wh-user');if(wus&&document.activeElement!==wus)wus.value=settings.discordUserId||'';
-  const tb=document.getElementById('wh-tg-brief');if(tb)tb.checked=settings.nBrief!==0;
-  const tu=document.getElementById('wh-tg-urgent');if(tu)tu.checked=settings.nUrgent!==0;
-  const wl=document.getElementById('wh-last');
-  if(wl){
-    const last=localStorage.getItem(WHBRIEF);
-    wl.textContent=!settings.whMain?'Add a webhook above first'
-      :last===isoOf(today())?'Today\'s brief already went out — this sends a fresh one'
-      :last?'Last sent '+fmt(pd(last))+' — sends automatically on your first open each day'
-      :'Never sent yet — it will go out automatically on your next first-open of the day';
+  const wld=document.getElementById('wh-lead');if(wld&&document.activeElement!==wld)wld.value=snsReviewLead();
+  const wh=document.getElementById('wh-hour');if(wh)wh.value=(settings.snsPingHour!=null?settings.snsPingHour:13);
+  const tb=document.getElementById('wh-tg-sns');if(tb)tb.checked=settings.nSns!==0;
+  const wau=document.getElementById('wh-appurl');if(wau&&document.activeElement!==wau)wau.value=settings.appUrl||'';
+  const wan=document.getElementById('wh-applink-note');
+  if(wan){
+    const auto=location.protocol.startsWith('http')?location.origin+location.pathname:'';
+    wan.innerHTML=settings.appUrl?'Using your own link.'
+      :auto?'Auto-detected: <b>'+escA(auto)+'</b> — tapping it in Discord opens this app.'
+      :'You\'re running this from a local file, so there\'s no link to tap. Host it (GitHub Pages) or paste the URL here.';
+  }
+  const wst=document.getElementById('wh-status');
+  if(wst){
+    const due=SNS_ACCOUNTS.filter(a=>['review','locked'].includes(calcSnsStatus(a).status));
+    const nextUp=[...SNS_ACCOUNTS].map(a=>({a,c:calcSnsStatus(a)}))
+      .filter(x=>x.c.inFlight&&x.c.daysToReview>0).sort((x,y)=>x.c.daysToReview-y.c.daysToReview)[0];
+    wst.innerHTML=IS_LOCAL?'<b>Local copy</b> — reminders are suppressed on localhost so test data can\'t reach your real channel. They work normally from the hosted version.'
+      :!snsWhUrl()?'<b>Off</b> — no webhook set, nothing will send.'
+      :settings.nSns===0?'<b>Paused</b> — turn the toggle on to resume reminders.'
+      :due.length?'<b>'+due.length+' account'+(due.length!==1?'s':'')+' need reviewing right now</b> — '+due.map(a=>escA(a)).join(', ')+'. You\'ll be pinged each time you open the app until they\'re ticked.'
+      :nextUp?'Nothing due. Next reminder: <b>'+escA(nextUp.a)+'</b> on '+fmt(nextUp.c.reviewStart)+' ('+nextUp.c.daysToReview+' days) from '+(settings.snsPingHour!=null?settings.snsPingHour:13)+':00.'
+      :'Nothing in flight to review yet.';
   }
   const ds=document.getElementById('set-data-stats');
   if(ds){
@@ -5725,7 +5999,9 @@ function renderSettings(){
     for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('a2a_'))bytes+=(localStorage.getItem(k)||'').length;}
     const bk=backupState();
     const bkTxt=bk.never?'never exported — do it now':bk.last?`last export ${bk.days===0?'today':bk.days+'d ago'}`:'';
-    ds.textContent=`${leads.length} leads · ${rebuys.length} rebuys · ${oaItems.length} OA items · ${notes.length} notes · ${(bytes/1024).toFixed(1)} KB stored${bkTxt?' · '+bkTxt:''}`;
+    ds.innerHTML=`${leads.length} leads · ${rebuys.length} rebuys · ${oaItems.length} OA items · ${notes.length} notes · ${(bytes/1024).toFixed(1)} KB stored${bkTxt?' · '+bkTxt:''}`
+      +`<div style="margin-top:5px">${atHome()?'✅ Running from your live app — this is the right place.'
+        :'⚠️ <b>Not your live app</b> — this data is separate from <a href="'+CANON_HOME+'" style="color:var(--blue)">'+CANON_HOME+'</a>'}</div>`;
   }
 }
 function setPdayMaster(on){
@@ -5830,6 +6106,31 @@ window.addEventListener('keydown',e=>{
 // ═══════════════════════════════════
 // INIT
 // ═══════════════════════════════════
+// Loud, unmissable warning when the app is opened somewhere other than its home —
+// this is exactly the situation that made a full set of data look like it had vanished.
+function homeBanner(){
+  if(atHome())return;
+  const local=!location.protocol.startsWith('http');
+  const dev=IS_LOCAL;
+  const hasData=leads.length+rebuys.length+oaItems.length+watchlist.length+inbox.length
+    +Object.keys(snsData||{}).length>0;
+  const el=document.createElement('div');
+  el.className='home-warn'+(dev?' dev':'');
+  el.innerHTML=`<div class="home-warn-ico">${dev?'🛠':'⚠️'}</div>
+    <div class="home-warn-tx">
+      <div class="home-warn-t">${dev?'Development copy'
+        :local?'You\'ve opened the file copy, not your live app'
+        :'This isn\'t your usual address'}</div>
+      <div class="home-warn-s">${dev?'Discord reminders are blocked here so test data can\'t reach your real channel.'
+        :`Your data is stored per web address, so anything saved here is <b>separate</b> from your live app${hasData?' — and what you\'re looking at now is a different set of data':' (which is why this looks empty)'}. Work in one place only.`}</div>
+    </div>
+    ${dev?'':`<div class="home-warn-acts">
+      ${hasData?'<button class="set-btn" onclick="exportData()">Export this data</button>':''}
+      <a class="set-btn primary" href="${CANON_HOME}">Open your live app →</a>
+    </div>`}`;
+  const main=document.querySelector('.main');
+  if(main)main.insertBefore(el,main.firstChild);
+}
 function updateDate(){
   const el=document.getElementById('hdrDate');
   if(el)el.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -5859,7 +6160,8 @@ function toggleSidebar(){
   renderSns();
   renderOA();
   if(_pdayAutoOffMsg)setTimeout(()=>toast(_pdayAutoOffMsg,'info'),800);
-  setTimeout(whAutoRun,1400);   // let the first render settle before anything posts
+  homeBanner();
+  setTimeout(snsWhRun,1400);   // let the first render settle before anything posts
   // Restore last tab, sourcing filter/view, and scroll position
   if(uiState.tab&&uiState.tab!=='overview')go(uiState.tab,true);
   document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===(_srcFilter||'all')));
