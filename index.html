@@ -22,9 +22,9 @@
 
   /* text */
   --text:#f6f7fa;
-  --text2:#b8bdca;
+  --text2:#c3c9d6;
   --text3:#d8dce5;
-  --muted:#878e9f;
+  --muted:#9aa4ba;
 
   /* accents — thick, solid, saturated */
   --green:#1fe07f;   --green-d:#10b562;
@@ -138,7 +138,7 @@ header{
 .notif-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--cv,var(--muted));box-shadow:0 0 7px color-mix(in srgb,var(--cv,transparent) 60%,transparent);}
 .notif-tx{flex:1;min-width:0;}
 .notif-it-title{font-size:12.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px;}
-.notif-it-chip{font-size:8.5px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:4px;text-transform:uppercase;flex-shrink:0;
+.notif-it-chip{font-size:9px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:4px;text-transform:uppercase;flex-shrink:0;
   background:var(--cv,var(--card2));color:#0a0b0d;}
 .notif-it-sub{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.45;}
 .notif-empty{text-align:center;padding:34px 18px;color:var(--muted);font-size:12.5px;}
@@ -222,7 +222,7 @@ header{
 .ac-stat-tx{display:flex;flex-direction:column;min-width:0;}
 .ac-stat-num{font-size:21px;font-weight:800;line-height:1.05;color:var(--text);font-variant-numeric:tabular-nums;}
 .ac-stat-num.dim{color:var(--muted);}
-.ac-stat-lbl{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--cv);margin-top:2px;white-space:nowrap;}
+.ac-stat-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--cv);margin-top:2px;white-space:nowrap;}
 .ac-stat.zero .ac-stat-lbl{color:var(--muted);}
 
 .ac-grid{display:grid;grid-template-columns:1fr 318px;gap:14px;align-items:start;}
@@ -265,7 +265,7 @@ header{
 .aq-t:hover{background:var(--card2);color:var(--text);border-color:var(--cv);}
 .aq-t.go{border-color:transparent;color:#081018;background:var(--cv);font-weight:800;}
 .aq-t.go:hover{filter:brightness(1.1);color:#081018;}
-.aq-t.danger{padding:7px 9px;color:var(--muted);}
+.aq-t.danger{padding:7px 9px;color:var(--text2);}
 .aq-t.danger:hover{color:var(--red);border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
 .aq-row.aq-gone{opacity:0;transform:translateX(14px);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0;
   transition:all .15s ease-in;}
@@ -321,7 +321,7 @@ header{
 .sched-3{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:9px 0 5px;}
 .sched-col{padding:6px 4px;border-right:1px solid var(--border);}
 .sched-col:last-child{border-right:none;}
-.sched-col-lbl{font-size:8.5px;font-weight:800;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.sched-col-lbl{font-size:9.5px;font-weight:800;letter-spacing:.8px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
 .sched-col-n{font-size:24px;font-weight:800;line-height:1;color:var(--text);font-variant-numeric:tabular-nums;}
 .sched-col.over .sched-col-n{color:var(--red);}
 .sched-col.today .sched-col-n{color:var(--amber);}
@@ -336,7 +336,7 @@ header{
 .opp-badge{width:36px;height:36px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;
   background:color-mix(in srgb,var(--cv) 15%,transparent);border:1px solid color-mix(in srgb,var(--cv) 30%,transparent);}
 .opp-badge-n{font-size:15px;font-weight:800;color:var(--cv);line-height:1;}
-.opp-badge-u{font-size:7.5px;font-weight:700;color:var(--cv);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.opp-badge-u{font-size:9px;font-weight:700;color:var(--cv);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
 .opp-tx{flex:1;min-width:0;}
 .opp-asin{font-family:var(--mono);font-size:12.5px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .opp-sub{font-size:10.5px;color:var(--text2);margin-top:1px;}
@@ -344,7 +344,7 @@ header{
 .glance-row:first-child{border-top:none;}
 .glance-lbl{font-size:12px;color:var(--text2);}
 .glance-n{font-size:15px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;}
-.side-empty{font-size:11.5px;color:var(--muted);text-align:center;padding:14px 6px;}
+.side-empty{font-size:11.5px;color:var(--text2);text-align:center;padding:14px 6px;}
 
 /* Today pulse rows */
 .pulse-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid var(--border);}
@@ -358,7 +358,7 @@ header{
 .snsmini-row:first-child{border-top:none;}
 .snsmini-row:hover{background:var(--card);}
 .snsmini-acc{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;width:44px;flex-shrink:0;}
-.snsmini-chip{font-size:8.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:5px;flex-shrink:0;
+.snsmini-chip{font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 8px;border-radius:5px;flex-shrink:0;
   background:var(--cv,var(--card2));color:#0a0b0d;}
 .snsmini-sub{flex:1;font-size:10.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
 
@@ -519,7 +519,7 @@ header{
   display:flex;flex-direction:column;align-items:center;gap:3px;min-height:66px;justify-content:center;text-align:center;}
 .acc-h{font-size:11px;font-weight:800;color:var(--text2);letter-spacing:.4px;}
 .acc-s{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.2px;}
-.acc-d{font-size:8.5px;font-weight:500;color:var(--muted);margin-top:2px;}
+.acc-d{font-size:9.5px;font-weight:500;color:var(--muted);margin-top:2px;}
 .acc.ready{background:color-mix(in srgb,var(--green) 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 50%,transparent);cursor:pointer;
   transition:background var(--tr),transform var(--tr);}
 .acc.ready:hover{background:color-mix(in srgb,var(--green) 25%,transparent);transform:translateY(-1px);}
@@ -528,7 +528,7 @@ header{
 .acc.snoozed{background:color-mix(in srgb,var(--purple) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--purple) 40%,transparent);}
 .acc.snoozed .acc-h,.acc.snoozed .acc-s{color:#d4bcff;}
 .acc.snoozed .acc-d{color:color-mix(in srgb,#d4bcff 65%,transparent);}
-.acc-deliv{margin-top:3px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;padding:2px 6px;border-radius:5px;
+.acc-deliv{margin-top:3px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;padding:2px 6px;border-radius:5px;
   border:1px solid var(--border2);background:var(--bg);color:var(--muted);cursor:pointer;transition:color var(--tr),border-color var(--tr);}
 .acc-deliv:hover{color:var(--text2);border-color:var(--text2);}
 .acc-deliv.on{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--teal);border-color:color-mix(in srgb,var(--teal) 45%,transparent);}
@@ -872,7 +872,7 @@ header{
 .sns-date{font-size:12.5px;color:var(--text3);}
 .sns-days{font-size:12px;font-weight:600;}
 .sns-next{font-size:11px;color:var(--text2);margin-top:5px;line-height:1.45;max-width:340px;}
-.sns-sub{font-size:10.5px;color:var(--muted);margin-top:3px;}
+.sns-sub{font-size:10.5px;color:var(--text2);margin-top:3px;}
 .sns-dim{font-size:12px;color:var(--muted);font-style:italic;}
 .sns-notes{font-size:11px;color:var(--amber);margin-top:5px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:default;}
 .sns-row-act td{background:color-mix(in srgb,var(--red) 6%,transparent);}
@@ -1050,7 +1050,7 @@ tr.sns-row-act td:first-child{box-shadow:inset 3px 0 0 var(--red);}
 .search-drop.open{display:block;animation:fu .12s;}
 .sr-row{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;transition:background var(--tr);}
 .sr-row:hover{background:var(--card);}
-.sr-chip{font-size:8.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 7px;border-radius:5px;
+.sr-chip{font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 7px;border-radius:5px;
   background:var(--cv,var(--card2));color:#0a0b0d;flex-shrink:0;min-width:54px;text-align:center;}
 .sr-asin{font-family:var(--mono);font-size:12.5px;font-weight:600;color:#fff;flex-shrink:0;}
 .sr-sub{flex:1;font-size:10.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
@@ -1102,12 +1102,12 @@ th.sortable:hover{color:var(--text)!important;}
 .gap-good{color:var(--green);font-weight:800;}
 .gap-close{color:var(--amber);font-weight:700;}
 .gap-far{color:var(--red);font-weight:700;}
-.oa-note-cell{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--muted);font-style:italic;}
+.oa-note-cell{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--text2);font-style:italic;}
 /* S&S insight strip + badges */
 .sns-insight{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);
   border-left:3px solid var(--teal);border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:12px;color:var(--text2);}
 .sns-insight b{color:#fff;}
-.sns-badge{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:4px;margin-left:6px;text-transform:uppercase;white-space:nowrap;}
+.sns-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:4px;margin-left:6px;text-transform:uppercase;white-space:nowrap;}
 .sns-badge.fast{background:var(--green);color:#06210f;}
 .sns-badge.slow{background:var(--blue);color:#fff;}
 .sns-insight .sns-badge{margin-left:0;margin-right:2px;}
@@ -1185,7 +1185,7 @@ th.sortable:hover{color:var(--text)!important;}
 .setup-num{width:19px;height:19px;border-radius:50%;background:var(--cv,var(--muted));color:#06070a;
   font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .setup-step b{display:block;font-size:12.5px;color:#fff;font-weight:700;}
-.setup-step span:not(.setup-num){display:block;font-size:10.5px;color:var(--text2);margin-top:2px;line-height:1.45;}
+.setup-step span:not(.setup-num){display:block;font-size:11px;color:var(--text2);margin-top:2px;line-height:1.45;}
 .setup-accs{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;}
 .setup-acc{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);
   border:1px solid var(--border2);border-radius:10px;padding:11px 13px;cursor:pointer;text-align:left;
@@ -1208,13 +1208,46 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 .sns-act-btn.set-btn-alt:hover{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,var(--card2));}
 
 .sns-table th.col-grp{color:var(--text2);}
-.col-sub{display:block;font-size:8.5px;font-weight:600;letter-spacing:.3px;color:var(--muted);text-transform:none;margin-top:2px;}
+.col-sub{display:block;font-size:9.5px;font-weight:600;letter-spacing:.3px;color:var(--muted);text-transform:none;margin-top:2px;}
 
 .rv{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:5px;}
 .rv.ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);}
 .rv.wait{background:var(--card2);color:var(--muted);}
 .rv.now{background:var(--purple);color:#fff;}
 .rv.missed{background:var(--red);color:#fff;}
+
+.sc-cell{min-width:390px;padding-top:11px!important;padding-bottom:11px!important;}
+.sc-head{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.sc-tag{font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:5px;}
+.sc-tag.live{background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal);}
+.sc-tag.open{background:var(--card2);color:var(--text2);}
+.sc-track{display:flex;align-items:flex-start;}
+.sc-node{display:flex;flex-direction:column;align-items:center;text-align:center;width:78px;flex:0 0 auto;position:relative;}
+.sc-node.wide{width:132px;}
+.sc-dot{width:9px;height:9px;border-radius:50%;background:var(--card2);box-shadow:inset 0 0 0 1.5px var(--border2);margin-bottom:6px;}
+.sc-node.done .sc-dot{background:var(--cv);box-shadow:none;opacity:.5;}
+.sc-node.now .sc-dot{background:var(--cv);box-shadow:0 0 0 3px color-mix(in srgb,var(--cv) 28%,transparent),0 0 10px var(--cv);width:11px;height:11px;margin-bottom:5px;}
+.sc-lbl{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--text2);}
+.sc-node.now .sc-lbl{color:var(--cv);}
+.sc-node.done .sc-lbl{opacity:.6;}
+.sc-date{font-size:12.5px;font-weight:700;color:#fff;margin-top:2px;white-space:nowrap;}
+.sc-node.done .sc-date{color:var(--text2);}
+.sc-rel{font-size:10px;color:var(--text2);margin-top:1px;white-space:nowrap;}
+.sc-node.done .sc-rel{color:var(--muted);}
+.sc-line{flex:1;height:2px;background:var(--border2);border-radius:2px;margin-top:4px;min-width:8px;}
+.sc-next{font-size:10.5px;color:var(--text2);margin-top:9px;padding-top:8px;border-top:1px dashed var(--border);}
+.sc-next b{color:#fff;}
+@media(max-width:1200px){.sc-cell{min-width:330px;}.sc-node{width:66px;}.sc-date{font-size:11.5px;}}
+
+.off-inp{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.off-inp .fi{width:64px;text-align:center;}
+.off-inp span{font-size:11.5px;color:var(--text2);white-space:nowrap;}
+
+.wh-warn{display:flex;align-items:center;justify-content:space-between;gap:14px;background:color-mix(in srgb,var(--amber) 10%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--amber) 38%,transparent);border-left:4px solid var(--amber);
+  border-radius:11px;padding:11px 15px;margin-bottom:12px;}
+.wh-warn-tx{font-size:12px;color:var(--text2);line-height:1.5;}
+.wh-warn-tx b{color:#fff;}
 
 /* small helper button inside modals */
 .sr-mini{display:inline-block;background:var(--card2);border:1px solid var(--border2);color:var(--text2);
@@ -1794,11 +1827,12 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <div>
           <div class="purpose-t">Set three dates once — they roll forward every month</div>
-        <div class="purpose-s"><b>Add by</b> → last day to put items in. <b>Review</b> → worked out for you, a set number of days before the cutoff; this is when Discord pings you and it keeps pinging daily until you hit <b>✓ Checked</b>. <b>Cutoff</b> → the supplier locks the order, nothing can be changed after it. <b>Delivery</b> → when it lands.</div>
+        <div class="purpose-s" id="sns-purpose-s">Enter just <b>two</b> dates per account — last add day and delivery.</div>
         </div>
       </div>
 
       <div id="sns-setup"></div>
+      <div id="sns-whwarn"></div>
       <div id="sns-live-wrap">
       <div id="sns-hero"></div>
       <div class="sns-toolbar">
@@ -1813,8 +1847,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
             <tr>
               <th class="sortable" onclick="setSnsSort('acc')">Account<span class="th-arr" id="arr-sns-acc"></span></th>
 
-              <th class="col-grp">This order<span class="col-sub">already placed — on its way</span></th>
-              <th class="col-grp">Next order<span class="col-sub">still open to add to</span></th>
+              <th class="col-grp">Cycle<span class="col-sub">every date, however far out</span></th>
               <th class="sortable" onclick="setSnsSort('status')">Status<span class="th-arr" id="arr-sns-status"></span></th>
               <th></th>
             </tr>
@@ -2007,11 +2040,21 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 
             <div class="set-row">
               <div class="set-row-tx">
-                <div class="set-row-t">Remind me this many days before the supplier cutoff</div>
-                <div class="set-row-s">Your review date is worked out from this. 2 days is the default — enough time to actually go through the order.</div>
+                <div class="set-row-t">Supplier locks the order</div>
+                <div class="set-row-s">Days after each account's last add day. Last add 10th + 2 = locks the 12th.</div>
               </div>
-              <input class="fi" id="wh-lead" type="number" min="1" max="10" style="max-width:80px;text-align:center" onchange="whSaveLead(this.value)">
+              <div class="off-inp"><input class="fi" id="wh-cutoff-off" type="number" min="0" max="14" onchange="whSaveOffset('snsCutoffOffset',this.value)"><span>days after</span></div>
             </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Remind me for</div>
+                <div class="set-row-s">Starting on the lock day. 2 days means you'd be pinged the 12th and 13th — Amazon still lets you skip items until it dispatches.</div>
+              </div>
+              <div class="off-inp"><input class="fi" id="wh-review-days" type="number" min="1" max="7" onchange="whSaveOffset('snsReviewDays',this.value)"><span>days</span></div>
+            </div>
+
+            <div class="set-note" id="wh-example" style="margin:2px 0 0"></div>
 
             <div class="set-row">
               <div class="set-row-tx">
@@ -2019,7 +2062,20 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
                 <div class="set-row-s">Reminders hold until this time. If the app is already open they fire on the hour; otherwise on your first open after it.</div>
               </div>
               <select class="fs" id="wh-hour" style="max-width:110px" onchange="settings.snsPingHour=parseInt(this.value);saveSettings();renderSettings();toast('Reminders will send from '+this.value+':00','ok')">
-                ${[7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(h=>`<option value="${h}">${h}:00</option>`).join('')}
+                <option value="7">7:00</option>
+                <option value="8">8:00</option>
+                <option value="9">9:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
               </select>
             </div>
 
@@ -2383,16 +2439,11 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
     <input type="hidden" id="sns-edit-acc">
     <input type="hidden" id="sns-edit-mode">
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px" id="sns-edit-hint">Editing the current cycle in place — nothing is archived.</p>
-    <div class="g3">
+    <div class="g2">
       <div class="fg">
-        <label class="fl">Add By *</label>
+        <label class="fl">Last day to add *</label>
         <input class="fi dm" id="sns-new-edit" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="snsPreview()">
         <div class="ferr" id="e-sns-edit">Required</div>
-      </div>
-      <div class="fg">
-        <label class="fl">Supplier Cutoff *</label>
-        <input class="fi dm" id="sns-new-cutoff" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="snsPreview()">
-        <div class="ferr" id="e-sns-cut">Required</div>
       </div>
       <div class="fg">
         <label class="fl">Delivery *</label>
@@ -2712,7 +2763,10 @@ const CANON_HOME='https://jackbithellamazon.github.io/A2AOA_Sourcing_Tracker/';
 const hereUrl=()=>location.protocol.startsWith('http')?(location.origin+location.pathname).replace(/index\.html$/,''):'';
 const atHome=()=>hereUrl()===CANON_HOME;
 const DEFAULT_DISCORD_USER='1255883029637763154';
-const DEFAULT_SNS_WEBHOOK='https://discord.com/api/webhooks/1530703716519379014/3Ddq7AjRNEd7-YjLHudI9pgjSlDB1NBJt0n4nAJdfVJfDttUKvUo07lqcj4BpmHIX-zS';
+// Deliberately empty. This file is public on GitHub Pages, and a webhook URL sitting in
+// the source is a webhook anyone can post to. It's entered once in Settings and lives
+// only in this browser's storage (and your exported backups).
+const DEFAULT_SNS_WEBHOOK='';
 const SNSPINGK='a2a_sns_ping_v5';   // {acc+cycle: 'YYYY-MM-DD'} — one ping per account per day
 // A copy running on a dev server must never post to the real channel — test data would
 // land in your Important channel looking like genuine reminders.
@@ -2720,7 +2774,7 @@ const IS_LOCAL=/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/i.test(location.ho
 
 const SETK='a2a_settings_v5';
 let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{},
-  discordUserId:DEFAULT_DISCORD_USER,nSns:1,snsReviewLead:2,snsPingHour:13,appUrl:''},ld(SETK)||{});
+  discordUserId:DEFAULT_DISCORD_USER,nSns:1,snsCutoffOffset:2,snsReviewDays:2,snsPingHour:13,appUrl:''},ld(SETK)||{});
 if(!settings.leadTimes)settings.leadTimes={};
 // ── Prime Day phases: editable dates + on/off, managed in Settings ──
 const PDAY_DEF={
@@ -4570,11 +4624,6 @@ const openM=id=>{
   },70);
 };
 const closeM=id=>document.getElementById(id).classList.remove('open');
-window.addEventListener('click',e=>{
-  ['leadModal','editModal','sbModal','rbModal','promoteModal','wEditModal','snsEditModal','dupModal','day8Modal','exportModal'].forEach(id=>{
-    if(e.target===document.getElementById(id))closeM(id);
-  });
-});
 
 // ═══════════════════════════════════
 // TOAST
@@ -5304,24 +5353,26 @@ function nextDayOfMonth(day,now){
   for(let m=0;m<13;m++){const dt=monthDate(now.getFullYear(),now.getMonth()+m,day);if(diff(now,dt)>=0)return dt;}
   return monthDate(now.getFullYear(),now.getMonth(),day);
 }
-// Days before the SUPPLIER CUTOFF that the review reminder fires. The review has to
-// land while the order can still be amended — once the supplier dispatches, it's locked.
-const snsReviewLead=()=>{const n=parseInt(settings.snsReviewLead);return(n>=1&&n<=10)?n:2;};
+// Jack's actual rule: the supplier locks the order a couple of days AFTER the last
+// add day, and he checks it over the days around that lock. Both offsets are settings,
+// so only two real dates ever need typing — last add and delivery.
+const snsCutoffOffset=()=>{const n=parseInt(settings.snsCutoffOffset);return(n>=0&&n<=14)?n:2;};
+const snsReviewDays=()=>{const n=parseInt(settings.snsReviewDays);return(n>=1&&n<=7)?n:2;};
+const snsReviewLead=()=>snsCutoffOffset();   // kept for older call sites
 
 function calcSnsStatus(acc){
   const d=snsData[acc];
   if(!d||!d.editDay)return{status:'no-data'};
   const now=today(), lda=pd(d.editDay), deliv=pd(d.deliveryDay);
-  // Supplier cutoff: the real point of no return. Older data only had add-by + delivery,
-  // so fall back to the midpoint between them rather than inventing a date.
-  const cutoff=d.cutoffDay?pd(d.cutoffDay):addD(lda,Math.max(1,Math.round(diff(lda,deliv)/2)));
+  // Supplier cutoff = last add day + the configured offset (default 2 days).
+  const cutoff=addD(lda,snsCutoffOffset());
   const nextLDA=nextDayOfMonth(lda.getDate(),now);
   const daysToLDA=diff(now,nextLDA);
   const ldaPassed=diff(now,lda)<0;                 // stored add-cutoff is before today
   const inFlight=ldaPassed && diff(now,deliv)>=0;   // order placed, not yet delivered
-  // Review opens N days before the cutoff and stays open right up to it — miss it and
-  // the order ships as-is.
-  const reviewStart=addD(cutoff,-snsReviewLead()), reviewEnd=cutoff;
+  // Review runs from the cutoff for the configured number of days — Amazon still lets
+  // you skip items until it actually dispatches, which is the window he works in.
+  const reviewStart=cutoff, reviewEnd=addD(cutoff,snsReviewDays()-1);
   const inReview=inFlight && diff(now,reviewStart)<=0 && diff(now,reviewEnd)>=0;
   const daysToCutoff=diff(now,cutoff), daysToReview=diff(now,reviewStart);
   const daysToDelivery=diff(now,deliv);
@@ -5334,7 +5385,7 @@ function calcSnsStatus(acc){
   const reviewHandled=h.review===reviewCycleKey;
   let status;
   if(inReview && !reviewHandled)          status='review';
-  else if(inFlight && !reviewHandled && daysToCutoff<0 && daysToDelivery>=0) status='locked'; // cutoff gone, never reviewed
+  else if(inFlight && !reviewHandled && diff(now,reviewEnd)<0 && daysToDelivery>=0) status='locked'; // window gone, never reviewed
   else if(daysToLDA===0 && !addHandled)   status='lda-today';
   else if(daysToLDA<=3 && !addHandled)    status='lda-soon';
   else if(reviewHandled && inFlight && daysToDelivery<=4) status='reviewed';  // calm confirmation
@@ -5342,15 +5393,18 @@ function calcSnsStatus(acc){
   else if(inFlight)                       status='in-flight';
   else if(addHandled && daysToLDA<=7)     status='added';     // calm confirmation
   else                                    status='idle';
-  // If you add items before the next cutoff, when does that order arrive?
-  let addDeliv=null,daysToAddDeliv=null;
+  // Every date of the NEXT cycle is derivable from the monthly pattern, so the board can
+  // always show a full timeline — no "unknown", however far out it is.
+  let addDeliv=null,daysToAddDeliv=null,nextCutoff=null,nextReview=null;
   if(deliv){
     const dayD=deliv.getDate();
     addDeliv=monthDate(nextLDA.getFullYear(),nextLDA.getMonth()+(dayD>=nextLDA.getDate()?0:1),dayD);
     daysToAddDeliv=diff(now,addDeliv);
   }
+  nextCutoff=addD(nextLDA,snsCutoffOffset());
+  nextReview=nextCutoff;
   return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,addDeliv,daysToAddDeliv,
-    cutoff,daysToCutoff,daysToReview,
+    cutoff,daysToCutoff,daysToReview,nextCutoff,nextReview,
     addHandled,reviewHandled,addCycleKey,reviewCycleKey,
     editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
@@ -5392,11 +5446,9 @@ function advanceSnsCycles(){
   Object.keys(snsData).forEach(acc=>{
     const d=snsData[acc];if(!d||!d.editDay||!d.deliveryDay)return;
     const ed=pd(d.editDay),dl=pd(d.deliveryDay);if(!ed||!dl)return;
-    const co=d.cutoffDay?pd(d.cutoffDay):null;
-    const cur=snsCurrentCycle(ed.getDate(),dl.getDate(),today(),co?co.getDate():null);
-    if(cur&&(cur.editDay!==d.editDay||cur.deliveryDay!==d.deliveryDay||(cur.cutoffDay&&cur.cutoffDay!==d.cutoffDay))){
-      snsData[acc]={...d,editDay:cur.editDay,deliveryDay:cur.deliveryDay,
-        ...(cur.cutoffDay?{cutoffDay:cur.cutoffDay}:{})};changed=true;
+    const cur=snsCurrentCycle(ed.getDate(),dl.getDate(),today());
+    if(cur&&(cur.editDay!==d.editDay||cur.deliveryDay!==d.deliveryDay)){
+      snsData[acc]={...d,editDay:cur.editDay,deliveryDay:cur.deliveryDay};changed=true;
     }
   });
   if(changed)sv2(SNSK,snsData);
@@ -5525,22 +5577,50 @@ function renderSns(){
     const badge=(acc===fastAcc&&fastAcc!==slowAcc?'<span class="sns-badge fast">soonest</span>':'')
       +(acc===slowAcc&&fastAcc!==slowAcc?'<span class="sns-badge slow">longest</span>':'');
     // THIS order = the one already placed and heading to you.
-    let thisCell;
-    if(c.status==='no-data')thisCell='—';
-    else if(!c.inFlight)thisCell=`<span class="sns-dim">nothing placed</span>`;
+    // Full cycle timeline: the in-flight order if there is one, otherwise the next one,
+    // with the following cycle summarised underneath. Every date visible, always.
+    let cycleCell;
+    if(c.status==='no-data')cycleCell='<span class="sns-dim">no dates set</span>';
     else{
-      const rev=c.reviewHandled?`<span class="rv ok">✓ reviewed</span>`
-        :c.daysToReview>0?`<span class="rv wait">review ${fmt(c.reviewStart)}</span>`
-        :c.daysToCutoff>=0?`<span class="rv now">review now</span>`
-        :`<span class="rv missed">not reviewed</span>`;
-      thisCell=`<span class="sns-date" style="color:var(--teal)">lands ${fmt(c.deliv)}</span>
-        <div class="sns-sub">${c.daysToDelivery===0?'today':c.daysToDelivery>0?'in '+c.daysToDelivery+'d':'due'} · ${c.daysToCutoff<0?'edits closed':'edit until '+fmt(c.cutoff)}</div>
-        <div style="margin-top:4px">${rev}</div>`;
+      const live=c.inFlight;
+      const dAdd  = live?c.editD:c.nextLDA;
+      const dRev  = live?c.reviewStart:c.nextReview;
+      const dCut  = live?c.cutoff:c.nextCutoff;
+      const dDel  = live?c.deliv:c.addDeliv;
+      const dd=x=>x?diff(today(),x):null;
+      const node=(lbl,dt,cvv,state)=>{
+        const n=dd(dt);
+        const sub=n===null?'—':n===0?'today':n>0?'in '+n+'d':Math.abs(n)+'d ago';
+        return `<div class="sc-node ${cvv} ${state}">
+          <div class="sc-dot"></div>
+          <div class="sc-lbl">${lbl}</div>
+          <div class="sc-date">${dt?fmt(dt):'—'}</div>
+          <div class="sc-rel">${sub}</div></div>`;
+      };
+      const st=(dt,isRev)=>{
+        if(!dt)return'';
+        const n=dd(dt);
+        if(isRev&&c.reviewHandled&&live)return'done';
+        if(n<0)return'done';
+        if(n===0)return'now';
+        return'';
+      };
+      const revState=live?(c.reviewHandled?'done':(c.daysToReview<=0&&c.daysToCutoff>=0?'now':st(dRev,1))):st(dRev,1);
+      const revEndD=dRev?addD(dRev,snsReviewDays()-1):null;
+      const revRange=dRev?(snsReviewDays()>1?fmt(dRev)+' – '+fmt(revEndD):fmt(dRev)):'—';
+      cycleCell=`<div class="sc-head">${live?'<span class="sc-tag live">Order placed — in flight</span>':'<span class="sc-tag open">Open to add to</span>'}${badge}</div>
+        <div class="sc-track">
+          ${node('Add by',dAdd,'cv-blue',st(dAdd))}<div class="sc-line"></div>
+          <div class="sc-node wide cv-purple ${revState}">
+            <div class="sc-dot"></div>
+            <div class="sc-lbl">Locks &amp; review</div>
+            <div class="sc-date">${revRange}</div>
+            <div class="sc-rel">${dRev?(dd(dRev)===0?'today':dd(dRev)>0?'in '+dd(dRev)+'d':(revEndD&&dd(revEndD)>=0?'open now':Math.abs(dd(dRev))+'d ago')):'—'}</div>
+          </div><div class="sc-line"></div>
+          ${node('Lands',dDel,'cv-teal',st(dDel))}
+        </div>
+        ${live?`<div class="sc-next">Then: add by <b>${fmt(c.nextLDA)}</b> (${c.daysToLDA}d) → lands ${c.addDeliv?fmt(c.addDeliv):'—'}</div>`:''}`;
     }
-    // NEXT order = the cycle that's already open for adding to.
-    const nextCell = c.status==='no-data' ? '—'
-      : `<span class="sns-date">add by ${fmt(c.nextLDA)}</span>
-         <div class="sns-sub">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}${c.addDeliv?' · lands '+fmt(c.addDeliv):''}${badge}</div>`;
 
     const notesTxt=(snsData[acc]&&snsData[acc].notes)?snsData[acc].notes:'';
     const notesHtml=`<input class="sns-note-in" value="${escA(notesTxt)}" placeholder="+ add note" maxlength="120"
@@ -5548,8 +5628,7 @@ function renderSns(){
 
     return`<tr class="${rowCls}">
       <td><span class="sns-acc">${acc}</span></td>
-      <td>${thisCell}</td>
-      <td>${nextCell}</td>
+      <td class="sc-cell">${cycleCell}</td>
       <td>${statusHtml}<div class="sns-next">${next}</div>${notesHtml}</td>
       <td><div class="sns-act-cell">${actionHtml}</div></td>
     </tr>`;
@@ -5582,12 +5661,12 @@ function renderSns(){
     setupEl.innerHTML=!allUnset?'':`<div class="setup-panel">
       <div class="setup-hd">
         <div class="setup-t">Set your dates once — then it runs itself</div>
-        <div class="setup-s">Each account repeats on the same days every month, so you only ever do this once. Add the three dates below and the app works out the rest — including when to remind you.</div>
+        <div class="setup-s">Each account repeats on the same days every month, so you only ever do this once. You only enter <b>two</b> dates — last add day and delivery — and the app works out the lock date and your review reminders from your Settings.</div>
       </div>
       <div class="setup-steps">
         <div class="setup-step cv-blue"><span class="setup-num">1</span><div><b>Add by</b><span>Last day you can put items in</span></div></div>
-        <div class="setup-step cv-purple"><span class="setup-num">2</span><div><b>Review</b><span>Worked out for you — ${snsReviewLead()} days before cutoff. Discord pings you</span></div></div>
-        <div class="setup-step cv-amber"><span class="setup-num">3</span><div><b>Cutoff</b><span>Supplier locks it — no changes after this</span></div></div>
+        <div class="setup-step cv-amber"><span class="setup-num">2</span><div><b>Locks</b><span>${snsCutoffOffset()} days later — supplier takes the order</span></div></div>
+        <div class="setup-step cv-purple"><span class="setup-num">3</span><div><b>Review</b><span>Discord pings you for ${snsReviewDays()} days from then</span></div></div>
         <div class="setup-step cv-teal"><span class="setup-num">4</span><div><b>Delivery</b><span>When it lands</span></div></div>
       </div>
       <div class="setup-accs">
@@ -5596,6 +5675,19 @@ function renderSns(){
       </div>
       <div class="setup-foot">Wrong accounts listed? <button class="lnk" onclick="openSnsAccounts()">Manage accounts</button></div>
     </div>`;
+  }
+
+  const psEl=document.getElementById('sns-purpose-s');
+  if(psEl)psEl.innerHTML=`Enter just <b>two</b> dates per account — <b>last add day</b> and <b>delivery</b>. `
+    +`The supplier locks the order <b>${snsCutoffOffset()} day${snsCutoffOffset()!==1?'s':''}</b> after the add day, and Discord reminds you `
+    +`${snsReviewDays()>1?'for <b>'+snsReviewDays()+' days</b> from then':'on that day'} until you hit <b>✓ Checked</b>. Both offsets live in Settings.`;
+
+  // Reminders are the whole point of this page — say so if they aren't wired up
+  const whWarnEl=document.getElementById('sns-whwarn');
+  if(whWarnEl){
+    whWarnEl.innerHTML=(snsWhUrl()||allUnset)?'':`<div class="wh-warn">
+      <div class="wh-warn-tx"><b>Discord reminders aren't set up.</b> Without them this page only helps on the days you remember to open it.</div>
+      <button class="set-btn primary" onclick="go('settings')">Set up →</button></div>`;
   }
 
   // ── Hero: the single thing that matters right now ──
@@ -5697,14 +5789,13 @@ function openSnsEdit(acc, isNextCycle){
     :'Editing the current cycle in place — nothing is archived.';
   const d=snsData[acc]||{};
   if(isNextCycle){
-    sv('sns-new-edit','');sv('sns-new-cutoff','');sv('sns-new-delivery','');sv('sns-new-notes','');
+    sv('sns-new-edit','');sv('sns-new-delivery','');sv('sns-new-notes','');
   } else {
     sv('sns-new-edit', d.editDay ? isoToDM(d.editDay) : '');
-    sv('sns-new-cutoff', d.cutoffDay ? isoToDM(d.cutoffDay) : '');
-    sv('sns-new-delivery', d.deliveryDay ? isoToDM(d.deliveryDay) : '');
+      sv('sns-new-delivery', d.deliveryDay ? isoToDM(d.deliveryDay) : '');
     sv('sns-new-notes', d.notes||'');
   }
-  se('e-sns-edit',0);se('e-sns-cut',0);se('e-sns-del',0);
+  se('e-sns-edit',0);se('e-sns-del',0);
   snsPreview();
   openM('snsEditModal');
 }
@@ -5712,34 +5803,30 @@ function openSnsEdit(acc, isNextCycle){
 // Live 4-stage preview so the timeline is obvious while typing the dates
 function snsPreview(){
   const box=document.getElementById('sns-preview');if(!box)return;
-  const a=dmToISO(gv('sns-new-edit'),'future'),c=dmToISO(gv('sns-new-cutoff'),'future'),d=dmToISO(gv('sns-new-delivery'),'future');
-  if(!a||!c||!d){box.innerHTML='<div class="sns-tl-empty">Enter all three dates to see the timeline. The review reminder is worked out for you — '+snsReviewLead()+' days before the supplier cutoff.</div>';return;}
-  const rev=addD(pd(c),-snsReviewLead());
-  const bad=diff(pd(a),pd(c))<0||diff(pd(c),pd(d))<0;
+  const a=dmToISO(gv('sns-new-edit'),'future'),d=dmToISO(gv('sns-new-delivery'),'future');
+  if(!a||!d){box.innerHTML='<div class="sns-tl-empty">Enter both dates. The supplier cutoff and your review days are worked out from the last add day — set the offsets in Settings.</div>';return;}
+  const cut=addD(pd(a),snsCutoffOffset()), revEnd=addD(cut,snsReviewDays()-1);
+  const bad=diff(pd(a),pd(d))<0;
   const node=(lbl,dt,cv,tag)=>`<div class="tl-node ${tag?'tl-hl':''} ${cv}"><div class="tl-dot"></div><div class="tl-lbl">${lbl}</div><div class="tl-date">${fmt(dt)}</div></div>`;
   box.innerHTML=`<div class="tl">
       ${node('Add by',pd(a),'cv-blue')}<div class="tl-line"></div>
-      ${node('Review',rev,'cv-purple',1)}<div class="tl-line"></div>
-      ${node('Cutoff',pd(c),'cv-amber')}<div class="tl-line"></div>
-      ${node('Delivery',pd(d),'cv-teal')}
+      ${node('Review',cut,'cv-purple',1)}<div class="tl-line"></div>
+      ${node('Lands',pd(d),'cv-teal')}
     </div>
-    <div class="sns-tl-note">${bad?'<span style="color:var(--red);font-weight:700">Dates are out of order — add-by, then cutoff, then delivery.</span>'
-      :'You\'ll get the Discord reminder on <b>'+fmt(rev)+'</b> — '+snsReviewLead()+' days before the supplier locks the order.'}</div>`;
+    <div class="sns-tl-note">${bad?'<span style="color:var(--red);font-weight:700">Delivery must come after the last add day.</span>'
+      :'Supplier locks it <b>'+fmt(cut)+'</b> ('+snsCutoffOffset()+'d after the add day). You\'ll be reminded '+fmt(cut)+(snsReviewDays()>1?' \u2013 '+fmt(revEnd):'')+'.'}</div>`;
 }
 function saveSnsEdit(){
   const acc=gv('sns-edit-acc');
   const mode=gv('sns-edit-mode')||'next';
   const newEdit=dmToISO(gv('sns-new-edit'),'future');
-  const newCut=dmToISO(gv('sns-new-cutoff'),'future');
   const newDel=dmToISO(gv('sns-new-delivery'),'future');
   const notes=gv('sns-new-notes');
   let ok=true;
   if(!newEdit){se('e-sns-edit',1);ok=false;}else se('e-sns-edit',0);
-  if(!newCut){se('e-sns-cut',1);ok=false;}else se('e-sns-cut',0);
   if(!newDel){se('e-sns-del',1);ok=false;}else se('e-sns-del',0);
-  if(!ok){toast('Enter all three dates','bad');return;}
-  if(diff(pd(newEdit),pd(newCut))<0){toast('Supplier cutoff must be on or after the add-by date','bad');return;}
-  if(diff(pd(newCut),pd(newDel))<0){toast('Delivery must be on or after the supplier cutoff','bad');return;}
+  if(!ok){toast('Enter both dates','bad');return;}
+  if(diff(pd(newEdit),pd(newDel))<0){toast('Delivery must be after the last add day','bad');return;}
 
   if(mode==='next'){
     // Archive current to history, then set new active cycle
@@ -5750,7 +5837,7 @@ function saveSnsEdit(){
       snsHist.push({acc,editDay:current.editDay,deliveryDay:current.deliveryDay,
         cycle,recorded:isoOf(today()),notes:current.notes||''});
     }
-    snsData[acc]={editDay:newEdit,cutoffDay:newCut,deliveryDay:newDel,notes};
+    snsData[acc]={editDay:newEdit,deliveryDay:newDel,notes};
     saveSns();
     closeM('snsEditModal');
     window._snsPopupDismissed=false; // re-evaluate popup
@@ -5759,7 +5846,7 @@ function saveSnsEdit(){
     toast(`${acc} updated — previous cycle archived`,'ok');
   } else {
     // Edit current cycle in place — no archiving
-    snsData[acc]={...(snsData[acc]||{}),editDay:newEdit,cutoffDay:newCut,deliveryDay:newDel,notes};
+    snsData[acc]={...(snsData[acc]||{}),editDay:newEdit,deliveryDay:newDel,notes};
     saveSns();
     closeM('snsEditModal');
     renderSns();
@@ -5932,12 +6019,15 @@ function whInput(el){
 }
 function whSaveUser(v){settings.discordUserId=String(v||'').trim().replace(/[<@!>]/g,'');saveSettings();}
 function whToggle(on){settings.nSns=on?1:0;saveSettings();renderSettings();}
-function whSaveLead(v){
+function whSaveOffset(key,v){
   const n=parseInt(v);
-  if(n>=1&&n<=10){settings.snsReviewLead=n;saveSettings();renderSns();renderSettings();
-    toast('Review reminder now '+n+' day'+(n!==1?'s':'')+' before cutoff','ok');}
+  const lim=key==='snsCutoffOffset'?[0,14]:[1,7];
+  if(isNaN(n)||n<lim[0]||n>lim[1]){renderSettings();return;}
+  settings[key]=n;saveSettings();renderSns();render();renderSettings();
+  toast('Saved','ok');
 }
 
+const nth=n=>{const v=n%100;if(v>=11&&v<=13)return'th';return['th','st','nd','rd'][n%10]||'th';};
 function renderSettings(){
   const on=pdayEnabled();
   const cb=document.getElementById('set-pday-master');if(cb)cb.checked=on;
@@ -5970,7 +6060,14 @@ function renderSettings(){
   // Discord — S&S only
   const wb=document.getElementById('wh-in-sns');if(wb&&document.activeElement!==wb)wb.value=snsWhUrl();
   const wus=document.getElementById('wh-user');if(wus&&document.activeElement!==wus)wus.value=settings.discordUserId||'';
-  const wld=document.getElementById('wh-lead');if(wld&&document.activeElement!==wld)wld.value=snsReviewLead();
+  const wco=document.getElementById('wh-cutoff-off');if(wco&&document.activeElement!==wco)wco.value=snsCutoffOffset();
+  const wrd=document.getElementById('wh-review-days');if(wrd&&document.activeElement!==wrd)wrd.value=snsReviewDays();
+  const wex=document.getElementById('wh-example');
+  if(wex){
+    const o=snsCutoffOffset(),r=snsReviewDays();
+    const days=Array.from({length:r},(_,i)=>10+o+i);
+    wex.innerHTML=`<b>How that plays out:</b> last add day the <b>10th</b> → supplier locks it the <b>${10+o}${nth(10+o)}</b> → you're reminded on the <b>${days.map(d=>d+nth(d)).join('</b> and the <b>')}</b>.`;
+  }
   const wh=document.getElementById('wh-hour');if(wh)wh.value=(settings.snsPingHour!=null?settings.snsPingHour:13);
   const tb=document.getElementById('wh-tg-sns');if(tb)tb.checked=settings.nSns!==0;
   const wau=document.getElementById('wh-appurl');if(wau&&document.activeElement!==wau)wau.value=settings.appUrl||'';
@@ -5987,7 +6084,7 @@ function renderSettings(){
     const nextUp=[...SNS_ACCOUNTS].map(a=>({a,c:calcSnsStatus(a)}))
       .filter(x=>x.c.inFlight&&x.c.daysToReview>0).sort((x,y)=>x.c.daysToReview-y.c.daysToReview)[0];
     wst.innerHTML=IS_LOCAL?'<b>Local copy</b> — reminders are suppressed on localhost so test data can\'t reach your real channel. They work normally from the hosted version.'
-      :!snsWhUrl()?'<b>Off</b> — no webhook set, nothing will send.'
+      :!snsWhUrl()?'<b>Not set up yet.</b> Paste your webhook above, then Send test. It\'s stored only in this browser — never in the app file. In Discord: right-click the channel → Edit Channel → Integrations → Webhooks → New Webhook → Copy Webhook URL.'
       :settings.nSns===0?'<b>Paused</b> — turn the toggle on to resume reminders.'
       :due.length?'<b>'+due.length+' account'+(due.length!==1?'s':'')+' need reviewing right now</b> — '+due.map(a=>escA(a)).join(', ')+'. You\'ll be pinged each time you open the app until they\'re ticked.'
       :nextUp?'Nothing due. Next reminder: <b>'+escA(nextUp.a)+'</b> on '+fmt(nextUp.c.reviewStart)+' ('+nextUp.c.daysToReview+' days) from '+(settings.snsPingHour!=null?settings.snsPingHour:13)+':00.'
