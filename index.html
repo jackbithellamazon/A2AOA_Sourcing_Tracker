@@ -1254,6 +1254,11 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 .sns-table-wrap,.ltbl-wrap{overflow:visible;}
 .sns-table-wrap{border-radius:var(--r-lg);border:1px solid var(--border);}
 
+.nx-lands{font-size:13.5px;color:var(--text2);margin-bottom:5px;}
+.nx-lands b{color:var(--teal);font-size:14.5px;font-weight:800;}
+.nx-note{font-size:10.5px;color:var(--text2);line-height:1.45;margin-bottom:4px;}
+.nx-note b{color:var(--text);}
+.nx-after{font-size:10px;color:var(--muted);}
 /* next-cycle column */
 .nx-cell{min-width:172px;}
 .nx{display:flex;flex-direction:column;gap:3px;}
@@ -1878,7 +1883,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
               <th class="sortable" onclick="setSnsSort('acc')">Account<span class="th-arr" id="arr-sns-acc"></span></th>
 
               <th class="col-grp">This cycle<span class="col-sub">the order in play</span></th>
-              <th class="col-grp">Next cycle<span class="col-sub">already open to add to</span></th>
+              <th class="col-grp">If you add today<span class="col-sub">the cycle your items would join</span></th>
               <th class="sortable" onclick="setSnsSort('status')">Status<span class="th-arr" id="arr-sns-status"></span></th>
               <th></th>
             </tr>
@@ -2090,7 +2095,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
             <div class="set-row">
               <div class="set-row-tx">
                 <div class="set-row-t">Send reminders at</div>
-                <div class="set-row-s">Reminders hold until this time. If the app is already open they fire on the hour; otherwise on your first open after it.</div>
+                <div class="set-row-s">Reminders hold until this time, then send. The app re-checks every 10 minutes while it's open — so leave the tab open and they land on time even days later. Closed all day? They go the next time you open it, and anything you missed is flagged.</div>
               </div>
               <select class="fs" id="wh-hour" style="max-width:110px" onchange="settings.snsPingHour=parseInt(this.value);saveSettings();renderSettings();toast('Reminders will send from '+this.value+':00','ok')">
                 <option value="7">7:00</option>
@@ -2124,6 +2129,14 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
                 <div class="set-row-s" id="wh-applink-note">—</div>
               </div>
               <input class="fi" id="wh-appurl" style="max-width:250px;font-size:11px" placeholder="auto-detected" onchange="settings.appUrl=this.value.trim();saveSettings();renderSettings()">
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
+                <div class="set-row-t">Optional: scheduled backup reminder</div>
+                <div class="set-row-s">Only worth it if you go days without opening the app. A GitHub Action can post at 1pm regardless — but it can't see your ✓ Checked, so it may remind you about something you've already done. Files are in <b>A2AOA-github-reminder/</b> with setup steps.</div>
+              </div>
+              <button class="set-btn" onclick="copyGhSchedule()">Copy schedule for GitHub</button>
             </div>
 
             <div class="set-row" style="border-bottom:none">
@@ -5668,18 +5681,19 @@ function renderSns(){
       const a2=monthDate(c.nextLDA.getFullYear(),c.nextLDA.getMonth()+1,c.nextLDA.getDate());
       const l2=addD(a2,snsCutoffOffset());
       const d2=c.addDeliv?monthDate(c.addDeliv.getFullYear(),c.addDeliv.getMonth()+1,c.addDeliv.getDate()):null;
-      nextCell=`<div class="nx dim">
-        <div class="nx-r"><span class="nx-k">Add by</span><span class="nx-v">${fmt(a2)}</span><span class="nx-d">in ${diff(today(),a2)}d</span></div>
-        <div class="nx-r"><span class="nx-k">Locks</span><span class="nx-v">${fmt(l2)}</span><span class="nx-d"></span></div>
-        <div class="nx-r"><span class="nx-k">Lands</span><span class="nx-v">${d2?fmt(d2):'—'}</span><span class="nx-d">${d2?'in '+diff(today(),d2)+'d':''}</span></div>
+      // its add window is still open, so adding today joins the cycle shown on the left
+      nextCell=`<div class="nx">
+        <div class="nx-lands">Lands <b>${c.addDeliv?fmt(c.addDeliv):'—'}</b>${c.daysToAddDeliv!=null?` <span class="nx-d">in ${c.daysToAddDeliv}d</span>`:''}</div>
+        <div class="nx-note">Joins the cycle on the left — add by <b>${fmt(c.nextLDA)}</b></div>
+        <div class="nx-after">After that: add by ${fmt(a2)} → lands ${d2?fmt(d2):'—'}</div>
       </div>`;
     }
     else{
       const soon=c.daysToLDA<=7;
       nextCell=`<div class="nx ${soon?'soon':''}">
+        <div class="nx-lands">Lands <b>${c.addDeliv?fmt(c.addDeliv):'—'}</b>${c.daysToAddDeliv!=null?` <span class="nx-d">in ${c.daysToAddDeliv}d</span>`:''}</div>
         <div class="nx-r"><span class="nx-k">Add by</span><span class="nx-v">${fmt(c.nextLDA)}</span><span class="nx-d">${c.daysToLDA===0?'today':'in '+c.daysToLDA+'d'}</span></div>
         <div class="nx-r"><span class="nx-k">Locks</span><span class="nx-v">${c.nextCutoff?fmt(c.nextCutoff):'—'}</span><span class="nx-d"></span></div>
-        <div class="nx-r"><span class="nx-k">Lands</span><span class="nx-v">${c.addDeliv?fmt(c.addDeliv):'—'}</span><span class="nx-d">${c.daysToAddDeliv!=null?'in '+c.daysToAddDeliv+'d':''}</span></div>
         ${soon?`<div class="nx-flag">Add window open — get items in</div>`:''}
       </div>`;
     }
@@ -5969,6 +5983,7 @@ function whBadMsg(v){
 const snsWhUrl=()=>(settings.whSns!==undefined?settings.whSns:DEFAULT_SNS_WEBHOOK||'').trim();
 const whMention=()=>{const id=(settings.discordUserId||'').trim();return id?'<@'+id+'>':'';};
 const whTime=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+const whLongDate=()=>today().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 // The app knows its own address when it's hosted, so the ping can link straight back to it
 const appLink=()=>((settings.appUrl||'').trim())||CANON_HOME;
 function whPost(url,body,okMsg){
@@ -5996,10 +6011,12 @@ function snsReviewPayload(list,isTest){
   const fieldsFor=()=>{
     if(one){
       const x=list[0],n=noteOf(x.acc);
+      const rEnd=addD(x.c.reviewStart,snsReviewDays()-1);
       return[
         {name:'Locks',value:whenTxt(x.c)+'\n'+fmt(x.c.cutoff),inline:true},
         {name:'Lands',value:x.c.deliv?fmt(x.c.deliv):'—',inline:true},
-        ...(n?[{name:'Note',value:n,inline:true}]:[])
+        {name:'Review window',value:snsReviewDays()>1?fmt(x.c.reviewStart)+' – '+fmt(rEnd):fmt(x.c.reviewStart),inline:true},
+        ...(n?[{name:'Note',value:n}]:[])
       ];
     }
     return list.map(x=>({name:x.acc,value:'locks '+whenTxt(x.c)+' · lands '+(x.c.deliv?fmt(x.c.deliv):'—'),inline:true}));
@@ -6018,7 +6035,9 @@ function snsReviewPayload(list,isTest){
       color:anyUrgent?C_RED:C_PURPLE,
       fields:[...fieldsFor(),
         ...(link?[{name:'​',value:`**[Open Sub & Save →](${link})** · hit ✓ Checked to stop the reminders`}]:[])],
-      footer:{text:isTest?'Test — this is exactly what a real reminder looks like':'Repeats daily until ticked off'}
+      footer:{text:(isTest?'Test — this is exactly what a real reminder looks like'
+        :'Repeats daily until you tick ✓ Checked')+' · sent '+whLongDate()+' '+whTime()},
+      timestamp:new Date().toISOString()
     }]
   };
 }
@@ -6029,16 +6048,11 @@ function snsWhRun(){
   const url=snsWhUrl();
   if(!url||settings.nSns===0||whBadMsg(url))return;
   if(IS_LOCAL){console.info('[A2AOA] Local copy — Discord reminders suppressed.');return;}
-  // He wants these at 1pm, not the moment he happens to open the app. Before then we
-  // wait; if the tab is left open it fires on the hour by itself.
+  // Reminders wait until the chosen hour. snsWhRun is safe to call as often as we like
+  // — it dedupes per account per day — so a heartbeat handles every case: tab left open
+  // for days, laptop asleep at 1pm, or the app opened late.
   const hour=(settings.snsPingHour!=null?settings.snsPingHour:13);
-  const now=new Date();
-  if(now.getHours()<hour){
-    const at=new Date();at.setHours(hour,0,5,0);
-    clearTimeout(window._snsPingTimer);
-    window._snsPingTimer=setTimeout(snsWhRun,Math.max(1000,at-now));
-    return;
-  }
+  if(new Date().getHours()<hour)return;
   const map=snsPingMap(),d=isoOf(today());
   const due=[];
   SNS_ACCOUNTS.forEach(acc=>{
@@ -6097,6 +6111,20 @@ function whInput(el){
 function whSaveUser(v){settings.discordUserId=String(v||'').trim().replace(/[<@!>]/g,'');saveSettings();}
 // Explicit save — flushes every field in this card in one go, including anything typed
 // but not yet blurred, so nothing can sit unsaved.
+// The scheduled GitHub job can't read the browser, so it needs the same schedule.
+// This spits out exactly the file it expects, straight from your live account data.
+function copyGhSchedule(){
+  const accounts=SNS_ACCOUNTS.map(a=>{
+    const d=snsData[a];
+    if(!d||!d.editDay||!d.deliveryDay)return null;
+    return{name:a,addDay:pd(d.editDay).getDate(),deliveryDay:pd(d.deliveryDay).getDate(),note:(d.notes||'').slice(0,80)};
+  }).filter(Boolean);
+  if(!accounts.length){toast('Set some account dates first',true);return;}
+  const json=JSON.stringify({cutoffOffset:snsCutoffOffset(),reviewDays:snsReviewDays(),accounts},null,2);
+  const done=()=>toast(`Schedule for ${accounts.length} account${accounts.length!==1?'s':''} copied — paste into sns-schedule.json`,'ok');
+  const fb=()=>{const t=document.createElement('textarea');t.value=json;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done();};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(json).then(done).catch(fb);else fb();
+}
 function whSaveAll(){
   const url=(document.getElementById('wh-in-sns')||{}).value||'';
   const bad=whBadMsg(url.trim());
@@ -6303,6 +6331,29 @@ window.addEventListener('keydown',e=>{
 // ═══════════════════════════════════
 // Loud, unmissable warning when the app is opened somewhere other than its home —
 // this is exactly the situation that made a full set of data look like it had vanished.
+// The one gap the app can't cover on its own: days it isn't opened at all. Rather than
+// pretend otherwise, it counts them and says exactly what was missed on the way back in.
+const SNSSEENK='a2a_sns_seen_v5';
+function snsMissedCatchUp(){
+  const last=localStorage.getItem(SNSSEENK);
+  localStorage.setItem(SNSSEENK,isoOf(today()));
+  if(!last)return;
+  const gap=diff(pd(last),today());
+  if(gap<1)return;
+  const missed=SNS_ACCOUNTS.map(a=>({a,c:calcSnsStatus(a)}))
+    .filter(x=>x.c.status==='locked'||(x.c.status==='review'&&x.c.daysToCutoff<0));
+  if(!missed.length)return;
+  const el=document.createElement('div');
+  el.className='home-warn';
+  el.innerHTML=`<div class="home-warn-ico">⏳</div>
+    <div class="home-warn-tx">
+      <div class="home-warn-t">${gap} day${gap!==1?'s':''} since you last opened this — ${missed.length} review${missed.length!==1?'s':''} passed</div>
+      <div class="home-warn-s"><b>${missed.map(x=>escA(x.a)).join(', ')}</b> locked without being reviewed. They ship as-is, so check they're expected.</div>
+    </div>
+    <div class="home-warn-acts"><button class="set-btn primary" onclick="go('sns');this.closest('.home-warn').remove()">Open Sub &amp; Save →</button></div>`;
+  const main=document.querySelector('.main');
+  if(main)main.insertBefore(el,main.firstChild);
+}
 function homeBanner(){
   if(atHome())return;
   const local=!location.protocol.startsWith('http');
@@ -6355,8 +6406,13 @@ function toggleSidebar(){
   renderSns();
   renderOA();
   if(_pdayAutoOffMsg)setTimeout(()=>toast(_pdayAutoOffMsg,'info'),800);
+  snsMissedCatchUp();
   homeBanner();
-  setTimeout(snsWhRun,1400);   // let the first render settle before anything posts
+  setTimeout(snsWhRun,1400);          // let the first render settle before anything posts
+  clearInterval(window._snsBeat);
+  window._snsBeat=setInterval(snsWhRun,10*60*1000);   // and keep checking every 10 min
+  // a laptop waking up can skip the interval entirely — re-check the moment it's visible
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)snsWhRun();});
   // Restore last tab, sourcing filter/view, and scroll position
   if(uiState.tab&&uiState.tab!=='overview')go(uiState.tab,true);
   document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===(_srcFilter||'all')));
