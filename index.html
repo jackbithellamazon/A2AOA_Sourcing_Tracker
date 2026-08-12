@@ -445,8 +445,9 @@ header{
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.badd{width:100%;margin-top:10px;padding:9px;background:var(--blue);color:#fff;border:none;
-  border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;
+.badd{width:auto;min-width:190px;margin-top:12px;padding:10px 22px;background:var(--blue);color:#fff;border:none;
+  border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;display:block;
+  box-shadow:0 3px 14px color-mix(in srgb,var(--blue) 30%,transparent);
   transition:background var(--tr),box-shadow var(--tr),transform var(--tr);}
 .badd:hover{background:var(--blue-d);box-shadow:0 4px 18px color-mix(in srgb,var(--blue) 35%,transparent);transform:translateY(-1px);}
 
@@ -1284,6 +1285,48 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 .sns-hero-r{flex-direction:column;align-items:flex-end;}
 @media(max-width:1150px){.sns-hero-facts{gap:14px;padding:10px 0;justify-content:flex-start;}.sns-hero{flex-wrap:wrap;}}
 
+.lr-lead{min-width:132px;}
+.lr-chips{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.lr-nums{display:flex;gap:14px;}
+.lr-n{display:flex;flex-direction:column;gap:2px;}
+.lr-k{font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}
+.lr-v{font-size:13.5px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
+.lr-v.comp-low{color:var(--green);} .lr-v.comp-med{color:var(--amber);} .lr-v.comp-high{color:var(--red);}
+.lr-status{min-width:180px;max-width:230px;}
+.sns-hero.green{border-left-color:var(--green);}
+.sns-hero.green .sns-hero-kick{color:var(--green);}
+.cv-grey{--cv:var(--muted);}
+
+.oa-cyc{min-width:210px;}
+.oa-price{min-width:150px;}
+.oa-gap{margin-top:5px;font-size:11.5px;}
+.oa-note-inline{font-size:10.5px;color:var(--muted);font-style:italic;margin-top:4px;
+  max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sns-hero.amber{border-left-color:var(--amber);}
+.sns-hero.amber .sns-hero-kick{color:var(--amber);}
+
+.ib-main{min-width:150px;}
+.inbox-card,.wl-card{align-items:center;gap:14px;}
+.inbox-card .inbox-note,.wl-card .wl-note{flex:1;font-size:12px;color:var(--text3);font-style:normal;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ib-age{font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:5px;
+  background:var(--card2);color:var(--text2);}
+.ib-age.aging{background:color-mix(in srgb,var(--amber) 18%,transparent);color:var(--amber);}
+.ib-age.stale{background:var(--amber);color:#241500;}
+.inbox-card.stale{border-left-color:var(--amber);}
+.inbox-card.aging{border-left-color:color-mix(in srgb,var(--amber) 55%,var(--border2));}
+.inbox-actions,.wl-actions{flex-shrink:0;}
+
+.fhint{font-size:10.5px;color:var(--text2);margin-top:4px;line-height:1.45;}
+.fhint .lnk{font-size:10.5px;}
+
+.more-btn{background:none;border:1px dashed var(--border2);color:var(--text2);font-family:var(--dm);
+  font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;width:100%;text-align:left;
+  transition:color var(--tr),border-color var(--tr);}
+.more-btn:hover{color:var(--text);border-color:var(--blue);}
+
+.strat-btn.latest.active{background:var(--purple);color:#fff;}
+
 /* small helper button inside modals */
 .sr-mini{display:inline-block;background:var(--card2);border:1px solid var(--border2);color:var(--text2);
   font-size:10.5px;font-weight:700;padding:6px 11px;border-radius:7px;cursor:pointer;margin-top:10px;
@@ -1506,17 +1549,14 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
               <div class="ferr" id="e-type">Select type</div>
             </div>
             <div class="fg">
-              <label class="fl">Found By</label>
-              <select class="fs" id="s-src">
-                <option value="">-- Optional --</option>
-                <option value="Jack">Jack</option>
-                <option value="TFTJ">TFTJ</option>
-                <option value="VAA">VAA</option>
-                <option value="VAS">VAS</option>
-                <option value="Discord Group">Discord Group</option>
-              </select>
+              <label class="fl">Date Dropped (Keepa)</label>
+              <input class="fi dm" id="s-date" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="previewBW()">
             </div>
           </div>
+          <div class="fg" style="margin:2px 0 10px">
+            <button type="button" class="more-btn" id="src-more-btn" onclick="toggleSrcMore()">+ Optional details — competitors, LTD end date, OA link, notes</button>
+          </div>
+          <div id="src-more" style="display:none">
           <div class="g4">
             <div class="fg">
               <label class="fl">Account</label>
@@ -1531,10 +1571,6 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
               </select>
             </div>
             <div class="fg">
-              <label class="fl">Date Dropped (Keepa)</label>
-              <input class="fi dm" id="s-date" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="previewBW()">
-            </div>
-            <div class="fg">
               <label class="fl">Date Found</label>
               <input class="fi dm" id="s-found" placeholder="dd/mm" maxlength="5" inputmode="numeric">
             </div>
@@ -1542,8 +1578,17 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
               <label class="fl">COG (£)</label>
               <input class="fi" id="s-cog" type="number" placeholder="0.00" step="0.01" min="0">
             </div>
-          </div>
-          <div class="g4">
+            <div class="fg">
+              <label class="fl">Found By</label>
+              <select class="fs" id="s-src">
+                <option value="">-- Optional --</option>
+                <option value="Jack">Jack</option>
+                <option value="TFTJ">TFTJ</option>
+                <option value="VAA">VAA</option>
+                <option value="VAS">VAS</option>
+                <option value="Discord Group">Discord Group</option>
+              </select>
+            </div>
             <div class="fg">
               <label class="fl">Competitors (FBA)</label>
               <input class="fi" id="s-comp" type="number" placeholder="0" min="0">
@@ -1552,10 +1597,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
               <label class="fl">LTD End (blank = 7DD)</label>
               <input class="fi dm" id="s-end" placeholder="dd/mm" maxlength="5" inputmode="numeric" oninput="previewBW()">
             </div>
-            <div class="fg" style="grid-column:span 2">
-              <label class="fl">Auto Amazon Link</label>
-              <input class="fi" id="s-amzlink" readonly placeholder="Select ASIN + Marketplace" style="opacity:.55;font-size:11px;">
-            </div>
+            <input type="hidden" id="s-amzlink">
           </div>
           <div class="fg" id="oa-row" style="display:none">
             <label class="fl">OA Source Link</label>
@@ -1567,9 +1609,11 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
             <textarea class="fta" id="s-notes" placeholder="Seller, competition, BSR notes…"></textarea>
           </div>
           <button class="badd" onclick="addLead()">Add Lead</button>
+          </div>
         </div>
       </div>
 
+      <div id="src-hero"></div>
       <div class="src-toolbar">
         <div class="seg" id="src-seg">
           <button class="seg-btn active" data-seg="all" onclick="setSrcFilter('all')">All <span class="seg-n" id="seg-n-all">0</span></button>
@@ -1578,6 +1622,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
           <button class="seg-btn" data-seg="watching" onclick="setSrcFilter('watching')">Watching <span class="seg-n" id="seg-n-watching">0</span></button>
         </div>
         <div class="src-ctrls">
+          <button class="src-sort" onclick="openBulk()" title="Paste a batch of ASINs at once" style="color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)">+ Paste list</button>
           <button class="src-sort" onclick="copySrcAsins()" title="Copy the visible ASINs for KPF">Copy ASINs</button>
           <select class="src-sort" id="src-sort" onchange="setSrcSort(this.value)">
             <option value="buy">Sort: Buy date</option>
@@ -1665,6 +1710,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
           <button class="badd" onclick="addRebuy()">Add to Rebuy Queue</button>
         </div>
       </div>
+      <div id="rb-hero"></div>
       <div class="sec nt"><span class="sec-t">Rebuy Queue</span><span class="sec-pill" id="cnt-rebuy">0</span>
         <span style="flex:1"></span>
         <button class="aq-t" onclick="copyAsins(rebuys.map(r=>r.asin))" title="Copy every rebuy ASIN for KPF">Copy ASINs</button>
@@ -1970,6 +2016,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
         </div>
       </div>
 
+      <div id="oa-hero"></div>
       <div class="mini-tools">
         <button class="set-btn" onclick="copyAsins(oaItems.map(i=>i.asin))" title="Copy every OA Replen ASIN for KPF">Copy ASINs</button>
       </div>
@@ -2019,6 +2066,17 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
             </div>
             <div class="set-row">
               <div class="set-row-tx">
+                <div class="set-row-t">Max Insight — how long to hold</div>
+                <div class="set-row-s">Only used by leads set to <b>Max Insight</b>. A 7DD has no deadline, so this caps the wait. An LTD instead buys this many days before the deal ends.</div>
+              </div>
+              <div class="off-inp">
+                <input class="fi" id="set-maxwait" type="number" min="8" max="60" onchange="whSaveOffset('maxWaitDays',this.value)"><span>days max</span>
+                <input class="fi" id="set-ltdsafety" type="number" min="0" max="5" onchange="whSaveOffset('ltdSafetyDays',this.value)"><span>LTD buffer</span>
+              </div>
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
                 <div class="set-row-t">Buy → live on Amazon</div>
                 <div class="set-row-s">Default days from purchase to live (delivery + prep + check-in).</div>
               </div>
@@ -2055,7 +2113,7 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
         <div class="set-card accent-blue" style="grid-column:1/-1">
           <div class="set-hd">
             <div class="set-hd-t"><svg width="14" height="14" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Discord — Sub &amp; Save reminders</div>
-            <div class="set-hd-s">One job: never miss the review before a supplier dispatches. It pings on the review date and once a day after that until you hit <b>✓ Checked</b> — then it stops. Nothing else notifies.</div>
+            <div class="set-hd-s">Never miss a review before a supplier dispatches, and optionally your OA price checks. It pings on the review date and once a day after that until you hit <b>✓ Checked</b> — then it stops. Nothing else notifies.</div>
           </div>
           <div class="set-body">
             <div class="wh-row">
@@ -2076,6 +2134,14 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 
             <div class="set-row">
               <div class="set-row-tx">
+                <div class="set-row-t">Also remind me about OA price checks</div>
+                <div class="set-row-s">Same channel. One message per item when a check is overdue or due today, with its target, last price and a link straight to the retailer.</div>
+              </div>
+              <label class="tgl"><input type="checkbox" id="wh-tg-oa" onchange="settings.nOa=this.checked?1:0;saveSettings();toast(this.checked?'OA reminders on':'OA reminders off','ok')"><span class="tgl-track"></span></label>
+            </div>
+
+            <div class="set-row">
+              <div class="set-row-tx">
                 <div class="set-row-t">Supplier locks the order</div>
                 <div class="set-row-s">Days after each account's last add day. Last add 10th + 2 = locks the 12th.</div>
               </div>
@@ -2084,10 +2150,10 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
 
             <div class="set-row">
               <div class="set-row-tx">
-                <div class="set-row-t">Remind me for</div>
-                <div class="set-row-s">Starting on the lock day. 2 days means you'd be pinged the 12th and 13th — Amazon still lets you skip items until it dispatches.</div>
+                <div class="set-row-t">It dispatches</div>
+                <div class="set-row-s">Days before delivery that the order actually ships. Reminders run from the edit deadline right up to this — because you can still skip items until then.</div>
               </div>
-              <div class="off-inp"><input class="fi" id="wh-review-days" type="number" min="1" max="7" onchange="whSaveOffset('snsReviewDays',this.value)"><span>days</span></div>
+              <div class="off-inp"><input class="fi" id="wh-dispatch-lead" type="number" min="0" max="10" onchange="whSaveOffset('snsDispatchLead',this.value)"><span>days before delivery</span></div>
             </div>
 
             <div class="set-note" id="wh-example" style="margin:2px 0 0"></div>
@@ -2230,7 +2296,12 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
         </select>
       </div>
     </div>
-    <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">Date dropped (Keepa)</label>
+        <input class="fi dm" id="em-date" placeholder="dd/mm" maxlength="5" inputmode="numeric">
+        <div class="fhint">Buy plan needs this · <button type="button" class="lnk" onclick="sv('em-date',isoToDM(isoOf(today())))">use today</button></div></div>
+      <div class="fg"><label class="fl">LTD End Date</label><input class="fi dm" id="em-end" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+    </div>
     <div class="fg"><label class="fl">OA Source Link</label><input class="fi" id="em-oa" type="url" placeholder="Leave blank for A2A"></div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fta" id="em-notes"></textarea></div>
     <div class="mbtns">
@@ -2279,6 +2350,39 @@ tr.sns-row-unset td:first-child{box-shadow:inset 3px 0 0 var(--border2);}
     <div class="mbtns">
       <button class="mbtn ok" onclick="saveWatchEdit()">Save</button>
       <button class="mbtn cancel" onclick="closeM('wEditModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK ADD -->
+<div class="mbg" id="bulkModal">
+  <div class="modal" style="max-width:560px">
+    <div class="mhd"><span class="mt">Paste a list of ASINs</span><button class="mx" onclick="closeM('bulkModal')">×</button></div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Paste straight from Discord, a sheet, anywhere — commas, spaces or new lines, it finds the ASINs. They share the settings below; edit any of them after.</p>
+    <div class="fg">
+      <textarea class="fta" id="bulk-text" style="min-height:110px;font-family:var(--mono);font-size:12px"
+        placeholder="B07X9KYZ6L B0BQ1234XY&#10;B0CRZ5WKCB, B08N5WRWNW…" oninput="bulkPreview()"></textarea>
+      <div class="fhint" id="bulk-count">No ASINs found yet</div>
+    </div>
+    <div class="g4">
+      <div class="fg"><label class="fl">Marketplace</label>
+        <select class="fs" id="bulk-market">
+          <option value="amazon.co.uk">🇬🇧 UK</option><option value="amazon.de">🇩🇪 DE</option>
+          <option value="amazon.fr">🇫🇷 FR</option><option value="amazon.es">🇪🇸 ES</option>
+          <option value="amazon.it">🇮🇹 IT</option><option value="amazon.nl">🇳🇱 NL</option>
+          <option value="amazon.com">🇺🇸 US</option></select></div>
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="bulk-type"><option value="A2A">A2A</option><option value="OA">OA</option></select></div>
+      <div class="fg"><label class="fl">Date dropped</label>
+        <input class="fi dm" id="bulk-date" placeholder="dd/mm" maxlength="5" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Found by</label>
+        <select class="fs" id="bulk-src"><option value="">--</option><option value="Jack">Jack</option>
+          <option value="TFTJ">TFTJ</option><option value="VAA">VAA</option><option value="VAS">VAS</option>
+          <option value="Discord Group">Discord Group</option></select></div>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn ok" onclick="bulkAdd()">Add them all</button>
+      <button class="mbtn cancel" onclick="closeM('bulkModal')">Cancel</button>
     </div>
   </div>
 </div>
@@ -2825,7 +2929,7 @@ const IS_LOCAL=/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/i.test(location.ho
 
 const SETK='a2a_settings_v5';
 let settings=Object.assign({strategy:'validation',leadToLive:8,deliveryDays:1,leadTimes:{},
-  discordUserId:DEFAULT_DISCORD_USER,nSns:1,snsCutoffOffset:2,snsReviewDays:2,snsPingHour:13,appUrl:''},ld(SETK)||{});
+  discordUserId:DEFAULT_DISCORD_USER,nSns:1,nOa:1,lastMarket:'amazon.co.uk',lastType:'A2A',maxWaitDays:14,ltdSafetyDays:1,snsCutoffOffset:2,snsDispatchLead:2,snsPingHour:13,appUrl:''},ld(SETK)||{});
 if(!settings.leadTimes)settings.leadTimes={};
 // ── Prime Day phases: editable dates + on/off, managed in Settings ──
 const PDAY_DEF={
@@ -2905,8 +3009,14 @@ function calcBuyPlan(l){
   const isLTD=!!end, strat=leadStrategy(l);
   if(!drop)return{status:'unknown',isLTD,strategy:strat,drop:null,found,end};
   const validationDay=addD(drop,7);          // day 8 — competition cleared
+  // "Latest" = squeeze out every day of evidence before committing. An LTD has a hard
+  // wall (the deal end, minus a safety day); a 7DD has none, so it's capped by a
+  // configurable max wait — the price can recover at any time, so it's a gamble.
+  const maxWait=(()=>{const n=parseInt(settings.maxWaitDays);return(n>=8&&n<=60)?n:14;})();
+  const latestSafe = end ? addD(end,-(settings.ltdSafetyDays!=null?settings.ltdSafetyDays:1)) : addD(drop,maxWait);
   const latestBuy=end;                        // LTD: deal live until end date
-  let recBuy = strat==='speed' ? now : validationDay;
+  let recBuy = strat==='speed' ? now : strat==='latest' ? latestSafe : validationDay;
+  if(strat==='latest'&&diff(recBuy,validationDay)>0)recBuy=validationDay; // never buy before day 8
   if(recBuy<now)recBuy=now;                   // already past the ideal point ⇒ buy now
   if(latestBuy&&recBuy>latestBuy)recBuy=latestBuy;
   if(recBuy<found)recBuy=found;
@@ -2920,7 +3030,7 @@ function calcBuyPlan(l){
   if(isLTD&&end<now)status='expired';
   else if(daysToBuy>0)status='wait';
   else status = (isLTD&&diff(now,end)<=2) ? 'closing' : 'buy';
-  return{status,isLTD,strategy:strat,drop,found,end,validationDay,latestBuy,
+  return{status,isLTD,strategy:strat,drop,found,end,validationDay,latestBuy,latestSafe,maxWait,
     recBuy,estDelivery,estLive,daysToBuy,validationAtBuy,valShort};
 }
 
@@ -3029,6 +3139,12 @@ function bwHtml(l,c){
 function autoLink(){
   const a=gv('s-asin'),m=gv('s-market');
   document.getElementById('s-amzlink').value=(a&&m)?amzUrl(a,m):'';
+}
+function toggleSrcMore(){
+  const b=document.getElementById('src-more'),btn=document.getElementById('src-more-btn');
+  const open=b.style.display!=='none';
+  b.style.display=open?'none':'';
+  btn.textContent=open?'+ Optional details (account, COG, competitors, LTD end, notes)':'− Hide optional details';
 }
 function toggleOA(){
   document.getElementById('oa-row').style.display=gv('s-type')==='OA'?'':'none';
@@ -3257,8 +3373,13 @@ function addLead(){
       notes,bought:false,snoozed:false,snoozeUntil:null,updatedAt:todayStr()});
     sv2(SK,leads);
     ['s-asin','s-cog','s-comp','s-oa','s-notes','s-found'].forEach(i=>sv(i,''));
-    ['s-type','s-date','s-end','s-market','s-src','s-account'].forEach(i=>sv(i,''));
-    document.getElementById('s-amzlink').value='';
+    // marketplace / type / found-by / drop date stay put — they're the same for a whole
+    // batch, and re-picking them for every lead was the single biggest bit of friction
+    settings.lastMarket=gv('s-market');settings.lastType=gv('s-type');settings.lastSrc=gv('s-src')||'';
+    saveSettings();
+    setTimeout(()=>document.getElementById('s-asin')?.focus(),40);
+    sv('s-end','');
+    const al=document.getElementById('s-amzlink');if(al)al.value='';
     document.getElementById('bw-preview').style.display='none';
     document.getElementById('oa-row').style.display='none';
     render();toast(`${asin} added`,'ok');
@@ -3288,6 +3409,7 @@ function openLead(id){
   const stratToggle=`<div class="strat-toggle">
       <button class="strat-btn ${p.strategy==='validation'?'active':''}" onclick="setLeadStrategy(${l.id},'validation')">Prioritise Validation</button>
       <button class="strat-btn speed ${p.strategy==='speed'?'active':''}" onclick="setLeadStrategy(${l.id},'speed')">Prioritise Speed</button>
+      <button class="strat-btn latest ${p.strategy==='latest'?'active':''}" onclick="setLeadStrategy(${l.id},'latest')" title="Wait as long as possible to see how the price behaves">Max Insight</button>
     </div>`;
   document.getElementById('lead-body').innerHTML=`
     <div class="ld-asin">${l.asin}</div>
@@ -3331,6 +3453,44 @@ function openLead(id){
   openM('leadModal');
 }
 
+// Sourcing happens in batches — filling an 11-field form per lead was the real blocker.
+function openBulk(){
+  sv('bulk-text','');
+  sv('bulk-market',settings.lastMarket||'amazon.co.uk');
+  sv('bulk-type',settings.lastType||'A2A');
+  sv('bulk-date',isoToDM(isoOf(today())));
+  sv('bulk-src',settings.lastSrc||'');
+  bulkPreview();openM('bulkModal');
+  setTimeout(()=>document.getElementById('bulk-text')?.focus(),60);
+}
+const bulkParse=t=>[...new Set((String(t||'').toUpperCase().match(/B[0-9A-Z]{9}/g)||[]))];
+function bulkPreview(){
+  const found=bulkParse(gv('bulk-text'));
+  const dupes=found.filter(a=>leads.some(l=>l.asin===a&&!l.rejectedAt));
+  const el=document.getElementById('bulk-count');if(!el)return;
+  el.innerHTML=found.length
+    ? `<b style="color:var(--green)">${found.length} ASIN${found.length!==1?'s':''} found</b>`
+      +(dupes.length?` · <span style="color:var(--amber)">${dupes.length} already in Sourcing — will be skipped</span>`:'')
+    : 'No ASINs found yet';
+}
+function bulkAdd(){
+  const found=bulkParse(gv('bulk-text'));
+  if(!found.length){toast('No ASINs found in that text',true);return;}
+  const market=gv('bulk-market'),type=gv('bulk-type'),src=gv('bulk-src')||null;
+  const dd=dmToISO(gv('bulk-date'),'past');
+  if(!dd){toast('Enter the drop date (dd/mm)',true);return;}
+  const existing=new Set(leads.filter(l=>!l.rejectedAt).map(l=>l.asin));
+  const fresh=found.filter(a=>!existing.has(a));
+  if(!fresh.length){toast('All of those are already in Sourcing','info');return;}
+  const added=fresh.map((asin,i)=>({id:Date.now()+i,asin,market,type,src,dateDropped:dd,dateFound:dd,
+    cog:null,comp:null,endDate:null,oaLink:null,notes:'',bought:false}));
+  leads.push(...added);
+  settings.lastMarket=market;settings.lastType=type;settings.lastSrc=src||'';saveSettings();
+  sv2(SK,leads);closeM('bulkModal');render();
+  const ids=new Set(added.map(a=>a.id));
+  undoToast(`${added.length} lead${added.length!==1?'s':''} added${found.length-fresh.length?` · ${found.length-fresh.length} skipped as duplicates`:''}`,
+    ()=>{leads=leads.filter(l=>!ids.has(l.id));sv2(SK,leads);render();toast('Removed','ok');},'ok');
+}
 function openSrcBought(id){
   // One tap = bought. No modal, no confirm — Undo (and optional Replen tracking) live in the toast.
   const l=leads.find(x=>x.id===id);if(!l)return;
@@ -3348,7 +3508,7 @@ function openEdit(id){
   editId=id;
   sv('em-id',id);sv('em-asin',l.asin);sv('em-market',l.market||'amazon.co.uk');
   sv('em-type',l.type||'A2A');sv('em-cog',l.cog||'');sv('em-comp',l.comp!=null?l.comp:'');
-  sv('em-src',l.src||'');sv('em-end',isoToDM(l.endDate));sv('em-account',l.account||'');sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
+  sv('em-src',l.src||'');sv('em-date',isoToDM(l.dateDropped));sv('em-end',isoToDM(l.endDate));sv('em-account',l.account||'');sv('em-oa',l.oaLink||'');sv('em-notes',l.notes||'');
   openM('editModal');
 }
 function saveEdit(){
@@ -3356,6 +3516,8 @@ function saveEdit(){
   l.market=gv('em-market');l.type=gv('em-type');l.src=gv('em-src')||null;
   l.cog=gv('em-cog')?parseFloat(gv('em-cog')):null;
   l.comp=gv('em-comp')!==''?parseInt(gv('em-comp')):null;
+  const nd=dmToISO(gv('em-date'),'past');
+  if(nd)l.dateDropped=nd;
   l.endDate=dmToISO(gv('em-end'),'future')||null;l.account=gv('em-account')||null;l.oaLink=gv('em-oa')||null;l.notes=gv('em-notes');
   l.updatedAt=todayStr();
   sv2(SK,leads);closeM('editModal');render();toast('Saved','ok');
@@ -3705,7 +3867,7 @@ function buildTile(l){
     : (p.status==='buy') ? (p.isLTD?'t-teal':'t-green')
     : p.isLTD ? 't-blue' : 't-amber';
   const cog=l.cog?`£${l.cog.toFixed(2)}`:'';
-  const stratTag=p.strategy==='speed'?'Speed':'Validate';
+  const stratTag=p.strategy==='speed'?'Speed':p.strategy==='latest'?'Latest':'Validate';
   let st='',meta='';
   if(p.status==='unknown'){
     st='ADD DROP DATE';
@@ -3790,6 +3952,27 @@ function toggleDelivered(id,acc){
 }
 
 function buildInboxCard(item){
+  // richer, tighter row — age is what decides whether triage is overdue
+  const age=item.ts?Math.max(0,Math.round((Date.now()-item.ts)/86400000)):null;
+  const ageCls=age==null?'':age>=7?'stale':age>=3?'aging':'';
+  return `<div class="inbox-card ${ageCls}" id="inbox-${item.id}">
+    <div class="ib-main">
+      <div class="inbox-asin">${escS(item.asin)}</div>
+      <div class="lr-chips">
+        ${item.market?`<span class="ltbl-src">${escS(String(item.market).replace('amazon.',''))}</span>`:''}
+        ${item.src?`<span class="ltbl-src">${escS(item.src)}</span>`:''}
+        ${age!=null?`<span class="ib-age ${ageCls}">${age===0?'today':age+'d old'}</span>`:''}
+      </div>
+    </div>
+    <div class="inbox-note">${item.note?escS(item.note):'<span class="sns-dim">no note</span>'}</div>
+    <div class="inbox-actions">
+      <button class="ib" style="background:var(--card2);color:var(--text2);border:1px solid var(--border2)" onclick="window.open('${sasUrl(item.asin)}','_blank')">SAS</button>
+      <button class="ib promote" onclick="openPromote(${item.id})">Promote →</button>
+      <button class="ib del" onclick="delInbox(${item.id})">✕</button>
+    </div>
+  </div>`;
+}
+function _buildInboxCardOld(item){
   const ts=new Date(item.ts);
   const tsStr=ts.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+ts.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   return`<div class="inbox-card" id="inbox-${item.id}">
@@ -3806,6 +3989,26 @@ function buildInboxCard(item){
 }
 
 function buildWLCard(w){
+  return `<div class="wl-card" id="wl-${w.id}">
+    <div class="ib-main">
+      <div class="wl-asin">${escS(w.asin)}</div>
+      <div class="lr-chips">
+        <span class="tile-type tt-${w.type||'A2A'}">${escS(w.type||'A2A')}</span>
+        ${w.market?`<span class="ltbl-src">${escS(String(w.market).replace('amazon.',''))}</span>`:''}
+        ${w.src?`<span class="ltbl-src">${escS(w.src)}</span>`:''}
+        ${w.offer?`<span class="wl-offer">${escS(w.offer)}</span>`:''}
+      </div>
+    </div>
+    <div class="wl-note">${w.notes?escS(w.notes):'<span class="sns-dim">what would make you buy?</span>'}</div>
+    <div class="wl-actions">
+      <button class="wb" style="background:var(--card2);color:var(--text2);border:1px solid var(--border2)" onclick="window.open('${sasUrl(w.asin)}','_blank')">SAS</button>
+      <button class="wb promote" onclick="promoteWatchDirect(${w.id})">→ Lead</button>
+      <button class="wb edit" onclick="openWatchEdit(${w.id})">Edit</button>
+      <button class="wb del" onclick="delWatch(${w.id})">✕</button>
+    </div>
+  </div>`;
+}
+function _buildWLCardOld(w){
   const OFFER_LBL={unknown:'On offer · length unknown','1m':'On offer · ~1 month','2m':'On offer · ~2 months',ongoing:'On offer · ongoing'};
   const offerBadge=w.offer?`<span class="wl-offer">${OFFER_LBL[w.offer]||'On offer'}</span>`:'';
   return`<div class="wl-card" id="wl-${w.id}">
@@ -3873,17 +4076,66 @@ function render(){
   const renderList=(arr,emptyMsg)=>{
     if(!arr.length)return emp(emptyMsg);
     if(_srcView==='table'){
-      const sth=(k,lbl)=>`<th class="sortable" onclick="setSrcSort('${k}');document.getElementById('src-sort').value='${k}'">${lbl}<span class="th-arr">${_srcSort===k?'▲':''}</span></th>`;
+      const sth=(k,lbl,sub)=>`<th class="sortable" onclick="setSrcSort('${k}');document.getElementById('src-sort').value='${k}'">${lbl}<span class="th-arr">${_srcSort===k?'▲':''}</span>${sub?`<span class="col-sub">${sub}</span>`:''}</th>`;
       return `<div class="ltbl-wrap"><table class="ltbl"><thead><tr>
-        <th></th>${sth('asin','ASIN')}<th>Type</th><th>Plan</th>${sth('buy','Buy')}${sth('countdown','When')}<th>Live ~</th>${sth('cog','COG')}${sth('comp','Comp')}<th></th>
+        <th></th>${sth('asin','Lead')}${sth('buy','Buy plan','drop → buy → live')}${sth('cog','Numbers')}${sth('countdown','Status')}<th></th>
         </tr></thead><tbody>${arr.map(buildLeadRow).join('')}</tbody></table></div>`;
     }
     return `<div class="tg">${arr.map(buildTile).join('')}</div>`;
   };
   if(tabActive('sourcing')){
-    set('ready-grid',renderList(readyBuy,'Nothing to buy today. 7DD leads land here on day 8 (Validation) or immediately (Speed).'));
-    set('ltd-grid',renderList(ltd,'No LTD deals. Add a deal with an end date and the app schedules the buy for you.'));
-    set('watch-grid',renderList(watching,'Nothing counting down. New 7DD leads wait here until their recommended buy date.'));
+    if(_srcView==='table'){
+      const all=[...readyBuy,...ltd,...watching].sort(srcSorter);
+      const shown=_srcFilter==='all'?all
+        :_srcFilter==='ready'?readyBuy.slice().sort(srcSorter)
+        :_srcFilter==='ltd'?ltd.slice().sort(srcSorter)
+        :watching.slice().sort(srcSorter);
+      set('ready-grid',renderList(shown,'Nothing here yet. Add a lead above, or capture one to the Inbox with A.'));
+      set('ltd-grid','');set('watch-grid','');
+    } else {
+      set('ready-grid',renderList(readyBuy,'Nothing to buy today. 7DD leads land here on day 8 (Validation) or immediately (Speed).'));
+      set('ltd-grid',renderList(ltd,'No LTD deals. Add a deal with an end date and the app schedules the buy for you.'));
+      set('watch-grid',renderList(watching,'Nothing counting down. New 7DD leads wait here until their recommended buy date.'));
+    }
+    // Hero: the single most urgent buy, so the page opens on a decision not a list
+    const heroS=document.getElementById('src-hero');
+    if(heroS){
+      const buyNow=[...readyBuy,...ltd].map(l=>({l,p:l._p||calcBuyPlan(l)}))
+        .filter(x=>x.p.status==='buy'||x.p.status==='closing')
+        .sort((a,b)=>(a.p.end?diff(today(),a.p.end):99)-(b.p.end?diff(today(),b.p.end):99));
+      const soonest=watching.map(l=>({l,p:l._p||calcBuyPlan(l)}))
+        .filter(x=>x.p.status==='wait').sort((a,b)=>a.p.daysToBuy-b.p.daysToBuy)[0];
+      if(buyNow.length){
+        const x=buyNow[0],urgent=x.p.status==='closing';
+        const f=(k,v,tone)=>`<div class="hf ${tone||''}"><span class="hf-k">${k}</span><span class="hf-v">${v}</span></div>`;
+        heroS.innerHTML=`<div class="sns-hero ${urgent?'urgent':'green'}">
+          <div class="sns-hero-l">
+            <div class="sns-hero-kick">${urgent?'Deal closing — buy today':'Ready to buy'}</div>
+            <div class="sns-hero-t">${x.l.asin}</div>
+            <div class="sns-hero-s">${x.p.isLTD?'LTD deal':(x.p.strategy==='speed'?'Speed pick — skipping validation':'7-day validation done')}</div>
+          </div>
+          <div class="sns-hero-facts">
+            ${f('COG',x.l.cog?'£'+Number(x.l.cog).toFixed(2):'—')}
+            ${f('Competitors',x.l.comp!=null?x.l.comp+' FBA':'—')}
+            ${x.p.end?f('Deal ends',fmt(x.p.end)+' · '+diff(today(),x.p.end)+'d','hot'):f('Dropped',fmt(x.p.drop))}
+            ${f('Live ~',fmt(x.p.estLive))}
+          </div>
+          <div class="sns-hero-r">
+            <button class="sns-hero-btn" onclick="event.stopPropagation();openSrcBought(${x.l.id})">Bought ✓</button>
+            ${buyNow.length>1?`<div class="hero-queue">then ${buyNow.slice(1,4).map(o=>`<button class="hero-chip" onclick="openLead(${o.l.id})">${o.l.asin}</button>`).join('')}${buyNow.length>4?`<span>+${buyNow.length-4}</span>`:''}</div>`:''}
+          </div>
+        </div>`;
+      } else {
+        heroS.innerHTML=`<div class="sns-hero clear">
+          <div class="sns-hero-l">
+            <div class="sns-hero-kick">Nothing to buy</div>
+            <div class="sns-hero-t">All clear</div>
+            <div class="sns-hero-s">${soonest?`Next up: <b>${soonest.l.asin}</b> on ${fmt(soonest.p.recBuy)} — ${soonest.p.daysToBuy} day${soonest.p.daysToBuy!==1?'s':''} of validation left.`
+              :'No leads waiting. Add one above or capture to the Inbox with <b>A</b>.'}</div>
+          </div>
+        </div>`;
+      }
+    }
     applySrcFilter();
     document.querySelectorAll('#global-strat .strat-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===settings.strategy));
     const lt=document.getElementById('lt-input');if(lt&&document.activeElement!==lt)lt.value=settings.leadToLive;
@@ -3891,7 +4143,48 @@ function render(){
   setN('cnt-watch',watching.length);setN('cnt-ready',readyBuy.length);setN('cnt-ltd',ltd.length);
 
   // Rebuy
-  if(tabActive('rebuy'))set('rebuy-list',rebuys.map(buildRC).join('')||emp('No rebuy entries.'));
+  if(tabActive('rebuy')){
+    const ACC6=['uk1','uk2','uk3','eu1','eu2','eu3'];
+    const scored=rebuys.map(r=>({r,ready:ACC6.filter(a=>calcAcc(r.accounts[a],r.snooze?.[a]).type==='ready').length,
+      soon:ACC6.map(a=>calcAcc(r.accounts[a],r.snooze?.[a])).filter(x=>x.type==='soon').sort((p,q)=>p.days-q.days)[0]}));
+    scored.sort((a,b)=>b.ready-a.ready||((a.soon?.days??999)-(b.soon?.days??999)));
+    set('rebuy-list',scored.map(x=>buildRC(x.r)).join('')||emp('No rebuy entries. Log a purchase above and each account reopens 8 days later.'));
+    const hero=document.getElementById('rb-hero');
+    if(hero){
+      const top=scored.filter(x=>x.ready>0);
+      const nxt=scored.filter(x=>!x.ready&&x.soon).sort((a,b)=>a.soon.days-b.soon.days)[0];
+      const f=(k,v,tone)=>`<div class="hf ${tone||''}"><span class="hf-k">${k}</span><span class="hf-v">${v}</span></div>`;
+      if(top.length){
+        const x=top[0];
+        const readyAccs=ACC6.filter(a=>calcAcc(x.r.accounts[a],x.r.snooze?.[a]).type==='ready').map(a=>a.toUpperCase());
+        const totalReady=scored.reduce((n,y)=>n+y.ready,0);
+        hero.innerHTML=`<div class="sns-hero green">
+          <div class="sns-hero-l">
+            <div class="sns-hero-kick">Ready to rebuy</div>
+            <div class="sns-hero-t">${x.r.asin}</div>
+            <div class="sns-hero-s">Check the price is still right, then buy again.</div>
+          </div>
+          <div class="sns-hero-facts">
+            ${f('Accounts ready',readyAccs.join(', '))}
+            ${f('On this item',x.ready)}
+            ${f('Ready overall',totalReady+' across '+top.length+' item'+(top.length!==1?'s':''))}
+            ${f('Next after',nxt?nxt.r.asin+' in '+nxt.soon.days+'d':'—')}
+          </div>
+          <div class="sns-hero-r">
+            <button class="sns-hero-btn" onclick="event.stopPropagation();openRbBought(${x.r.id})">Rebought ✓</button>
+            ${top.length>1?`<div class="hero-queue">then ${top.slice(1,4).map(o=>`<button class="hero-chip" onclick="flashEl('rebuy-${o.r.id}')">${o.r.asin}</button>`).join('')}</div>`:''}
+          </div>
+        </div>`;
+      } else {
+        hero.innerHTML=`<div class="sns-hero clear">
+          <div class="sns-hero-l"><div class="sns-hero-kick">Nothing ready</div>
+          <div class="sns-hero-t">All rebuys resting</div>
+          <div class="sns-hero-s">${nxt?`Next: <b>${nxt.r.asin}</b> reopens in ${nxt.soon.days} day${nxt.soon.days!==1?'s':''} (${fmt(nxt.soon.readyDate)}).`
+            :'Log a purchase and the 8-day countdown starts.'}</div></div>
+        </div>`;
+      }
+    }
+  }
   else _dirtyTabs.add('rebuy');
   setN('cnt-rebuy',rebuys.length);
   renderPday();
@@ -3962,7 +4255,7 @@ function computeActions(){
     // so they never reach the queue. Nothing to surface here — once it's gone, it's gone.
     if(p.isLTD&&p.status==='expired')return;
     if(p.status==='buy'||p.status==='closing'){
-      const stratTag=p.strategy==='speed'?'Speed':'Validate';
+      const stratTag=p.strategy==='speed'?'Speed':p.strategy==='latest'?'Latest':'Validate';
       if(p.isLTD){
         const closing=p.status==='closing';
         A.push({key:'ltd-'+l.id,cat:'buy',priority:closing?2:3,color:closing?'red':'teal',
@@ -4007,7 +4300,7 @@ function computeActions(){
     const s=calcSnsStatus(acc);
     if(s.status==='review'){
       A.push({key:'snsrev-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S REVIEW',title:acc,
-        sub:`Review window open — check prices, profit &amp; competition before delivery${s.deliv?` (~${fmt(s.deliv)})`:''}`,
+        sub:`Still cancellable until it dispatches${s.reviewEnd?` (${fmt(s.reviewEnd)})`:''} — check prices, profit &amp; competition`,
         jump:`go('sns')`,primary:{label:'Open',fn:`go('sns')`},links:''});
     } else if(s.status==='lda-today'){
       A.push({key:'snse-'+acc,cat:'sns',priority:1,color:'red',chip:'S&S LAST DAY',title:acc,
@@ -4347,7 +4640,7 @@ function refreshActionCenter(){
 
   setN('nb-action',total);
   buildAside();
-  renderNotif(A,U);
+  renderNotif(A,U);   // must come AFTER buildAside — it recreates #notifBody
   const bb=document.getElementById('hdrBackupBtn');
   if(bb)bb.classList.toggle('stale',backupState().stale);
 }
@@ -4477,12 +4770,13 @@ function renderNotif(A,U){
   if(badge){badge.textContent=active.length;badge.classList.toggle('zero',active.length===0);}
   if(bell)bell.classList.toggle('has-alerts',active.length>0);
 
-  const body=document.getElementById('bellNotifBody');
-  if(!body)return;
+  const targets=['bellNotifBody','notifBody'].map(id=>document.getElementById(id)).filter(Boolean);
+  if(!targets.length)return;
   if(active.length===0&&U.length===0){
-    body.innerHTML=`<div class="notif-empty">
+    const empty=`<div class="notif-empty">
       <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       You're all caught up</div>`;
+    targets.forEach(t=>t.innerHTML=empty);
     return;
   }
   let html='';
@@ -4494,7 +4788,7 @@ function renderNotif(A,U){
     </div></div>`;
   if(active.length){html+=`<div class="notif-group-lbl">Needs action</div>`+active.map(a=>itemHtml(a)).join('');}
   if(U.length){html+=`<div class="notif-group-lbl">Upcoming</div>`+U.map(u=>itemHtml(u)).join('');}
-  body.innerHTML=html;
+  targets.forEach(t=>t.innerHTML=html);
 }
 
 // ═══════════════════════════════════
@@ -4521,16 +4815,23 @@ let _srcFilter='all';
 function setSrcFilter(seg){
   _srcFilter=seg;uiState.srcFilter=seg;saveUI();
   document.querySelectorAll('#src-seg .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.seg===seg));
-  applySrcFilter();
+  // card view just hides groups; table view is one merged list, so it has to rebuild
+  if(_srcView==='table')render(); else applySrcFilter();
 }
 function applySrcFilter(){
+  const table=_srcView==='table';
   document.querySelectorAll('.src-group').forEach(g=>{
-    g.style.display=(_srcFilter==='all'||g.dataset.group===_srcFilter)?'':'none';
+    // table view is one merged list, so only the first group is used and the
+    // per-section headings would just repeat themselves
+    const isFirst=g.dataset.group==='ready';
+    g.style.display=table?(isFirst?'':'none'):((_srcFilter==='all'||g.dataset.group===_srcFilter)?'':'none');
+    const sec=g.querySelector('.sec');
+    if(sec)sec.style.display=table?'none':'';
   });
 }
 
 // ── View (cards/table) + sort ──
-let _srcView=uiState.srcView||'cards', _srcSort=uiState.srcSort||'buy';
+let _srcView=uiState.srcView||'table', _srcSort=uiState.srcSort||'buy';
 _srcFilter=uiState.srcFilter||'all';
 function setSrcView(v){_srcView=v;uiState.srcView=v;saveUI();document.querySelectorAll('#view-toggle .vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));render();}
 function setSrcSort(s){_srcSort=s;uiState.srcSort=s;saveUI();render();}
@@ -4548,22 +4849,52 @@ function srcSorter(a,b){
 function buildLeadRow(l){
   const p=l._p||calcBuyPlan(l);
   const color = p.status==='closing'?'red' : (p.status==='buy'?(p.isLTD?'teal':'green') : (p.isLTD?'blue':'amber'));
-  const when = (p.status==='buy'||p.status==='closing')
-    ? `<span class="ltbl-buy">${p.status==='closing'?'CLOSING':'BUY NOW'}</span>`
-    : `<span class="ltbl-cd">${p.isLTD?fmt(p.recBuy):p.daysToBuy+'d'}</span>`;
-  const compCell=l.comp!=null?(()=>{const lvl=l.comp<=2?'low':l.comp<=5?'med':'high';return`<span class="ltbl-comp comp-${lvl}">${l.comp}</span>`;})():'<span class="ltbl-dim">—</span>';
-  return `<tr class="ltbl-row cv-${color}" onclick="openLead(${l.id})">
+  const dd=x=>x?diff(today(),x):null;
+  const node=(lbl,dt,cvv,now)=>{
+    const n=dd(dt);
+    return `<div class="sc-node ${cvv} ${n===null?'':n<0?'done':n===0?'now':''} ${now?'now':''}">
+      <div class="sc-dot"></div><div class="sc-lbl">${lbl}</div>
+      <div class="sc-date">${dt?fmt(dt):'—'}</div>
+      <div class="sc-rel">${n===null?'':n===0?'today':n>0?'in '+n+'d':Math.abs(n)+'d ago'}</div></div>`;
+  };
+  const buyNow=p.status==='buy'||p.status==='closing';
+  // Drop → Buy → Live, plus the LTD end date when there is one
+  const plan=`<div class="sc-track">
+      ${node('Dropped',p.drop,'cv-grey')}<div class="sc-line"></div>
+      ${node(p.strategy==='speed'?'Buy (speed)':p.strategy==='latest'?'Buy (latest)':'Buy',p.recBuy,buyNow?'cv-green':'cv-amber',buyNow)}<div class="sc-line"></div>
+      ${node('Live ~',p.estLive,'cv-blue')}
+      ${p.end?`<div class="sc-line"></div>${node('Deal ends',p.end,'cv-red')}`:''}
+    </div>`;
+  const lvl=l.comp==null?null:l.comp<=2?'low':l.comp<=5?'med':'high';
+  const nums=`<div class="lr-nums">
+      <div class="lr-n"><span class="lr-k">COG</span><span class="lr-v">${l.cog?'£'+Number(l.cog).toFixed(2):'—'}</span></div>
+      <div class="lr-n"><span class="lr-k">FBA</span><span class="lr-v ${lvl?'comp-'+lvl:''}">${l.comp!=null?l.comp:'—'}</span></div>
+    </div>`;
+  let pill,sub;
+  if(p.status==='unknown'){pill='<span class="st-pill amber">Needs date</span>';sub='Add the drop date to start the buy plan';}
+  else if(p.status==='closing'){pill='<span class="st-pill red">Closing</span>';sub=`Deal ends ${fmt(p.end)} — last chance`;}
+  else if(p.status==='buy'){pill='<span class="st-pill green">Buy now</span>';
+    sub=p.isLTD?`LTD · live ~${fmt(p.estLive)}`:`${p.strategy==='speed'?'Speed pick':'Validated'} · live ~${fmt(p.estLive)}`;}
+  else{pill=`<span class="st-pill">In ${p.daysToBuy}d</span>`;
+    // an LTD ending before day 8 gets its buy pulled forward — say that, rather than
+    // quoting a validation date that falls after the deal is already gone
+    const cut=p.isLTD&&p.end&&p.validationDay>p.end;
+    sub=cut?`Deal ends ${fmt(p.end)} — buying ${fmt(p.recBuy)}, short of full validation`
+      :p.strategy==='speed'?`Buying ${fmt(p.recBuy)}`
+      :p.strategy==='latest'?`Holding for max insight — buying ${fmt(p.recBuy)}${p.isLTD?' (last safe day)':''}`
+      :`Validating until ${fmt(p.validationDay)}`;}
+  return `<tr class="ltbl-row cv-${color}" id="tile-${l.id}" onclick="openLead(${l.id})">
     <td><span class="ltbl-dot"></span></td>
-    <td class="ltbl-asin">${l.asin}${l.src?`<span class="ltbl-src">${l.src}</span>`:''}</td>
-    <td>${l.type}</td>
-    <td><span class="ltbl-strat ${p.strategy}">${p.strategy==='speed'?'Speed':'Validate'}</span></td>
-    <td>${fmt(p.recBuy)}</td>
-    <td>${when}</td>
-    <td class="ltbl-dim">${fmt(p.estLive)}</td>
-    <td>${l.cog?'£'+l.cog.toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
-    <td>${compCell}</td>
+    <td class="lr-lead">
+      <div class="ltbl-asin">${l.asin}</div>
+      <div class="lr-chips"><span class="tile-type tt-${l.type}">${l.type}</span>${l.src?`<span class="ltbl-src">${escS(l.src)}</span>`:''}${l.account?`<span class="ltbl-src">${escS(l.account)}</span>`:''}</div>
+    </td>
+    <td class="sc-cell">${plan}</td>
+    <td>${nums}</td>
+    <td class="lr-status">${pill}<div class="sns-sub">${sub}</div></td>
     <td class="ltbl-act" onclick="event.stopPropagation()">
       <button class="ltbl-btn" onclick="window.open('${sasUrl(l.asin)}','_blank')">SAS</button>
+      <button class="ltbl-btn" onclick="window.open('${amzUrl(l.asin,l.market)}','_blank')">AMZ</button>
       <button class="ltbl-btn buy" onclick="openSrcBought(${l.id})">Bought</button>
     </td>
   </tr>`;
@@ -4614,6 +4945,10 @@ function runSearch(q){
   });
   document.querySelectorAll('.inbox-card[id^="inbox-"]').forEach(el=>{
     el.style.display=(!t||el.querySelector('.inbox-asin')?.textContent?.includes(t))?'':'none';
+  });
+  // table rows are <tr>, not tiles — they need filtering too
+  document.querySelectorAll('.ltbl-row').forEach(el=>{
+    el.style.display=(!t||el.querySelector('.ltbl-asin')?.textContent?.toUpperCase().includes(t))?'':'none';
   });
   // ── global results dropdown (only while the search box has focus) ──
   const drop=document.getElementById('searchDrop');
@@ -5188,6 +5523,41 @@ function renderOA(){
     return;
   }
 
+  // Hero — the one to check first
+  const oaHero=document.getElementById('oa-hero');
+  if(oaHero){
+    const worst=[...g.overdue,...g.due].map(i=>({i,s:calcOAStatus(i)}))
+      .sort((a,b)=>(b.s.daysOverdue||0)-(a.s.daysOverdue||0))[0];
+    if(worst){
+      const i=worst.i,st=worst.s;
+      const gap=(i.current!=null&&i.target!=null)?i.current-i.target:null;
+      const f=(k,v,tone)=>`<div class="hf ${tone||''}"><span class="hf-k">${k}</span><span class="hf-v">${v}</span></div>`;
+      oaHero.innerHTML=`<div class="sns-hero ${st.status==='overdue'?'urgent':'amber'}">
+        <div class="sns-hero-l">
+          <div class="sns-hero-kick">${st.status==='overdue'?'Longest overdue':'Due today'}</div>
+          <div class="sns-hero-t">${i.asin}</div>
+          <div class="sns-hero-s">${siteName(i.link)?escS(siteName(i.link))+' · ':''}${st.status==='overdue'?`Was due ${fmt(st.dueDate)}`:'Check the price now'}</div>
+        </div>
+        <div class="sns-hero-facts">
+          ${f('Target',i.target!=null?'£'+Number(i.target).toFixed(2):'—')}
+          ${f('Last seen',i.current!=null?'£'+Number(i.current).toFixed(2):'not logged')}
+          ${f('Gap',gap==null?'—':gap<=0?'at/below — buy':'£'+gap.toFixed(2)+' over',gap!=null&&gap>0?'hot':'')}
+          ${f('Overdue',st.status==='overdue'?st.daysOverdue+' days':'due today','hot')}
+        </div>
+        <div class="sns-hero-r">
+          <button class="sns-hero-btn" onclick="event.stopPropagation();oaQuickCheck(${i.id},event)">✓ Checked</button>
+          ${i.link?`<div class="hero-queue"><button class="hero-chip" onclick="window.open('${escS(i.link)}','_blank')">Open retailer ↗</button></div>`:''}
+        </div>
+      </div>`;
+    } else {
+      oaHero.innerHTML=`<div class="sns-hero clear">
+        <div class="sns-hero-l"><div class="sns-hero-kick">Nothing to check</div>
+        <div class="sns-hero-t">All up to date</div>
+        <div class="sns-hero-s">${oaItems.length?oaItems.length+' item'+(oaItems.length!==1?'s':'')+' monitored — you\'ll be pinged when one is due.':'Add an item above to start monitoring a price.'}</div></div>
+      </div>`;
+    }
+  }
+
   // summary cards
   const sumEl=document.getElementById('oa-summary');
   if(sumEl){
@@ -5238,6 +5608,19 @@ function renderOA(){
       const th=(k,lbl)=>`<th class="sortable" onclick="setOaSort('${k}')">${lbl}<span class="th-arr">${arr(k)}</span></th>`;
       const body=rows.map(r=>{
         const i=r.i,st=r.s,freq=parseInt(i.freq)||7;
+        const lastD=i.lastChecked?pd(i.lastChecked):null;
+        const nextD=st.dueDate||(lastD?addD(lastD,freq):null);
+        const dd=x=>x?diff(today(),x):null;
+        const tnode=(lbl,dt,cvv)=>{const n=dd(dt);
+          return `<div class="sc-node ${cvv} ${n===null?'':n<0?'done':n===0?'now':''}">
+            <div class="sc-dot"></div><div class="sc-lbl">${lbl}</div>
+            <div class="sc-date">${dt?fmt(dt):'—'}</div>
+            <div class="sc-rel">${n===null?'never':n===0?'today':n>0?'in '+n+'d':Math.abs(n)+'d ago'}</div></div>`;};
+        const cycle=`<div class="sc-track">
+            ${tnode('Checked',lastD,'cv-grey')}<div class="sc-line"></div>
+            ${tnode('Due',nextD,st.status==='overdue'?'cv-red':st.status==='due'?'cv-amber':'cv-green')}
+            ${i.snoozedUntil&&pd(i.snoozedUntil)>today()?`<div class="sc-line"></div>${tnode('Wakes',pd(i.snoozedUntil),'cv-purple')}`:''}
+          </div>`;
         const cv=st.status==='overdue'?'cv-red':st.status==='due'?'cv-amber':st.status==='snoozed'?'cv-purple':'cv-green';
         let pill,sub;
         if(st.status==='overdue'){pill=`<span class="st-pill red">Overdue · ${st.daysOverdue}d</span>`;sub=`was due ${fmt(st.dueDate)}`;}
@@ -5254,13 +5637,19 @@ function renderOA(){
         const notes=escS(i.notes||'');
         return `<tr class="ltbl-row ${cv}" id="oa-${i.id}" onclick="openOADetail(${i.id})">
           <td><span class="ltbl-dot"></span></td>
-          <td>${site?`<span class="tile-site">${escS(site)}</span>`:'<span class="ltbl-dim">—</span>'}</td>
-          <td class="ltbl-asin">${i.asin}</td>
-          <td>${pill}<div class="sns-sub">${sub}</div></td>
-          <td>${i.target!=null?'£'+Number(i.target).toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
-          <td>${i.current!=null?'£'+Number(i.current).toFixed(2):'<span class="ltbl-dim">—</span>'}</td>
-          <td>${gapHtml}</td>
-          <td class="oa-note-cell" title="${notes}">${notes||''}</td>
+          <td class="lr-lead">
+            <div class="ltbl-asin">${i.asin}</div>
+            <div class="lr-chips">${site?`<span class="tile-site">${escS(site)}</span>`:''}<span class="ltbl-src">every ${freq}d</span></div>
+          </td>
+          <td class="sc-cell oa-cyc">${cycle}</td>
+          <td class="oa-price">
+            <div class="lr-nums">
+              <div class="lr-n"><span class="lr-k">Target</span><span class="lr-v">${i.target!=null?'£'+Number(i.target).toFixed(2):'—'}</span></div>
+              <div class="lr-n"><span class="lr-k">Now</span><span class="lr-v">${i.current!=null?'£'+Number(i.current).toFixed(2):'—'}</span></div>
+            </div>
+            <div class="oa-gap">${gapHtml}</div>
+          </td>
+          <td class="lr-status">${pill}<div class="sns-sub">${sub}</div>${notes?`<div class="oa-note-inline" title="${notes}">${notes}</div>`:''}</td>
           <td class="ltbl-act" onclick="event.stopPropagation()">
             <button class="ltbl-btn buy" onclick="oaQuickCheck(${i.id},event)" title="Checked, no change — resets the countdown">✓</button>
             <button class="ltbl-btn" onclick="openOACheck(${i.id})" title="Log price / bought">Log</button>
@@ -5271,7 +5660,7 @@ function renderOA(){
         </tr>`;
       }).join('');
       wrap.innerHTML=`<div class="ltbl-wrap"><table class="ltbl"><thead><tr>
-        <th></th>${th('site','Retailer')}${th('asin','ASIN')}${th('due','Status')}${th('target','Target')}${th('current','Current')}${th('gap','Gap')}<th>Notes</th><th></th>
+        <th></th>${th('asin','Item')}${th('due','Check cycle')}${th('gap','Price')}${th('current','Status')}<th></th>
         </tr></thead><tbody>${body}</tbody></table></div>`;
     }
   }
@@ -5408,7 +5797,8 @@ function nextDayOfMonth(day,now){
 // add day, and he checks it over the days around that lock. Both offsets are settings,
 // so only two real dates ever need typing — last add and delivery.
 const snsCutoffOffset=()=>{const n=parseInt(settings.snsCutoffOffset);return(n>=0&&n<=14)?n:2;};
-const snsReviewDays=()=>{const n=parseInt(settings.snsReviewDays);return(n>=1&&n<=7)?n:2;};
+const snsDispatchLead=()=>{const n=parseInt(settings.snsDispatchLead);return(n>=0&&n<=10)?n:2;};
+const snsReviewDays=()=>{const n=parseInt(settings.snsReviewDays);return(n>=1&&n<=7)?n:2;}; // legacy
 const snsReviewLead=()=>snsCutoffOffset();   // kept for older call sites
 
 function calcSnsStatus(acc){
@@ -5423,7 +5813,9 @@ function calcSnsStatus(acc){
   const inFlight=ldaPassed && diff(now,deliv)>=0;   // order placed, not yet delivered
   // Review runs from the cutoff for the configured number of days — Amazon still lets
   // you skip items until it actually dispatches, which is the window he works in.
-  const reviewStart=cutoff, reviewEnd=addD(cutoff,snsReviewDays()-1);
+  const reviewStart=cutoff;
+  let reviewEnd=deliv?addD(deliv,-snsDispatchLead()):cutoff;
+  if(diff(reviewStart,reviewEnd)<0)reviewEnd=reviewStart;
   const inReview=inFlight && diff(now,reviewStart)<=0 && diff(now,reviewEnd)>=0;
   const daysToCutoff=diff(now,cutoff), daysToReview=diff(now,reviewStart);
   const daysToDelivery=diff(now,deliv);
@@ -5455,7 +5847,7 @@ function calcSnsStatus(acc){
   nextCutoff=addD(nextLDA,snsCutoffOffset());
   nextReview=nextCutoff;
   return{status,nextLDA,daysToLDA,inFlight,reviewStart,reviewEnd,deliv,daysToDelivery,addDeliv,daysToAddDeliv,
-    cutoff,daysToCutoff,daysToReview,nextCutoff,nextReview,
+    cutoff,daysToCutoff,daysToReview,nextCutoff,nextReview,reviewEnd,
     addHandled,reviewHandled,addCycleKey,reviewCycleKey,
     editD:lda,delivD:deliv,daysToEdit:daysToLDA,daysToReviewStart:diff(now,reviewStart)};
 }
@@ -5479,15 +5871,12 @@ function snsUndoHandled(acc){const h=snsHandled[acc];if(!h)return;const s=calcSn
 // ── Fixed monthly cycles auto-roll: dates never need re-entering ──
 function isoOf(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
 function monthDate(y,m,day){const dim=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(day,dim));}
-function snsCurrentCycle(dayE,dayD,now,dayC){
+function snsCurrentCycle(dayE,dayD,now){
   for(let m=-1;m<14;m++){
     const ed=monthDate(now.getFullYear(),now.getMonth()+m,dayE);
     const dl=monthDate(ed.getFullYear(),ed.getMonth()+(dayD>=dayE?0:1),dayD);
     if(diff(now,dl)>=-1){
-      const out={editDay:isoOf(ed),deliveryDay:isoOf(dl)};
-      // cutoff sits between add-by and delivery — same month-walk rule
-      if(dayC)out.cutoffDay=isoOf(monthDate(ed.getFullYear(),ed.getMonth()+(dayC>=dayE?0:1),dayC));
-      return out;
+      return{editDay:isoOf(ed),deliveryDay:isoOf(dl)};
     }
   }
   return null;
@@ -5657,8 +6046,8 @@ function renderSns(){
         return'';
       };
       const revState=live?(c.reviewHandled?'done':(c.daysToReview<=0&&c.daysToCutoff>=0?'now':st(dRev,1))):st(dRev,1);
-      const revEndD=dRev?addD(dRev,snsReviewDays()-1):null;
-      const revRange=dRev?(snsReviewDays()>1?fmt(dRev)+' – '+fmt(revEndD):fmt(dRev)):'—';
+      const revEndD=live?c.reviewEnd:(dDel?addD(dDel,-snsDispatchLead()):dRev);
+      const revRange=dRev?((revEndD&&diff(dRev,revEndD)>0)?fmt(dRev)+' – '+fmt(revEndD):fmt(dRev)):'—';
       cycleCell=`<div class="sc-head">${live?'<span class="sc-tag live">Order placed — in flight</span>':'<span class="sc-tag open">Open to add to</span>'}${badge}</div>
         <div class="sc-track">
           ${node('Add by',dAdd,'cv-blue',st(dAdd))}<div class="sc-line"></div>
@@ -5702,7 +6091,7 @@ function renderSns(){
     const notesHtml=`<input class="sns-note-in" value="${escA(notesTxt)}" placeholder="+ add note" maxlength="120"
       onclick="event.stopPropagation()" onchange="snsSaveNote('${escA(acc)}',this.value)">`;
 
-    return`<tr class="${rowCls}">
+    return`<tr class="${rowCls}" id="snsrow-${cssSafe(acc)}">
       <td><span class="sns-acc">${acc}</span></td>
       <td class="sc-cell">${cycleCell}</td>
       <td class="nx-cell">${nextCell}</td>
@@ -5743,7 +6132,7 @@ function renderSns(){
       <div class="setup-steps">
         <div class="setup-step cv-blue"><span class="setup-num">1</span><div><b>Add by</b><span>Last day you can put items in</span></div></div>
         <div class="setup-step cv-amber"><span class="setup-num">2</span><div><b>Locks</b><span>${snsCutoffOffset()} days later — supplier takes the order</span></div></div>
-        <div class="setup-step cv-purple"><span class="setup-num">3</span><div><b>Review</b><span>Discord pings you for ${snsReviewDays()} days from then</span></div></div>
+        <div class="setup-step cv-purple"><span class="setup-num">3</span><div><b>Review</b><span>Pings from then until it dispatches — you can still skip items</span></div></div>
         <div class="setup-step cv-teal"><span class="setup-num">4</span><div><b>Delivery</b><span>When it lands</span></div></div>
       </div>
       <div class="setup-accs">
@@ -5757,7 +6146,7 @@ function renderSns(){
   const psEl=document.getElementById('sns-purpose-s');
   if(psEl)psEl.innerHTML=`Enter just <b>two</b> dates per account — <b>last add day</b> and <b>delivery</b>. `
     +`The supplier locks the order <b>${snsCutoffOffset()} day${snsCutoffOffset()!==1?'s':''}</b> after the add day, and Discord reminds you `
-    +`${snsReviewDays()>1?'for <b>'+snsReviewDays()+' days</b> from then':'on that day'} until you hit <b>✓ Checked</b>. Both offsets live in Settings.`;
+    +`from then <b>until it dispatches</b> (${snsDispatchLead()} days before delivery) or until you hit <b>✓ Checked</b>. Both offsets live in Settings.`;
 
   // Reminders are the whole point of this page — say so if they aren't wired up
   const whWarnEl=document.getElementById('sns-whwarn');
@@ -5778,7 +6167,7 @@ function renderSns(){
     if(due.length){
       const x=due[0],urgent=x.c.daysToCutoff<=1,missed=x.c.status==='locked';
       const others=due.slice(1);
-      const revEnd=addD(x.c.reviewStart,snsReviewDays()-1);
+      const revEnd=x.c.reviewEnd;
       const f=(k,v,tone)=>`<div class="hf ${tone||''}"><span class="hf-k">${k}</span><span class="hf-v">${v}</span></div>`;
       heroEl.innerHTML=`<div class="sns-hero ${urgent?'urgent':''}">
         <div class="sns-hero-l">
@@ -5790,7 +6179,7 @@ function renderSns(){
         </div>
         <div class="sns-hero-facts">
           ${f('Locks',missed?fmt(x.c.cutoff)+' (gone)':x.c.daysToCutoff<=0?'today · '+fmt(x.c.cutoff):'in '+x.c.daysToCutoff+'d · '+fmt(x.c.cutoff),missed?'':'hot')}
-          ${f('Review window',snsReviewDays()>1?fmt(x.c.reviewStart)+' – '+fmt(revEnd):fmt(x.c.reviewStart))}
+          ${f('Review window',diff(x.c.reviewStart,revEnd)>0?fmt(x.c.reviewStart)+' – '+fmt(revEnd):fmt(x.c.reviewStart))}
           ${f('Lands',fmt(x.c.deliv)+' · in '+x.c.daysToDelivery+'d')}
           ${f('Next add-by',fmt(x.c.nextLDA)+' · in '+x.c.daysToLDA+'d')}
         </div>
@@ -5805,7 +6194,7 @@ function renderSns(){
         <div class="sns-hero-l">
           <div class="sns-hero-kick">${x.c.status==='no-data'?'Needs setting up':'Last day to add'}</div>
           <div class="sns-hero-t">${escA(x.a)}</div>
-          <div class="sns-hero-s">${x.c.status==='no-data'?'Set this account\'s three dates once and it runs itself.'
+          <div class="sns-hero-s">${x.c.status==='no-data'?'Set the last add day and the delivery day — everything else is worked out.'
             :`Get items in today — the add window closes tonight.`}</div>
         </div>
         <div class="sns-hero-r">
@@ -5891,7 +6280,8 @@ function snsPreview(){
   const box=document.getElementById('sns-preview');if(!box)return;
   const a=dmToISO(gv('sns-new-edit'),'future'),d=dmToISO(gv('sns-new-delivery'),'future');
   if(!a||!d){box.innerHTML='<div class="sns-tl-empty">Enter both dates. The supplier cutoff and your review days are worked out from the last add day — set the offsets in Settings.</div>';return;}
-  const cut=addD(pd(a),snsCutoffOffset()), revEnd=addD(cut,snsReviewDays()-1);
+  const cut=addD(pd(a),snsCutoffOffset());
+  let revEnd=addD(pd(d),-snsDispatchLead()); if(diff(cut,revEnd)<0)revEnd=cut;
   const bad=diff(pd(a),pd(d))<0;
   const node=(lbl,dt,cv,tag)=>`<div class="tl-node ${tag?'tl-hl':''} ${cv}"><div class="tl-dot"></div><div class="tl-lbl">${lbl}</div><div class="tl-date">${fmt(dt)}</div></div>`;
   box.innerHTML=`<div class="tl">
@@ -5900,7 +6290,7 @@ function snsPreview(){
       ${node('Lands',pd(d),'cv-teal')}
     </div>
     <div class="sns-tl-note">${bad?'<span style="color:var(--red);font-weight:700">Delivery must come after the last add day.</span>'
-      :'Supplier locks it <b>'+fmt(cut)+'</b> ('+snsCutoffOffset()+'d after the add day). You\'ll be reminded '+fmt(cut)+(snsReviewDays()>1?' \u2013 '+fmt(revEnd):'')+'.'}</div>`;
+      :'Supplier locks it <b>'+fmt(cut)+'</b> ('+snsCutoffOffset()+'d after the add day). You\'ll be reminded '+fmt(cut)+(diff(cut,revEnd)>0?' \u2013 '+fmt(revEnd):'')+'.'}</div>`;
 }
 function saveSnsEdit(){
   const acc=gv('sns-edit-acc');
@@ -6002,6 +6392,9 @@ const C_PURPLE=10509567, C_RED=16724821;
 function snsUrgent(c){return c.daysToCutoff<=1;}   // locks today/tomorrow, or already gone
 function snsReviewPayload(list,isTest){
   const anyUrgent=list.some(x=>snsUrgent(x.c));
+  // "locked" only means the EDIT deadline passed — items can still be skipped right up
+  // to dispatch. Only past reviewEnd is it genuinely too late to change anything.
+  const allGone=list.every(x=>diff(today(),x.c.reviewEnd)<0);
   const one=list.length===1;
   const link=appLink();
   const whenTxt=c=>{const l=c.daysToCutoff;
@@ -6011,11 +6404,11 @@ function snsReviewPayload(list,isTest){
   const fieldsFor=()=>{
     if(one){
       const x=list[0],n=noteOf(x.acc);
-      const rEnd=addD(x.c.reviewStart,snsReviewDays()-1);
       return[
-        {name:'Locks',value:whenTxt(x.c)+'\n'+fmt(x.c.cutoff),inline:true},
+        {name:'Can change until',value:(()=>{const n=diff(today(),x.c.reviewEnd);
+          return n<0?'dispatched\n'+Math.abs(n)+'d ago':n===0?'**today**\n'+fmt(x.c.reviewEnd):'**'+fmt(x.c.reviewEnd)+'**\n'+n+' days left';})(),inline:true},
         {name:'Lands',value:x.c.deliv?fmt(x.c.deliv):'—',inline:true},
-        {name:'Review window',value:snsReviewDays()>1?fmt(x.c.reviewStart)+' – '+fmt(rEnd):fmt(x.c.reviewStart),inline:true},
+        {name:'Edit deadline was',value:fmt(x.c.cutoff),inline:true},
         ...(n?[{name:'Note',value:n}]:[])
       ];
     }
@@ -6026,16 +6419,17 @@ function snsReviewPayload(list,isTest){
     allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
     embeds:[{
       author:{name:'Sub & Save'},
-      title:(isTest?'TEST · ':'')+(one
-        ?`Review ${list[0].acc} before it locks`
-        :`${list.length} orders need reviewing`),
-      description:one
-        ?`Amend or cancel now — once the supplier cuts off, it ships as-is.`
-        :`Amend or cancel now — once each supplier cuts off, it ships as-is.`,
-      color:anyUrgent?C_RED:C_PURPLE,
+      title:(isTest?'TEST · ':'')+(allGone
+        ?(one?`${list[0].acc} shipped unreviewed`:`${list.length} orders shipped unreviewed`)
+        :(one?`Review ${list[0].acc} before it dispatches`:`${list.length} orders need reviewing`)),
+      description:allGone
+        ?`Already dispatched — it can't be changed now. Just make sure the delivery is expected.`
+        :`You can still **skip or cancel items right up until it dispatches**. Do it now.`,
+      color:allGone?9807270:(anyUrgent?C_RED:C_PURPLE),
       fields:[...fieldsFor(),
-        ...(link?[{name:'​',value:`**[Open Sub & Save →](${link})** · hit ✓ Checked to stop the reminders`}]:[])],
+        ...(link?[{name:'​',value:`**[Confirm ${one?list[0].acc:'these orders'} →](${link}#sns=${one?encodeURIComponent(list[0].acc):'all'})** · opens straight on it, ready to tick`}]:[])],
       footer:{text:(isTest?'Test — this is exactly what a real reminder looks like'
+        :allGone?'Too late to change — for your records'
         :'Repeats daily until you tick ✓ Checked')+' · sent '+whLongDate()+' '+whTime()},
       timestamp:new Date().toISOString()
     }]
@@ -6044,6 +6438,38 @@ function snsReviewPayload(list,isTest){
 
 // Fires on app open: any account whose review is open (or whose cutoff was missed and
 // still hasn't been checked) gets one ping per day until it's ticked off.
+// OA replen checks — same rules: one message per item, once a day, until it's checked.
+function oaWhRun(url,map,d){
+  const due=oaItems.map(i=>({i,s:calcOAStatus(i)}))
+    .filter(x=>x.s.status==='overdue'||x.s.status==='due');
+  if(!due.length)return;
+  const link=appLink();
+  due.forEach((x,n)=>setTimeout(()=>{
+    const key='oa|'+x.i.id+'|'+isoOf(today());
+    const m=snsPingMap(); if(m[key])return;
+    const over=x.s.status==='overdue';
+    const gap=(x.i.current!=null&&x.i.target!=null)?x.i.current-x.i.target:null;
+    whPost(url,{
+      content:whMention()||undefined,
+      allowed_mentions:whMention()?{parse:[],users:[(settings.discordUserId||'').trim()]}:undefined,
+      embeds:[{
+        author:{name:'OA Replen'},
+        title:`Check ${x.i.asin}`,
+        description:over?`Review was due ${fmt(x.s.dueDate)} — **${x.s.daysOverdue} days ago**.`
+                        :'Due for a price check today.',
+        color:over?C_RED:16755243,
+        fields:[
+          {name:'Target',value:x.i.target!=null?'£'+Number(x.i.target).toFixed(2):'—',inline:true},
+          {name:'Last seen',value:x.i.current!=null?'£'+Number(x.i.current).toFixed(2):'—',inline:true},
+          ...(gap!=null?[{name:'Gap',value:gap<=0?'at/below target':'£'+gap.toFixed(2)+' over',inline:true}]:[]),
+          ...(x.i.link?[{name:'Source',value:`[Open retailer →](${x.i.link})`}]:[]),
+          ...(link?[{name:'​',value:`**[Check it off →](${link}#oa=${x.i.id})** · opens straight on it`}]:[])
+        ],
+        footer:{text:'Repeats daily until you tick it · sent '+whLongDate()+' '+whTime()},
+        timestamp:new Date().toISOString()}
+      ]}).then(ok=>{if(ok){const mm=snsPingMap();mm[key]=d;localStorage.setItem(SNSPINGK,JSON.stringify(mm));}});
+  },(n+1)*1400));
+}
 function snsWhRun(){
   const url=snsWhUrl();
   if(!url||settings.nSns===0||whBadMsg(url))return;
@@ -6061,6 +6487,7 @@ function snsWhRun(){
     if(map[acc+'|'+c.reviewCycleKey]===d)return;    // already told him today
     due.push({acc,c});
   });
+  if(settings.nOa!==0)oaWhRun(url,map,d);
   if(!due.length)return;
   // One message per account — each is its own job, so each gets its own ping.
   // Staggered so Discord's rate limit never drops one.
@@ -6120,7 +6547,7 @@ function copyGhSchedule(){
     return{name:a,addDay:pd(d.editDay).getDate(),deliveryDay:pd(d.deliveryDay).getDate(),note:(d.notes||'').slice(0,80)};
   }).filter(Boolean);
   if(!accounts.length){toast('Set some account dates first',true);return;}
-  const json=JSON.stringify({cutoffOffset:snsCutoffOffset(),reviewDays:snsReviewDays(),accounts},null,2);
+  const json=JSON.stringify({cutoffOffset:snsCutoffOffset(),dispatchLead:snsDispatchLead(),accounts},null,2);
   const done=()=>toast(`Schedule for ${accounts.length} account${accounts.length!==1?'s':''} copied — paste into sns-schedule.json`,'ok');
   const fb=()=>{const t=document.createElement('textarea');t.value=json;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done();};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(json).then(done).catch(fb);else fb();
@@ -6132,8 +6559,8 @@ function whSaveAll(){
   settings.whSns=url.trim();
   const co=parseInt((document.getElementById('wh-cutoff-off')||{}).value);
   if(co>=0&&co<=14)settings.snsCutoffOffset=co;
-  const rd=parseInt((document.getElementById('wh-review-days')||{}).value);
-  if(rd>=1&&rd<=7)settings.snsReviewDays=rd;
+  const rd=parseInt((document.getElementById('wh-dispatch-lead')||{}).value);
+  if(rd>=0&&rd<=10)settings.snsDispatchLead=rd;
   const hr=parseInt((document.getElementById('wh-hour')||{}).value);
   if(hr>=0&&hr<=23)settings.snsPingHour=hr;
   settings.discordUserId=String((document.getElementById('wh-user')||{}).value||'').trim().replace(/[<@!>]/g,'');
@@ -6147,7 +6574,8 @@ function whSaveAll(){
 function whToggle(on){settings.nSns=on?1:0;saveSettings();renderSettings();}
 function whSaveOffset(key,v){
   const n=parseInt(v);
-  const lim=key==='snsCutoffOffset'?[0,14]:[1,7];
+  const LIMS={snsCutoffOffset:[0,14],snsDispatchLead:[0,10],maxWaitDays:[8,60],ltdSafetyDays:[0,5]};
+  const lim=LIMS[key]||[0,60];
   if(isNaN(n)||n<lim[0]||n>lim[1]){renderSettings();return;}
   settings[key]=n;saveSettings();renderSns();render();renderSettings();
   toast('Saved','ok');
@@ -6187,14 +6615,20 @@ function renderSettings(){
   const wb=document.getElementById('wh-in-sns');if(wb&&document.activeElement!==wb)wb.value=snsWhUrl();
   const wus=document.getElementById('wh-user');if(wus&&document.activeElement!==wus)wus.value=settings.discordUserId||'';
   const wco=document.getElementById('wh-cutoff-off');if(wco&&document.activeElement!==wco)wco.value=snsCutoffOffset();
-  const wrd=document.getElementById('wh-review-days');if(wrd&&document.activeElement!==wrd)wrd.value=snsReviewDays();
+  const wrd=document.getElementById('wh-dispatch-lead');if(wrd&&document.activeElement!==wrd)wrd.value=snsDispatchLead();
   const wex=document.getElementById('wh-example');
   if(wex){
-    const o=snsCutoffOffset(),r=snsReviewDays();
-    const days=Array.from({length:r},(_,i)=>10+o+i);
-    wex.innerHTML=`<b>How that plays out:</b> last add day the <b>10th</b> → supplier locks it the <b>${10+o}${nth(10+o)}</b> → you're reminded on the <b>${days.map(d=>d+nth(d)).join('</b> and the <b>')}</b>.`;
+    const o=snsCutoffOffset(),dl=snsDispatchLead();
+    const add=10,lock=add+o,deliv=16,last=Math.max(lock,deliv-dl);
+    const days=[];for(let d=lock;d<=last;d++)days.push(d+nth(d));
+    wex.innerHTML=`<b>Worked example</b> — last add day the <b>10th</b>, delivery the <b>16th</b>: edit deadline the <b>${lock}${nth(lock)}</b>, dispatches the <b>${last}${nth(last)}</b>, so you're reminded on the <b>${days.join('</b>, the <b>')}</b>.`;
   }
+  const mw=document.getElementById('set-maxwait');
+  if(mw&&document.activeElement!==mw)mw.value=(parseInt(settings.maxWaitDays)>=8?settings.maxWaitDays:14);
+  const ls=document.getElementById('set-ltdsafety');
+  if(ls&&document.activeElement!==ls)ls.value=(settings.ltdSafetyDays!=null?settings.ltdSafetyDays:1);
   const wh=document.getElementById('wh-hour');if(wh)wh.value=(settings.snsPingHour!=null?settings.snsPingHour:13);
+  const wto=document.getElementById('wh-tg-oa');if(wto)wto.checked=settings.nOa!==0;
   const tb=document.getElementById('wh-tg-sns');if(tb)tb.checked=settings.nSns!==0;
   const wau=document.getElementById('wh-appurl');if(wau&&document.activeElement!==wau)wau.value=settings.appUrl||'';
   const wan=document.getElementById('wh-applink-note');
@@ -6377,6 +6811,36 @@ function homeBanner(){
   const main=document.querySelector('.main');
   if(main)main.insertBefore(el,main.firstChild);
 }
+// Links from Discord carry #sns=EU01 so the app opens on that exact row, scrolls to it,
+// flashes it and puts the confirm button under the cursor — no hunting.
+function handleDeepLink(){
+  const h=decodeURIComponent((location.hash||'').replace(/^#/,''));
+  if(!h)return;
+  const [k,v]=h.split('=');
+  if(k==='sns'){
+    go('sns');
+    setTimeout(()=>{
+      if(v&&v!=='all'){
+        const row=document.getElementById('snsrow-'+cssSafe(v));
+        if(row){
+          row.scrollIntoView({behavior:'smooth',block:'center'});
+          row.classList.add('search-hit');
+          setTimeout(()=>row.classList.remove('search-hit'),3600);
+        }
+      }
+      history.replaceState(null,'',location.pathname+location.search);
+    },260);
+  } else if(k==='oa'){
+    go('oareplen');
+    setTimeout(()=>{
+      const row=document.getElementById('oa-'+v);
+      if(row){row.scrollIntoView({behavior:'smooth',block:'center'});row.classList.add('search-hit');
+        setTimeout(()=>row.classList.remove('search-hit'),3600);}
+      history.replaceState(null,'',location.pathname+location.search);
+    },260);
+  }
+}
+const cssSafe=x=>String(x).replace(/[^A-Za-z0-9_-]/g,'_');
 function updateDate(){
   const el=document.getElementById('hdrDate');
   if(el)el.textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
@@ -6400,6 +6864,13 @@ function toggleSidebar(){
   setTimeout(()=>{updateDate();setInterval(updateDate,86400000);},msUntilMidnight);
   advanceSnsCycles();
   fillAccountSelects();
+  // pre-pick what he used last — same marketplace/type nearly every time
+  try{
+    if(settings.lastMarket&&!gv('s-market'))sv('s-market',settings.lastMarket);
+    if(settings.lastType&&!gv('s-type')){sv('s-type',settings.lastType);toggleOA();}
+    if(settings.lastSrc&&!gv('s-src'))sv('s-src',settings.lastSrc);
+    if(!gv('s-date'))sv('s-date',isoToDM(isoOf(today())));
+  }catch(e){}
   if(uiState.tab==='pday'&&!pdayEnabled()){uiState.tab='overview';saveUI();}
   render();
   renderNotes();
@@ -6408,6 +6879,7 @@ function toggleSidebar(){
   if(_pdayAutoOffMsg)setTimeout(()=>toast(_pdayAutoOffMsg,'info'),800);
   snsMissedCatchUp();
   homeBanner();
+  handleDeepLink();
   setTimeout(snsWhRun,1400);          // let the first render settle before anything posts
   clearInterval(window._snsBeat);
   window._snsBeat=setInterval(snsWhRun,10*60*1000);   // and keep checking every 10 min
