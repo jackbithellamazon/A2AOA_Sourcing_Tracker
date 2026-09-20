@@ -213,6 +213,82 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .kp-mk span.dead{opacity:.65;text-decoration:line-through}
 .kp-mk span.best{background:var(--green);color:var(--chipfg)}
 
+/* ── risk queue ── */
+.rk-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:8px;margin-bottom:12px}
+.rk-kpi{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--rkc,var(--line2));
+  border-radius:11px;padding:9px 14px}
+.rk-kpi b{display:block;font-size:22px;font-weight:800;color:var(--rkc,var(--text));font-variant-numeric:tabular-nums;line-height:1.15}
+.rk-kpi span{display:block;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text2);margin-top:1px}
+.rk-kpi small{display:block;font-size:11px;color:var(--mute);margin-top:2px}
+.rk-warn{display:flex;gap:9px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+  border-left:3px solid var(--amber);border-radius:11px;padding:9px 13px;margin-bottom:10px;font-size:13px;color:var(--text2)}
+.rk-warn b{color:var(--strong)}
+.rk-warn.bad{border-left-color:var(--red)}
+.rk-warn .btn{margin-left:auto;flex:0 0 auto}
+.rk-wrap{display:grid;grid-template-columns:232px minmax(0,1fr);gap:12px;align-items:start}
+.rk-rail{display:flex;flex-direction:column;gap:5px;position:sticky;top:8px}
+.rk-band{display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:9px;align-items:center;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text2);
+  font-family:var(--dm);font-size:13px;font-weight:700;cursor:pointer;transition:border-color var(--tr),background var(--tr)}
+.rk-band:hover{border-color:var(--line2);background:var(--raise)}
+.rk-band[aria-pressed="true"]{border-color:var(--rkc,var(--acc));background:var(--raise);color:var(--strong)}
+.rk-band i{width:8px;height:8px;border-radius:50%;background:var(--rkc,var(--line2));font-style:normal}
+.rk-band .rk-bn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-band .rk-bc{font-variant-numeric:tabular-nums;font-size:15px;font-weight:800;color:var(--strong)}
+.rk-band .rk-bv{grid-column:2/4;font-size:11px;font-weight:600;color:var(--mute);font-variant-numeric:tabular-nums}
+.rk-row{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--rkc,var(--line2));
+  border-radius:var(--r);margin-bottom:8px;transition:border-color var(--tr)}
+.rk-row:hover{border-color:var(--line2);border-left-color:var(--rkc,var(--line2))}
+.rk-head{display:grid;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;
+  grid-template-columns:92px 54px minmax(0,1fr) auto 26px;
+  grid-template-areas:"dl thumb pi val chev" "acts acts acts acts acts"}
+.rk-dl{grid-area:dl}
+.rk-dl .n{font-size:12px;font-weight:800;letter-spacing:.4px;color:var(--rkc,var(--text));white-space:nowrap}
+.rk-dl .d{font-size:12px;color:var(--mute);margin-top:1px;white-space:nowrap}
+.rk-thumb{grid-area:thumb;width:54px;height:54px;border-radius:8px;background:#fff;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.rk-thumb img{width:100%;height:100%;object-fit:contain}
+.rk-thumb svg{width:22px;height:22px;stroke:#94a3b8;fill:none;stroke-width:1.6}
+.rk-pi{grid-area:pi;min-width:0}
+.rk-pn{font-size:13px;color:var(--strong);font-weight:600;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rk-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.rk-cp{display:inline-flex;align-items:center;gap:5px;background:var(--raise);border:1px solid var(--line);
+  border-radius:7px;padding:3px 8px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;
+  transition:border-color var(--tr),color var(--tr)}
+.rk-cp:hover{border-color:var(--line2);color:var(--strong)}
+.rk-cp .lb{font-family:var(--dm);font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mute)}
+.rk-cp.done{border-color:var(--green);color:var(--green)}
+.rk-cp.acct{cursor:default;border-color:var(--rkt);color:var(--rkt)}
+.rk-cp.acct .lb{color:var(--rkt);opacity:.75}
+.rk-val{grid-area:val;text-align:right;white-space:nowrap}
+.rk-val .v{font-size:17px;font-weight:800;color:var(--amber);font-variant-numeric:tabular-nums}
+.rk-val .u{font-size:11px;color:var(--mute);margin-top:1px}
+.rk-chev{grid-area:chev;background:none;border:none;color:var(--mute);padding:4px;line-height:0;cursor:pointer}
+.rk-chev svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;transition:transform var(--tr)}
+.rk-row.open .rk-chev svg{transform:rotate(180deg)}
+.rk-acts{grid-area:acts;display:flex;gap:6px;flex-wrap:wrap;padding-top:2px}
+.rk-flag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;
+  background:rgba(255,170,43,.14);color:var(--amber);margin-top:6px}
+.rk-flag.bad{background:rgba(255,51,85,.14);color:var(--red)}
+.rk-detail{display:none;border-top:1px solid var(--line);padding:11px 13px;background:var(--surface)}
+.rk-row.open .rk-detail{display:block}
+.rk-dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.rk-dv{font-size:12px;color:var(--text2)}
+.rk-dk{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.rk-foot{margin-top:14px;padding:11px 14px;border:1px dashed var(--line2);border-radius:11px;
+  font-size:12px;color:var(--mute);line-height:1.6}
+.rk-foot b{color:var(--text2)}
+@media(max-width:900px){.rk-wrap{grid-template-columns:1fr}
+  .rk-rail{position:static;flex-direction:row;overflow-x:auto;padding-bottom:3px}
+  .rk-band{flex:0 0 auto;min-width:150px}}
+@media(max-width:760px){
+  .rk-head{grid-template-columns:54px minmax(0,1fr) auto 26px;
+    grid-template-areas:"thumb pi pi chev" "dl dl val val" "acts acts acts acts"}
+  .rk-val{text-align:left}
+  .rk-dl{display:flex;gap:6px;align-items:baseline}
+  .rk-dl .d{margin-top:0}}
+
 /* ── s&s account cards ── */
 .snsbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 10px}
 .fastline{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text2);
@@ -522,6 +598,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <button class="nv" data-p="checks" onclick="go('checks')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
     Checks<span class="bdg" id="b-checks">0</span></button>
+  <button class="nv" data-p="risk" onclick="go('risk')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.2 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+    Risk<span class="bdg" id="b-risk">0</span></button>
   <div class="nv-foot">
     <div class="sidecard"><b>Buy smarter.</b><span>Source faster.</span><small id="side-stat">—</small></div>
     <button class="nv" data-p="manual" onclick="go('manual')">
@@ -631,6 +710,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 </div>
 
 <!-- ═══ SETTINGS ═══ -->
+<div class="page" id="p-risk">
+  <div id="risk-body"></div>
+</div>
+
 <div class="page" id="p-settings">
   <div class="pagehead"><div class="ph-l"><h1>Settings</h1></div></div>
   <div id="set-body"></div>
@@ -755,6 +838,9 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <button class="tb" data-p="checks" onclick="go('checks')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
     <span class="tbdg" id="tb-checks"></span><span class="tbl2">Checks</span></button>
+  <button class="tb" data-p="risk" onclick="go('risk')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.2 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+    <span class="tbdg" id="tb-risk"></span><span class="tbl2">Risk</span></button>
 </nav>
 <div class="mbg" id="mPlay"><div class="modal">
   <div class="mhd"><b>New S&amp;S play</b><button class="mx" onclick="closeM('mPlay')">×</button></div>
@@ -873,6 +959,34 @@ let intents=ld('a2a_intent_v6')||{};
 let attempts=ld('a2a_att_v6')||[];
 let settings=Object.assign({snsCutoffOffset:2,snsDispatchLead:2,defAmazonDays:8,defRetailDays:3,recentWindow:30,whSns:'',discordUserId:'',snsPingHour:13,nSns:1,nOa:1,appUrl:'',leadToLive:8,maxWaitDays:14,ltdSafetyDays:1,autoQuiet:1,quietDays:14,accent:'Blue',density:'comfort',theme:'dark',strategy:'validation',keepaKey:'',greenRoi:20,priceTol:10,fxEurGbp:0,defReferral:15,defPickPack:3},ld('a2a_settings_v6')||{});
 const ui={page:'today',pwOpen:false,plArch:false,decSort:{k:'units',d:-1},snsSort:'due'};
+// The old app named S&S accounts EU01/Biz1; v8 uses the Purchase Sheet's canonical names.
+// Dates saved under the old names were invisible — remap them, and never drop an account
+// whose name we don't recognise (it gets added to the list instead).
+const SNS_ALIAS={'eu01':'EU1','eu 01':'EU1','eu1':'EU1','eu02':'EU2','eu 02':'EU2','eu2':'EU2',
+  'eu03':'EU3','eu 03':'EU3','eu3':'EU3','biz1':'BIZ01','biz 1':'BIZ01','biz01':'BIZ01','biz 01':'BIZ01',
+  'biz2':'BIZ02','biz 2':'BIZ02','biz02':'BIZ02','biz 02':'BIZ02',
+  'biz3':'BIZ03-WM','biz 3':'BIZ03-WM','biz03':'BIZ03-WM','biz 03':'BIZ03-WM','biz03-wm':'BIZ03-WM','wm':'BIZ03-WM',
+  'uk1':'BIZ01','uk2':'BIZ02','uk3':'BIZ03-WM'};
+const hasDates=o=>!!(o&&o.editDay&&o.deliveryDay);
+function migrateSnsNames(){
+  const moved=[];let touched=false;
+  for(const old of Object.keys(snsData)){
+    if(SNS_ACCOUNTS.includes(old))continue;
+    const target=SNS_ALIAS[String(old).trim().toLowerCase()];
+    if(target&&SNS_ACCOUNTS.includes(target)){
+      if(hasDates(snsData[old])&&!hasDates(snsData[target])){
+        snsData[target]=snsData[old];
+        if(snsHandled[old]&&!snsHandled[target])snsHandled[target]=snsHandled[old];
+        moved.push(old+' → '+target);
+      }
+      delete snsData[old];delete snsHandled[old];touched=true;
+    }else if(hasDates(snsData[old])){
+      SNS_ACCOUNTS.push(old);moved.push(old+' (kept)');touched=true;   // unknown name — never lose it
+    }
+  }
+  if(touched){svk('a2a_sns_v5',snsData);svk('a2a_sns_accts_v5',SNS_ACCOUNTS);svk('a2a_sns_handled_v5',snsHandled);}
+  return moved;
+}
 function migrateV5(){
   if(localStorage.getItem('a2a_mig_v8'))return null;
   const out={rb:0,watch:0,inbox:0,notes:false,settings:false};
@@ -1967,6 +2081,293 @@ function connectAll(){
   sheetSync(true);
 }
 
+/* ═══════════ RISK — Amazon Business payment-decline queue ═══════════
+   Two Google Apps Script feeds report orders Amazon has declined payment on
+   and will cancel. This screen only READS them: nothing here writes back to
+   Amazon, to the feeds, or to any database.
+   The feed addresses live in Settings (this browser only) and must NEVER be
+   written into this file — the repo is public, and one address exposes every
+   order number, product and total for that account. ═══════════ */
+
+// The same colours the Discord delivery board uses, so a colour means the same
+// account in both places. Change one, change both.
+const RISK_TINT={BIZ01:"#F97316",BIZ02:"#A3E635",BIZ03:"#F472B6",EU01:"#22D3EE",EU02:"#818CF8",EU03:"#E8EAED"};
+const riskTint=a=>RISK_TINT[String(a||"").toUpperCase().replace(/\s+/g,"")]||"#94A3B8";
+const riskOrderUrl=o=>"https://www.amazon.co.uk/gp/css/order-details?orderID="+o.order;
+
+// One feed per Apps Script, NOT per account: BIZ03 is an Outlook mailbox that
+// cannot run a script, so its mail redirects into BIZ02 and one watcher reports
+// both. The feed's own `covers` list is what gets shown to the user.
+const RISK_SLOTS=[
+  {key:'feed1',label:'BIZ01',       get:()=>String(settings.riskFeed1||'').trim()},
+  {key:'feed2',label:'BIZ02 + BIZ03',get:()=>String(settings.riskFeed2||'').trim()}];
+const riskFeeds=()=>RISK_SLOTS.filter(s=>s.get());
+const riskReady=()=>riskFeeds().length>0;
+
+let riskOrders=[],riskResolved=[],riskReadAt=null,riskNote="",riskCapped=false;
+let riskNeverLoaded=[],riskView="all",riskBusy=false,riskLastErrAt=0;
+const riskOpen=new Set();
+let riskLastGood=ld('a2a_risk_lastgood_v1')||{};
+const saveRiskLastGood=()=>{try{svk('a2a_risk_lastgood_v1',riskLastGood);}catch(e){}};
+// Name a feed by what it actually covers, never by our internal slot label.
+const riskName=slot=>{const d=riskLastGood[slot.key];
+  return (d&&Array.isArray(d.covers)&&d.covers.length)?d.covers.join(' + '):slot.label;};
+
+const riskMoney=n=>"£"+(+n||0).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
+const riskMoney0=n=>"£"+Math.round(+n||0).toLocaleString("en-GB");
+const riskDmy=iso=>{try{return new Date(iso+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"});}catch(e){return iso||"—";}};
+const riskHhmm=iso=>{try{return new Date(iso).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});}catch(e){return "?";}};
+// Normalised to noon so "today" is 0 whatever the clock says.
+function riskDaysLeft(iso){const t=new Date();t.setHours(12,0,0,0);
+  return Math.round((new Date(iso+"T12:00:00")-t)/86400000);}
+function riskUrg(d){
+  if(d<0)  return{c:'var(--red)',  n:'OVERDUE'};
+  if(d===0)return{c:'var(--red)',  n:'TODAY'};
+  if(d===1)return{c:'var(--amber)',n:'1 DAY'};
+  if(d<=3) return{c:'var(--blue)', n:d+' DAYS'};
+  return     {c:'var(--green)',n:d+' DAYS'};
+}
+const RISK_BANDS=[
+  {id:'all',  label:'All orders',c:'var(--acc)', test:()=>true},
+  {id:'today',label:'Today / overdue',c:'var(--red)',  test:d=>d<=0},
+  {id:'tmrw', label:'Tomorrow',  c:'var(--amber)',test:d=>d===1},
+  {id:'soon', label:'2–3 days',  c:'var(--blue)', test:d=>d===2||d===3},
+  {id:'later',label:'4+ days',   c:'var(--green)',test:d=>d>=4},
+  {id:'done', label:'Resolved',  c:'var(--mute)', test:null}];
+const RK_PH='<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M21 15l-5-5-6 6-3-2-4 4"/></svg>';
+const RK_CHEV='<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+
+/* ---------- fetching ---------- */
+let __riskCbSeq=0;
+function riskCallFeed(url,ms){
+  return new Promise((res,rej)=>{
+    // A counter AND the clock: two feeds starting in the same millisecond would
+    // otherwise share a callback name and one would silently overwrite the other.
+    const name="__bdlFeed"+(++__riskCbSeq)+"_"+Date.now(),tag=document.createElement("script");
+    const fin=fn=>{clearTimeout(t);delete window[name];tag.remove();fn();};
+    const t=setTimeout(()=>fin(()=>rej(new Error("the feed didn't answer"))),ms||30000);
+    window[name]=d=>fin(()=>res(d));
+    tag.onerror=()=>fin(()=>rej(new Error("couldn't reach the feed")));
+    // DO NOT REMOVE. Signed into six Google accounts, a cookie-carrying request
+    // can be answered with a "which account?" HTML page instead of the data.
+    tag.crossOrigin="anonymous";
+    tag.src=url+(url.includes("?")?"&":"?")+"callback="+name+"&t="+Date.now();
+    document.head.appendChild(tag);
+  });
+}
+// Hosted pages fetch (Apps Script allows anonymous CORS); a file:// page can't,
+// so JSONP is both the fallback and the local path.
+async function riskLoadFeed(url){
+  if(location.protocol==="http:"||location.protocol==="https:"){
+    try{
+      const r=await fetch(url+(url.includes("?")?"&":"?")+"t="+Date.now(),{cache:"no-store",redirect:"follow"});
+      if(!r.ok)throw new Error("feed said "+r.status);
+      return await r.json();
+    }catch(e){/* fall through to JSONP */}
+  }
+  return riskCallFeed(url);
+}
+
+async function riskRefresh(manual){
+  const feeds=riskFeeds();
+  if(!feeds.length){renderRisk();return;}
+  if(riskBusy)return;riskBusy=true;
+  if(manual){riskNote="checking the inboxes…";renderRisk();}
+  try{
+    // Every feed is always tried — one being down must never stop another.
+    // THREE TRIES EACH: Google hands back a one-shot redirect per request and a
+    // hiccup arrives as a 404 HTML page. Without retries a fine feed looks broken.
+    const results=await Promise.all(feeds.map(async f=>{
+      let lastErr;
+      for(let attempt=1;attempt<=3;attempt++){
+        try{
+          const d=await riskLoadFeed(f.get());
+          if(!d||d.ok===false)throw new Error(d&&d.error?d.error:"the watcher reported a problem");
+          if(!Array.isArray(d.orders))throw new Error("sent no orders");
+          return{slot:f,ok:true,d};
+        }catch(err){lastErr=err;if(attempt<3)await new Promise(r=>setTimeout(r,1500*attempt));}
+      }
+      return{slot:f,ok:false,err:lastErr};
+    }));
+    const good=results.filter(r=>r.ok),bad=results.filter(r=>!r.ok);
+
+    /* A FEED THAT FAILS KEEPS ITS LAST GOOD COPY — rule number one.
+       v1.0 rebuilt the list from only the feeds that answered, so one Google
+       hiccup WIPED that account's orders and the screen read "£0.00 at risk ·
+       nothing here" with ~£9k genuinely at risk. A reassuring wrong number is
+       the worst thing this screen can do. */
+    for(const r of good)riskLastGood[r.slot.key]=r.d;
+    saveRiskLastGood();
+    const usable=feeds.map(f=>riskLastGood[f.key]).filter(Boolean);
+    riskNeverLoaded=feeds.filter(f=>!riskLastGood[f.key]).map(f=>riskName(f));
+
+    if(usable.length){
+      // Keyed by order number so the same order in two feeds updates, never duplicates.
+      const liveM=new Map(),doneM=new Map();
+      for(const d of usable){
+        for(const o of d.orders)liveM.set(o.order,o);
+        for(const o of (d.resolved||[]))doneM.set(o.order,o);
+      }
+      riskOrders=[...liveM.values()];
+      riskResolved=[...doneM.values()];
+      // The OLDEST read, never the newest — a stale fallback copy counts, so the
+      // sync time honestly shows how old the weakest part of the picture is.
+      const reads=usable.map(d=>d.readAt).filter(Boolean).sort();
+      riskReadAt=reads.length?reads[0]:riskReadAt;
+      riskCapped=usable.some(d=>d.capped===true);
+    }
+    // A MISSING FEED MUST NEVER LOOK LIKE AN EMPTY ONE — name it.
+    if(!bad.length){riskNote="";}
+    else{
+      riskLastErrAt=Date.now();
+      riskNote=bad.map(r=>{
+        const last=riskLastGood[r.slot.key];
+        return last?riskName(r.slot)+" didn't answer — showing its last copy from "+riskHhmm(last.readAt)
+                   :riskName(r.slot)+" didn't answer and has never loaded — its orders are NOT shown";
+      }).join(" · ")+"  (press Refresh to retry)";
+    }
+  }catch(e){riskNote="couldn't read the feeds — "+(e.message||e);}
+  finally{riskBusy=false;renderRisk();}
+}
+
+/* ---------- copy (works on file://, where the clipboard API is unavailable) ---------- */
+async function riskCopy(text,btn){
+  let okc=true;
+  try{await navigator.clipboard.writeText(text);}
+  catch(e){
+    const ta=document.createElement("textarea");
+    ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");}catch(_){okc=false;}
+    ta.remove();
+  }
+  if(!okc){toast("Couldn't copy — select it by hand","bad");return;}
+  toast("Copied "+text,"ok");
+  if(btn){btn.classList.add("done");setTimeout(()=>btn.classList.remove("done"),1200);}
+}
+document.addEventListener('click',e=>{
+  const cp=e.target.closest('[data-rkcopy]');
+  if(cp){e.stopPropagation();riskCopy(cp.dataset.rkcopy,cp);return;}
+  const nav=e.target.closest('[data-rknav]');
+  if(nav){riskView=nav.dataset.rknav;renderRisk();return;}
+  if(e.target.closest('a'))return;
+  const head=e.target.closest('.rk-head');
+  if(head&&head.dataset.rkorder){
+    const id=head.dataset.rkorder;
+    riskOpen.has(id)?riskOpen.delete(id):riskOpen.add(id);renderRisk();
+  }
+});
+
+/* ---------- rendering ---------- */
+function riskRowHtml(o){
+  const d=riskDaysLeft(o.deadline),u=riskUrg(d),isOpen=riskOpen.has(o.order);
+  const qty=+o.qty||1,unit=o.unit!=null?+o.unit:(+o.total/qty);
+  const each=qty>1?qty+" units · "+riskMoney(unit)+" each":"1 unit";
+  const payBy=riskDmy(isoOf(addD(new Date(o.deadline+"T12:00:00"),-1)));
+  const flags=(o.conflict?'<div class="rk-flag bad">⚠ Shipping address says '+esc(o.conflict)+' — the account shown may be wrong</div>':'')
+    +(o.addsUp===false?'<div class="rk-flag">Part order — the item shown isn\'t everything on it. The total is still right.</div>':'');
+  return '<div class="rk-row'+(isOpen?' open':'')+'" style="--rkc:'+u.c+'">'
+   +'<div class="rk-head" data-rkorder="'+esc(o.order)+'">'
+   +'<div class="rk-dl"><div class="n">'+u.n+'</div><div class="d">'+riskDmy(o.deadline)+'</div></div>'
+   +'<div class="rk-thumb">'+(o.asin?'<img src="https://images-na.ssl-images-amazon.com/images/P/'+esc(o.asin)+'.01._SCLZZZZZZZ_SX160_.jpg" alt="" loading="lazy" onerror="this.parentNode.innerHTML=RK_PH">':RK_PH)+'</div>'
+   +'<div class="rk-pi"><div class="rk-pn" title="'+esc(o.name||'')+'">'+esc(o.name||'(no product name on the email)')+'</div>'
+     +'<div class="rk-chips">'
+       +'<button class="rk-cp" type="button" data-rkcopy="'+esc(o.order)+'" title="Copy the order number"><span class="lb">Order</span>'+esc(o.order)+'</button>'
+       +(o.asin?'<button class="rk-cp" type="button" data-rkcopy="'+esc(o.asin)+'" title="Copy the ASIN"><span class="lb">ASIN</span>'+esc(o.asin)+'</button>':'')
+       +'<button class="rk-cp" type="button" data-rkcopy="'+esc(riskOrderUrl(o))+'" title="Copy the Amazon link — switch to the right account first, then paste"><span class="lb">Link</span>Amazon</button>'
+       +'<span class="rk-cp acct" style="--rkt:'+riskTint(o.account)+'"><span class="lb">Acct</span>'+esc(o.account||'?')+'</span>'
+     +'</div>'+flags+'</div>'
+   +'<div class="rk-val"><div class="v">'+riskMoney(o.total)+'</div><div class="u">'+each+'</div></div>'
+   +'<button class="rk-chev" type="button" aria-label="Show order detail">'+RK_CHEV+'</button>'
+   +'<div class="rk-acts">'
+     +'<a class="btn xs" href="'+riskOrderUrl(o)+'" target="_blank" rel="noopener">Order ↗</a>'
+     +(o.asin?'<a class="btn xs" href="https://www.amazon.co.uk/dp/'+esc(o.asin)+'" target="_blank" rel="noopener">Listing ↗</a>':'')
+     +(o.asin?'<a class="btn xs" href="https://sas.selleramp.com/sas/lookup?src=web&search_term='+esc(o.asin)+'&asin='+esc(o.asin)+'" target="_blank" rel="noopener">SellerAmp ↗</a>':'')
+     +(o.asin?'<a class="btn xs" href="https://keepa.com/#!product/2-'+esc(o.asin)+'" target="_blank" rel="noopener">Keepa ↗</a>':'')
+   +'</div></div>'
+   +'<div class="rk-detail"><div class="rk-dgrid">'
+     +'<div class="rk-dv"><div class="rk-dk">Deadline</div><b style="color:'+u.c+'">'+riskDmy(o.deadline)+'</b> · pay by '+payBy+'</div>'
+     +'<div class="rk-dv"><div class="rk-dk">Unit breakdown</div>'+qty+' × '+riskMoney(unit)+' = <b>'+riskMoney(o.total)+'</b></div>'
+     +(o.items!=null?'<div class="rk-dv"><div class="rk-dk">Items on the order</div>'+o.items+'</div>':'')
+     +'<div class="rk-dv"><div class="rk-dk">Order number</div><span class="mono">'+esc(o.order)+'</span></div>'
+     +(o.asin?'<div class="rk-dv"><div class="rk-dk">ASIN</div><span class="mono">'+esc(o.asin)+'</span></div>':'')
+     +'<div class="rk-dv"><div class="rk-dk">Account</div><span style="color:'+riskTint(o.account)+';font-weight:700">'+esc(o.account||'?')+'</span></div>'
+   +'</div></div></div>';
+}
+function riskDoneHtml(r){
+  // "expired" = the deadline passed and no email ever said which way it went.
+  // That is the majority case — show it honestly, not as "cancelled".
+  const c=r.how==='paid'?'var(--green)':r.how==='cancelled'?'var(--red)':'var(--mute)';
+  const w=r.how==='paid'?'PAID':r.how==='cancelled'?'CANCELLED':'EXPIRED';
+  return '<div class="rk-row" style="--rkc:'+c+'"><div class="rk-head" style="cursor:default;grid-template-areas:\'dl pi pi val\';grid-template-columns:92px minmax(0,1fr) auto auto">'
+   +'<div class="rk-dl"><div class="n">'+w+'</div><div class="d">'+riskDmy(r.on)+'</div></div>'
+   +'<div class="rk-pi"><div class="rk-pn">'+esc(r.name||'—')+'</div><div class="rk-chips">'
+     +'<button class="rk-cp" type="button" data-rkcopy="'+esc(r.order)+'"><span class="lb">Order</span>'+esc(r.order)+'</button>'
+     +(r.account?'<span class="rk-cp acct" style="--rkt:'+riskTint(r.account)+'"><span class="lb">Acct</span>'+esc(r.account)+'</span>':'')
+   +'</div></div>'
+   +'<div class="rk-val"><div class="v" style="color:var(--mute)">'+riskMoney(r.total)+'</div></div></div></div>';
+}
+function renderRisk(){
+  // The badge counts what dies TODAY, not everything — a badge that always
+  // reads 19 gets ignored. It must be right even when this page isn't showing.
+  const dueNow=riskOrders.filter(o=>riskDaysLeft(o.deadline)<=0).length;
+  const b=$('b-risk');
+  if(b){b.textContent=dueNow;b.className='bdg '+(dueNow?'hot':'zero');}
+  // a background refresh lands outside renderAll(), so mirror to the phone tab bar here too
+  if(typeof syncBadges==='function')syncBadges();
+  if(!$('p-risk').classList.contains('on'))return;
+  const head='<div class="pagehead"><div class="ph-l"><h1>Risk</h1>'
+    +'<div class="sub">Amazon declined payment on these orders and will cancel them. Read-only — nothing here touches Amazon.</div></div>'
+    +'<div class="ph-r">'+(riskReady()?'<button class="btn sm" onclick="riskRefresh(true)">↻ Refresh</button>':'')
+    +'<button class="btn sm" onclick="go(\'settings\')">Feeds</button></div></div>';
+  if(!riskReady()){
+    $('risk-body').innerHTML=head+'<div class="hero cv-amber"><div>'
+      +'<div class="hero-kick">Not connected yet</div><div class="hero-t dm">Add your two feed addresses</div>'
+      +'<div class="hero-s">Settings → Connections. They are kept in this browser only, never in the app file — the repo is public and one address exposes every order on that account.</div></div>'
+      +'<div class="hero-act"><button class="btn pri" onclick="go(\'settings\')">Open Settings →</button></div></div>';
+    return;
+  }
+  const L=riskOrders.slice();
+  const exposed=L.reduce((s,o)=>s+(+o.total||0),0);
+  const due=L.filter(o=>riskDaysLeft(o.deadline)<=0);
+  const dueSum=due.reduce((s,o)=>s+(+o.total||0),0);
+  const hrs=riskReadAt?Math.round((Date.now()-new Date(riskReadAt).getTime())/3600000):null;
+  const stale=hrs!=null&&hrs>=12;
+  const ageTxt=hrs==null?'never':hrs<1?'just now':hrs<24?hrs+'h ago':Math.round(hrs/24)+' day'+(Math.round(hrs/24)===1?'':'s')+' ago';
+  const kpis='<div class="rk-kpis">'
+   +'<div class="rk-kpi" style="--rkc:var(--amber)"><b>'+riskMoney0(exposed)+'</b><span>At risk</span><small>across '+L.length+' order'+(L.length===1?'':'s')+'</small></div>'
+   +'<div class="rk-kpi" style="--rkc:var(--blue)"><b>'+L.length+'</b><span>Orders waiting</span><small>unpaid, not yet cancelled</small></div>'
+   +'<div class="rk-kpi" style="--rkc:'+(due.length?'var(--red)':'var(--green)')+'"><b>'+(due.length||'None')+'</b><span>Due today</span>'
+     +(due.length?'<small>'+riskMoney0(dueSum)+' · pay this morning</small>':'<small>nothing dies today</small>')+'</div>'
+   +'<div class="rk-kpi" style="--rkc:'+(stale?'var(--amber)':'var(--green)')+'"><b style="font-size:17px">'+ageTxt+'</b><span>Last sync</span>'
+     +'<small>'+(riskReadAt?new Date(riskReadAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—')+'</small></div>'
+   +'</div>';
+  let warn='';
+  if(riskNote)warn+='<div class="rk-warn'+(riskNeverLoaded.length?' bad':'')+'"><span>⚠</span><span>'+esc(riskNote)+'</span>'
+    +'<button class="btn xs" onclick="riskRefresh(true)">↻ Retry</button></div>';
+  if(riskCapped)warn+='<div class="rk-warn"><span>⚠</span><span><b>A watcher hit its search limit</b> — some orders may be missing from this list.</span></div>';
+  if(stale&&!riskNote)warn+='<div class="rk-warn"><span>⚠</span><span><b>Data '+ageTxt+'</b> · refresh before making payment decisions.</span>'
+    +'<button class="btn xs" onclick="riskRefresh(true)">↻ Refresh</button></div>';
+  const rail='<div class="rk-rail">'+RISK_BANDS.map(bd=>{
+    const rows=bd.id==='done'?riskResolved:L.filter(o=>bd.test(riskDaysLeft(o.deadline)));
+    const sum=rows.reduce((t,o)=>t+(+o.total||0),0);
+    return '<button class="rk-band" type="button" data-rknav="'+bd.id+'" aria-pressed="'+(riskView===bd.id)+'" style="--rkc:'+bd.c+'">'
+      +'<i></i><span class="rk-bn">'+bd.label+'</span><span class="rk-bc">'+rows.length+'</span>'
+      +'<span class="rk-bv">'+(rows.length?riskMoney0(sum):'clear')+'</span></button>';
+  }).join('')+'</div>';
+  const isDone=riskView==='done',bd=RISK_BANDS.find(x=>x.id===riskView)||RISK_BANDS[0];
+  const shown=isDone?riskResolved.slice():L.filter(o=>bd.test(riskDaysLeft(o.deadline)));
+  const list=shown.length
+    ?(isDone?shown.sort((a,b)=>String(b.on||'').localeCompare(String(a.on||''))).map(riskDoneHtml).join('')
+            :shown.sort((a,b)=>a.deadline===b.deadline?(+b.total||0)-(+a.total||0):(a.deadline<b.deadline?-1:1)).map(riskRowHtml).join(''))
+    :(riskNeverLoaded.length
+      ?'<div class="empty"><b>Can\'t show the full picture</b> — '+esc(riskNeverLoaded.join(' and '))+' hasn\'t loaded yet, so orders could be missing. Press Refresh.</div>'
+      :'<div class="empty">Nothing here — no orders are waiting on you.</div>');
+  const foot='<div class="rk-foot">Measured on 137 real orders: Amazon has <b>never once cancelled late</b>, but 40 of 48 died on exactly the day it said — one at 08:52 in the morning. '
+    +'Re-measured 8 Sept on 20 live orders, the window is now <b>5–10 days</b> (most often 5). <b>Pay the day before the deadline.</b></div>';
+  $('risk-body').innerHTML=head+kpis+warn+'<div class="rk-wrap">'+rail+'<div class="rk-list">'+list+'</div></div>'+foot;
+}
+
 /* ═══════════ TODAY ═══════════ */
 function todayItems(){
   const items=[];
@@ -2229,6 +2630,22 @@ function renderSettings(){
       <div><label class="lbl">Fallback pick &amp; pack £</label><input class="fld" type="number" step="0.01" value="${settings.defPickPack}" onchange="settings.defPickPack=+this.value||3;saveSettings()"></div>
     </div>
   </div>
+  <div class="card" style="padding:14px 16px;max-width:780px;margin-bottom:12px;border-left:3px solid ${riskReady()?'var(--green)':'var(--line2)'}">
+    <h3 style="font-size:14px;font-weight:800;margin-bottom:4px">Risk feeds ${riskReady()?'<span class="chip cv-green">connected</span>':'<span class="chip soft">not connected</span>'}</h3>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">The Risk tab reads these two Google Apps Script feeds to find orders Amazon has declined payment on. Kept in this browser only — never in the app file, because the repo is public and one address exposes every order number, product and total on that account. One feed per script, not per account: BIZ03's mail redirects into BIZ02.</p>
+    <div class="g2">
+      <div><label class="lbl">BIZ01 risk feed</label>
+        <input class="fld mono" style="font-size:12px" value="${esc(settings.riskFeed1||'')}" placeholder="https://script.google.com/macros/s/…/exec" spellcheck="false"
+          onchange="settings.riskFeed1=this.value.trim();saveSettings();renderSettings();riskRefresh(true)"></div>
+      <div><label class="lbl">BIZ02 + BIZ03 risk feed</label>
+        <input class="fld mono" style="font-size:12px" value="${esc(settings.riskFeed2||'')}" placeholder="https://script.google.com/macros/s/…/exec" spellcheck="false"
+          onchange="settings.riskFeed2=this.value.trim();saveSettings();renderSettings();riskRefresh(true)"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn sm" onclick="riskRefresh(true)">Test / refresh now</button>
+      <span style="font-size:12px;color:var(--mute)">${riskReady()?(riskReadAt?'Last read '+new Date(riskReadAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' · '+riskOrders.length+' live · '+riskResolved.length+' resolved':'Not read yet'):'Add at least one feed address'}</span>
+    </div>
+  </div>
   <div class="card" style="padding:14px 16px;max-width:780px">
     <h3 style="font-size:14px;font-weight:800;margin-bottom:10px">Rebuy defaults <span class="tag">learning overrides these as data lands</span></h3>
     <div class="g3">
@@ -2287,9 +2704,9 @@ function renderSettings(){
     </div>
   </div>`;
   const body=$('set-body');const cards=[...body.children];
-  const map=[['Purchase Sheet','conn'],['Keepa','conn'],['Rebuy defaults','rebuy'],['Buy plan','rebuy'],['Backlog automation','rebuy'],['Sub & Save','sns'],['Discord reminders','sns'],['Appearance','look'],['Data','data']];
+  const map=[['Purchase Sheet','conn'],['Keepa','conn'],['Risk feeds','conn'],['Rebuy defaults','rebuy'],['Buy plan','rebuy'],['Backlog automation','rebuy'],['Sub & Save','sns'],['Discord reminders','sns'],['Appearance','look'],['Data','data']];
   const keyOf=t=>{const e=map.find(([k])=>t.trim().startsWith(k));return e?e[1]:'rebuy';};
-  const big=cards[2];
+  const big=cards[cards.length-1];
   if(big){const kids=[...big.children];let sec=null;
     kids.forEach(k=>{if(k.tagName==='H3'){sec=document.createElement('section');sec.dataset.t=keyOf(k.textContent);big.appendChild(sec);}if(sec)sec.appendChild(k);});
     big.querySelectorAll('section > h3').forEach(h=>{h.style.marginTop='0';});}
@@ -2298,7 +2715,7 @@ function renderSettings(){
   const bar=document.createElement('div');bar.className='ovtabs';bar.style.marginBottom='12px';
   bar.innerHTML=tabs.map(([k,l])=>`<button class="${cur===k?'on':''}" onclick="ui.setTab='${k}';renderSettings()">${l}</button>`).join('');
   body.insertBefore(bar,body.firstChild);
-  [cards[0],cards[1]].forEach(c=>{if(c)c.style.display=cur==='conn'?'':'none';});
+  cards.slice(0,-1).forEach(c=>{if(c)c.style.display=cur==='conn'?'':'none';});
   if(big){let any=false;[...big.querySelectorAll('section')].forEach(sc=>{const on=sc.dataset.t===cur;sc.style.display=on?'':'none';if(on)any=true;});big.style.display=any?'':'none';}
 }
 const ACCENTS={Blue:'#4d7cff',Teal:'#00dcc2',Purple:'#a05cff',Green:'#1fe07f',Orange:'#ff6a2b',Red:'#ff3355'};
@@ -2346,12 +2763,12 @@ function exportData(){const dump={};for(let i=0;i<localStorage.length;i++){const
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='a2aoa-backup-'+isoOf(today())+'.json';a.click();}
 
 /* ═══════════ boot ═══════════ */
-function syncBadges(){['today','buying','sourcing','sns','checks'].forEach(p=>{
+function syncBadges(){['today','buying','sourcing','sns','checks','risk'].forEach(p=>{
   const s=$('b-'+p),t=$('tb-'+p);if(!s||!t)return;const n=+s.textContent||0;
   t.textContent=n>99?'99+':String(n);
   t.className='tbdg'+(n?(s.classList.contains('hot')?' hot':' on'):'');});}
 function renderAll(){
-  const _sy=window.scrollY;renderToday();renderBuying();renderSourcing();renderSns();renderChecks();renderManual();renderSettings();
+  const _sy=window.scrollY;renderToday();renderBuying();renderSourcing();renderSns();renderChecks();renderRisk();renderManual();renderSettings();
   const bs=$('b-sourcing');if(bs&&!$('p-sourcing').classList.contains('on')){
     const n=leads.filter(l=>!l.bought&&!l.dead).map(calcBuyPlan).filter(p=>p.status==='buy'||p.status==='closing').length;
     bs.textContent=n;bs.className='bdg '+(n?'':'zero');}
@@ -2361,6 +2778,7 @@ function renderAll(){
 (function init(){
   $('logo-sub').textContent='v8.0 · '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   const mig=migrateV5();
+  const snsMoved=migrateSnsNames();
   loadNotes();
   const srcSel=$('aw-src');if(srcSel)srcSel.innerHTML=['Amazon UK','Amazon Germany','Amazon France','Amazon Italy','Amazon Spain','Currys','Argos','Superdrug','Other']
     .map(s=>`<option>${s}</option>`).join('');
@@ -2375,6 +2793,7 @@ function renderAll(){
     document.body.appendChild(b);}
   applyLook();
   aggregate();renderAll();
+  if(snsMoved.length)setTimeout(()=>toast('Sub & Save dates recovered: '+snsMoved.join(' · '),'ok'),900);
   if(mig&&(mig.rb||mig.watch||mig.inbox))toast(`Migrated from the old app: ${mig.rb} rebuys, ${mig.watch} watchlist, ${mig.inbox} inbox items`,'ok');
   sheetSync(false);
   let _day=isoOf(today());
@@ -2385,6 +2804,9 @@ function renderAll(){
   setTimeout(snsWhRun,4000);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)return;dayTick();snsWhRun();
     if(sheetAt&&(Date.now()-sheetAt.getTime())>5*60*1000)sheetSync(false);});
+  if(riskReady())riskRefresh(false);
+  setInterval(()=>{if(riskReady())riskRefresh(false);},15*60000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&riskReady())riskRefresh(false);});
   handleDeepLink();
   window.addEventListener('hashchange',handleDeepLink);
 })();
